@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+           xmlns:context="http://www.springframework.org/schema/context"    
+           xmlns:aop="http://www.springframework.org/schema/aop"         
+           xsi:schemaLocation="http://www.springframework.org/schema/beans   
+               http://www.springframework.org/schema/beans/spring-beans-3.0.xsd   
+               http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd   
+               http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">  
+       
+       <bean id="performer" class="com.exam.impl.DukePerformer"> 
+       		<property name="    " value="    "/>
+       </bean>
+       
+       <bean id="audience" class="com.exam.service.Audience"/>  
+      
+       <aop:config>
+      <!-- 定义切面 -->
+       <aop:pointcut  id="afterPointcut"
+			expression="execution(* lhs.spring.aop.advice.PersonDAO.*(..))" />
+		<!-- 定义切面 -->
+		<aop:aspect ref="beforeAdviceE">
+			<aop:after-throwing pointcut-ref="afterPointcut" method="afterAspect" 
+					throwing="ex"/>
+		</aop:aspect>
+      <!-- 定义切入点 -->
+      
+			
+      <!-- 前置通知 --> 
+       			
+    <aop:config>  
+                <aop:aspect id="asp" ref="beforeAdviceE">  
+                    <aop:pointcut id="testPointcut" expression="execution(*  lhs.spring.aop.advice.PersonDAO.*(..))"/>  
+                    <aop:before pointcut-ref="testPointcut" method="doAccessCheck"/>              
+                </aop:aspect>  
+            </aop:config> 
+       			
+       			<!-- 后置通知 -->
+
+       	<aop:config proxy-target-class="false">
+		<!-- 定义切入点 -->
+		<aop:pointcut  id="afterPointcut"
+			expression="execution(* lhs.spring.aop.advice.PersonDAO.*(..))" />
+		<!-- 定义切面 -->
+		<aop:aspect ref="beforeAdviceE">
+			<aop:after-throwing pointcut-ref="afterPointcut" method="afterAspect" 
+					throwing="ex"/>
+		</aop:aspect>
+	</aop:config>		 			
+       			    			
+       		
+		</aop:config>
+		
+</beans>

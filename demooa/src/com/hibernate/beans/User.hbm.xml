@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Tue Aug 14 18:57:22 CST 2007                         -->
+<hibernate-mapping package="com.hibernate.beans">
+
+    <class name="User" table="user">
+        <id name="id" column="ID" type="integer">
+            <generator class="native"/>
+        </id>
+ 
+        <property name="username" column="username" type="string" />
+        <property name="password" column="password" type="string" />
+        <property name="truename" column="truename" type="string" />
+        <property name="email" column="email" type="string" />
+        <property name="telphone" column="telphone" type="string" />
+        <property name="sex" column="sex" type="string" />
+        <property name="address" column="address" type="string" />
+        <property name="job" column="job" type="string" />
+        <property name="branch" column="branch" type="string" />
+        <property name="accessTime" column="accessTime" type="integer" />
+        <property name="foundTime" column="foundTime" type="string" />
+        <property name="userid" column="userid" type="string" />
+        <property name="islogging" column="islogging" type="string" />
+    </class>
+    
+</hibernate-mapping>

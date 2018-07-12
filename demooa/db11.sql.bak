@@ -1,0 +1,160 @@
+
+--
+-- Create schema db11
+--
+
+CREATE DATABASE IF NOT EXISTS db11;
+USE db11;
+
+--
+-- Definition of table `address`
+--
+
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE `address` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `sex` varchar(10) DEFAULT NULL,
+  `mobile` varchar(20) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `qq` varchar(20) DEFAULT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `postcode` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID` (`ID`),
+  KEY `ID_2` (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=96 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `address`
+--
+
+/*!40000 ALTER TABLE `address` DISABLE KEYS */;
+INSERT INTO `address` (`ID`,`username`,`name`,`sex`,`mobile`,`email`,`qq`,`company`,`address`,`postcode`) VALUES 
+ (95,'cfl','陈凡灵','男','13613806810','buluofan@qq.com','1232121','不落帆工作室','郑州市','999111');
+/*!40000 ALTER TABLE `address` ENABLE KEYS */;
+
+
+
+--
+-- Definition of table `notice`
+--
+
+DROP TABLE IF EXISTS `notice`;
+CREATE TABLE `notice` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sender` varchar(50) NOT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `content` text,
+  `sendtime` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID` (`ID`),
+  KEY `ID_2` (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `notice`
+--
+
+/*!40000 ALTER TABLE `notice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notice` ENABLE KEYS */;
+
+
+--
+-- Definition of table `schedule`
+--
+
+DROP TABLE IF EXISTS `schedule`;
+CREATE TABLE `schedule` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `year` int(4) DEFAULT NULL,
+  `month` int(2) DEFAULT NULL,
+  `day` int(2) DEFAULT NULL,
+  `plan` text,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID` (`ID`),
+  KEY `ID_2` (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `schedule`
+--
+
+/*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
+
+
+
+
+--
+-- Definition of table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `telphone` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `job` varchar(255) DEFAULT NULL,
+  `branch` varchar(255) DEFAULT NULL,
+  `truename` varchar(255) DEFAULT NULL,
+  `sex` varchar(255) DEFAULT NULL,
+  `accessTime` int(11) DEFAULT '0',
+  `foundTime` varchar(255) DEFAULT NULL,
+  `userid` varchar(255) NOT NULL DEFAULT '1',
+  `islogging` varchar(255) NOT NULL DEFAULT 'false',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID` (`ID`),
+  KEY `ID_2` (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user`
+--
+
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` (`ID`,`username`,`password`,`email`,`telphone`,`address`,`job`,`branch`,`truename`,`sex`,`accessTime`,`foundTime`,`userid`,`islogging`) VALUES 
+ (4,'admin','F59BD65F7EDAFB087A81D4DCA06C4910','chenking@china.com.cn','13613806810','dsfasd','BOSS','adf','管理员','男',233,'2008-1-1','0','true'),
+ (83,'ss','E10ADC3949BA59ABBE56E057F20F883E','ss@163.com','25879412','22','22','222','adf','男',10,'2008-05-06 20:46:28','0','true'),
+ (84,'dd','E10ADC3949BA59ABBE56E057F20F883E','abc@def.com','2568471','dafsdf','CEO','asdf','adf','男',1,'2008-05-08 23:26:28','0','false'),
+ (85,'33','E10ADC3949BA59ABBE56E057F20F883E','liangzi@sina.com','15045879621','adfsd','MANAGER','asdf','ad','男',27,'2008-05-16 21:57:03','0','true'),
+ (86,'aa','E10ADC3949BA59ABBE56E057F20F883E','aa@sina.com','15053841763','adfsdf','EMPLOYEE','adf','asdf','男',0,'2008-05-24 16:04:22','0','false'),
+ (88,'hello','E10ADC3949BA59ABBE56E057F20F883E','hello@cn.com','123123123','北京市','部门经理','产品部','李四','男',1,'2011-11-23 22:01:49','1','true');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+
+
+--
+-- Definition of table `worklog`
+--
+
+DROP TABLE IF EXISTS `worklog`;
+CREATE TABLE `worklog` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `year` int(4) DEFAULT NULL,
+  `month` int(2) DEFAULT NULL,
+  `day` int(2) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `description` text,
+  `logtime` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID` (`ID`),
+  KEY `ID_2` (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `worklog`
+--
+
+/*!40000 ALTER TABLE `worklog` DISABLE KEYS */;
+INSERT INTO `worklog` (`ID`,`username`,`year`,`month`,`day`,`title`,`description`,`logtime`) VALUES 
+ (10,'aa',2008,5,5,'ff','ff','2008-05-07 22:51:27');
+/*!40000 ALTER TABLE `worklog` ENABLE KEYS */;
+
+

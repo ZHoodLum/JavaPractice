@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Tue Aug 28 18:29:29 CST 2007                         -->
+<hibernate-mapping package="com.hibernate.beans">
+
+    <class name="Schedule" table="schedule">
+        <id name="id" column="ID" type="java.lang.Integer">
+            <generator class="native"/>
+        </id>
+ 
+        <property name="username" column="username" type="java.lang.String"  not-null="true" />
+        <property name="year" column="year" type="java.lang.Integer" />
+        <property name="month" column="month" type="java.lang.Integer" />
+        <property name="day" column="day" type="java.lang.Integer" />
+        <property name="plan" column="plan" type="java.lang.String" />
+    </class>
+    
+</hibernate-mapping>

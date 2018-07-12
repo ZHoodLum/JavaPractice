@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Tue Aug 28 18:29:28 CST 2007                         -->
+<hibernate-mapping package="com.hibernate.beans">
+
+    <class name="Notice" table="notice">
+        <id name="id" column="ID" type="java.lang.Integer">
+            <generator class="native"/>
+        </id>
+ 
+        <property name="sender" column="sender" type="java.lang.String"  not-null="true" />
+        <property name="title" column="title" type="java.lang.String" />
+        <property name="content" column="content" type="java.lang.String" />
+        <property name="sendtime" column="sendtime" type="java.lang.String" />
+        <!--<property name="isread" column="isRead" type="java.lang.String" />-->
+    </class>
+    
+</hibernate-mapping>

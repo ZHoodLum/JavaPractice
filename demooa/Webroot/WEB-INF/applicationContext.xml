@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:aop="http://www.springframework.org/schema/aop"
+ xmlns:tx="http://www.springframework.org/schema/tx"
+ xmlns:mvc="http://www.springframework.org/schema/mvc"
+ xmlns:task="http://www.springframework.org/schema/task"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-3.0.xsd
+      http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+      http://www.springframework.org/schema/aop
+      http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+      http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd
+">
+
+
+	<!--  配置数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/db11"/>
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="5" />
+	</bean>
+	<!-- 配置Hibernate -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!-- 注入连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		
+		<!-- 配置数据库方法及其他属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.autoReconnect">true</prop>
+			</props>
+		</property>
+		
+		<!-- 加载映射文件 -->
+		<property name="mappingResources">
+			<list>
+				<value>com/hibernate/beans/User.hbm.xml</value>
+				<value>com/hibernate/beans/Schedule.hbm.xml</value>
+				<value>com/hibernate/beans/Notice.hbm.xml</value>
+				<value>com/hibernate/beans/Address.hbm.xml</value>
+				<value>com/hibernate/beans/Worklog.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置事务 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<!-- 注入连接池，hibernate是由session来管理，所以传入sessionFactory即可 -->
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- 开启事务注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<!-- 定义DAO -->
+	<bean id="noticeDAO" class="com.hibernate.dao.NoticeDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="addressDAO" class="com.hibernate.dao.AddressDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="personDAO" class="com.hibernate.dao.PersonDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="scheduleDAO" class="com.hibernate.dao.ScheduleDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+
+	<bean id="userDAO" class="com.hibernate.dao.UserDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="worklogDAO" class="com.hibernate.dao.WorklogDAO">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+
+	<!-- 定义DAO代理 -->
+	<bean id="UserDAOProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="userDAO" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="addressDAOProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="addressDAO" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="scheduleDAOProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="scheduleDAO" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="worklogDAOProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="worklogDAO" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="noticeDAOProxy"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref local="noticeDAO" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- 定义Struts配置 -->
+	<bean name="/register" class="com.struts.actions.RegisterAction">
+		<property name="userDAO">
+			<ref local="userDAO"/>
+		</property>
+	</bean>
+	
+	<bean name="/login" class="com.struts.actions.LoginAction">
+		<property name="userDAO">
+			<ref local="userDAO"/>
+		</property>
+	</bean>
+	
+	<bean name="/logout" class="com.struts.actions.LogoutAction">
+		<property name="userDAO">
+			<ref local="userDAO"/>
+		</property>
+	</bean>
+
+	<!-- 定义Struts配置：address -->
+	<bean name="/address"
+		class="com.struts.actions.AddressAction">
+		<property name="addressDAO">
+			<ref local="addressDAO" />
+		</property>
+	</bean>
+	<bean name="/address_add"
+		class="com.struts.actions.AddressAction">
+		<property name="addressDAO">
+			<ref local="addressDAO" />
+		</property>
+	</bean>
+	<bean name="/address_edit"
+		class="com.struts.actions.AddressAction">
+		<property name="addressDAO">
+			<ref local="addressDAO" />
+		</property>
+	</bean>
+	<bean name="/address_view"
+		class="com.struts.actions.AddressAction">
+		<property name="addressDAO">
+			<ref local="addressDAO" />
+		</property>
+	</bean>
+	
+	<!-- 定义Struts配置：person -->
+	<bean name="/person"
+		class="com.struts.actions.PersonAction">
+		<property name="userDAO">
+			<ref local="userDAO" />
+		</property>
+	</bean>
+	<bean name="/person_add"
+		class="com.struts.actions.PersonAction">
+		<property name="userDAO">
+			<ref local="userDAO" />
+		</property>
+	</bean>
+	<bean name="/person_edit"
+		class="com.struts.actions.PersonAction">
+		<property name="userDAO">
+			<ref local="userDAO" />
+		</property>
+	</bean>
+	<bean name="/person_view"
+		class="com.struts.actions.PersonAction">
+		<property name="userDAO">
+			<ref local="userDAO" />
+		</property>
+	</bean>
+
+	<!-- 定义Struts配置：schedule -->
+	<bean name="/schedule"
+		class="com.struts.actions.ScheduleAction">
+		<property name="scheduleDAO">
+			<ref local="scheduleDAO" />
+		</property>
+	</bean>
+	<bean name="/schedule_add"
+		class="com.struts.actions.ScheduleAction">
+		<property name="scheduleDAO">
+			<ref local="scheduleDAO" />
+		</property>
+	</bean>
+	<bean name="/schedule_edit"
+		class="com.struts.actions.ScheduleAction">
+		<property name="scheduleDAO">
+			<ref local="scheduleDAO" />
+		</property>
+	</bean>
+	<bean name="/schedule_view"
+		class="com.struts.actions.ScheduleAction">
+		<property name="scheduleDAO">
+			<ref local="scheduleDAO" />
+		</property>
+	</bean>
+
+	<!-- 定义Struts配置：worklog -->
+	<bean name="/worklog"
+		class="com.struts.actions.WorklogAction">
+		<property name="worklogDAO">
+			<ref local="worklogDAO" />
+		</property>
+	</bean>
+	<bean name="/worklog_add"
+		class="com.struts.actions.WorklogAction">
+		<property name="worklogDAO">
+			<ref local="worklogDAO" />
+		</property>
+	</bean>
+	<bean name="/worklog_edit"
+		class="com.struts.actions.WorklogAction">
+		<property name="worklogDAO">
+			<ref local="worklogDAO" />
+		</property>
+	</bean>
+	<bean name="/worklog_view"
+		class="com.struts.actions.WorklogAction">
+		<property name="worklogDAO">
+			<ref local="worklogDAO" />
+		</property>
+	</bean>
+
+	<!-- 定义Struts配置：notice -->
+	<bean name="/notice" class="com.struts.actions.NoticeAction">
+		<property name="noticeDAO">
+			<ref local="noticeDAO" />
+		</property>
+	</bean>
+	<bean name="/notice_add"
+		class="com.struts.actions.NoticeAction">
+		<property name="noticeDAO">
+			<ref local="noticeDAO" />
+		</property>
+	</bean>
+	<bean name="/notice_edit"
+		class="com.struts.actions.NoticeAction">
+		<property name="noticeDAO">
+			<ref local="noticeDAO" />
+		</property>
+	</bean>
+	<bean name="/notice_view"
+		class="com.struts.actions.NoticeAction">
+		<property name="noticeDAO">
+			<ref local="noticeDAO" />
+		</property>
+	</bean>
+
+
+
+	<!-- 配置拦截器 -->
+	<bean name="logger" class="com.spring.aop.LoggingInterceptor" />
+
+	<!-- 配置拦截器代理 -->
+	<bean name="loggingAutoProxy"
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<value>/login</value>
+				<value>/register</value>
+				<value>/address</value>
+				<value>/address_add</value>
+				<value>/address_edit</value>
+				<value>/address_view</value>
+				<value>/person</value>
+				<value>/person_add</value>
+				<value>/person_edit</value>
+				<value>/person_view</value>
+				<value>/schedule</value>
+				<value>/schedule_add</value>
+				<value>/schedule_edit</value>
+				<value>/schedule_view</value>
+				<value>/worklog</value>
+				<value>/worklog_add</value>
+				<value>/worklog_edit</value>
+				<value>/worklog_view</value>
+				<value>/notice</value>
+				<value>/notice_add</value>
+				<value>/notice_edit</value>
+				<value>/notice_view</value>
+			
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>logger</value>
+			</list>
+		</property>
+	</bean>
+</beans>

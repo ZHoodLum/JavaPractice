@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Thu Aug 23 16:46:04 CST 2007                         -->
+<hibernate-mapping package="com.hibernate.beans">
+
+    <class name="Address" table="address">
+        <id name="id" column="ID" type="java.lang.Integer">
+            <generator class="native"/>
+        </id>
+ 
+        <property name="username" column="username" type="java.lang.String"  not-null="true" />
+        <property name="name" column="name" type="java.lang.String"  not-null="true" />
+        <property name="sex" column="sex" type="java.lang.String" />
+        <property name="mobile" column="mobile" type="java.lang.String" />
+        <property name="email" column="email" type="java.lang.String" />
+        <property name="qq" column="qq" type="java.lang.String" />
+        <property name="company" column="company" type="java.lang.String" />
+        <property name="address" column="address" type="java.lang.String" />
+        <property name="postcode" column="postcode" type="java.lang.String" />
+    </class>
+    
+</hibernate-mapping>

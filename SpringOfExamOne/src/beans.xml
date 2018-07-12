@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+        
+	<bean id="person1" class="com.exam.SetDI.Person">
+		<property name="person">
+			<value>邹善名</value>
+		</property>
+		<property name="age">
+			<value>21</value>
+		</property>
+		<property name="friend">
+		<list>
+			<value>tom</value>
+			<value>123</value>
+		</list>
+		</property>
+	</bean>	
+	
+	
+	
+	
+	
+
+</beans>       

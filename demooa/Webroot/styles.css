@@ -1,0 +1,67 @@
+BODY {
+	FONT-FAMILY: "ËÎÌו"; FONT-SIZE: 10pt; LINE-HEIGHT: 10pt;background-color: #C7D9E7;
+}
+TD {
+	FONT-FAMILY: "ËÎÌו"; FONT-SIZE: 10pt; 
+}
+
+
+a{color:#DD891D;text-decoration:none;}
+a:hover{color:#1D93DD;text-decoration:underline;}
+
+hr {
+	filter:alpha(opacity=100,finishopacity=2,style=0);
+	height:3px;
+	color:#1D93DD;
+}
+
+.td{
+	FONT-FAMILY: "ËÎÌו"; FONT-SIZE: 10pt;border:1px #1D93DD solid;margin: 0;
+	}
+.position {
+	background-color: #D9EBBE;
+}
+.tableheader {
+	background-color: #A0BF71;
+}
+.pager {
+	background-color: #C7D9E7;margin: 0;
+}
+.buttom{
+padding:1px 10px;
+font-size:12px;
+border:1px #1E7ACE solid;
+background:#D0F0FF;
+}
+ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        }
+/* =-=-=-=-=-=-=-[Menu]-=-=-=-=-=-=-=- */
+
+#menu {
+        width: 187px;
+        border: 1px solid #1D93DD;
+        margin: 0px;
+        }       
+#menu li a {
+          height: 32px;
+          voice-family: "\"}\"";
+          voice-family: inherit;
+          height: 24px;
+          text-decoration: none;
+        }
+
+#menu li a:link, #menu li a:visited {
+        color: #283A50;
+        display: block;
+        background: url(images\menu.gif);
+        padding: 8px 0 0 30px;
+        }
+
+#menu li a:hover, #menu li #current, #menu li a:active {
+        color: #283A50;
+        background: url(images\menu.gif) 0 -32px;
+        padding: 8px 0 0 30px;
+        }
