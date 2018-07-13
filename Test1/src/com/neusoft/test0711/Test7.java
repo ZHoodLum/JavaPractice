@@ -26,6 +26,10 @@ public class Test7 {
 //		String[] op = {"+","*","-","/"};
 //		char[] op = new char[] {'+','-','*','/'};
 		
+//     8种数据类型 判断相等  == 
+//		String 判断相等用euqals
+		
+		
 		double a=0,b=0,c=0;
 		int r=1;
 		Scanner sa = new Scanner(System.in);
@@ -45,7 +49,11 @@ public class Test7 {
 			}else if(s[i] == '*'){
 				System.out.println("运算得："+(c=a*b));
 			}else if(s[i] == '/'){
-				System.out.println("运算得："+(c=a/b));
+				if(b==0){
+					System.out.println("除数不能为0！");
+				}else{
+				System.out.println("运算/得："+(c=a/b));
+				}
 			}
 			else {
 //				System.out.println(new BigInteger(a+"").pow(b));
