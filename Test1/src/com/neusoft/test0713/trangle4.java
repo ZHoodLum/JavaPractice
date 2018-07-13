@@ -4,7 +4,7 @@ public class trangle4 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+//		输出一个double型二维数组（长度分别为5、4，值自己设定）的值。
 //		int[][] a = { {1,2,3},{2,3,6} };
 		double[][] a = new double[2][2];
 		
