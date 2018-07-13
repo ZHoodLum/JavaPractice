@@ -6,7 +6,10 @@ public class trangle5 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+<<<<<<< HEAD
 //		在一个有8个整数（18，25，7，36，13，2，89，63）的数组中找出其中最大的数及其下标
+=======
+>>>>>>> 7cb5949dfe8e48280cd7b698ca9aaeb4839dbc0f
 		int[] a = {18,25,7,36,13,2,89,63};
 //		Arrays类中的sort()使用的是经过调优的快速排序法;
 		Arrays.sort(a);

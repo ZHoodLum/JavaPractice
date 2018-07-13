@@ -6,7 +6,11 @@ public class Test5 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+<<<<<<< HEAD
 
+=======
+		for(;;){
+>>>>>>> 7cb5949dfe8e48280cd7b698ca9aaeb4839dbc0f
 			double a=0,b=0,c=0;
 			double r=1;
 			Scanner sa = new Scanner(System.in);
@@ -35,6 +39,7 @@ public class Test5 {
 					System.out.println("运算/得："+(c=a/b));
 					}
 				}
+<<<<<<< HEAD
 				else if(s.equals("^")){
 //					for(int j=0;j<(b-1);j++){
 //						if(i==0){
@@ -50,7 +55,20 @@ public class Test5 {
 					System.out.println("运算得："+r);
 				}
 				
+=======
+				else {
+					for(int j=0;j<b;j++) {
+					 r = r *a;//当j等于1 进行r= r*a 由于j<b   所以再一次进行运算r*a(r为第一次运算的)
+					 System.out.println("运算得："+r);
+					}
+				}
+				System.out.println();
+>>>>>>> 7cb5949dfe8e48280cd7b698ca9aaeb4839dbc0f
 			}
 		}
 	}
 
+<<<<<<< HEAD
+=======
+}
+>>>>>>> 7cb5949dfe8e48280cd7b698ca9aaeb4839dbc0f
