@@ -39,7 +39,7 @@ ps:break  终止循环
 
 ### 循环练习题
 
-####  冒泡排序
+####  <font color="blue">冒泡排序</font>
 > 使用冒牌排序，对A数组内数字进行由小到大排序
 ```
 public static void main(String[] args) {
