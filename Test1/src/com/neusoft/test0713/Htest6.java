@@ -7,24 +7,24 @@ public class Htest6 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 //		
-		Scanner s = new Scanner(System.in);
-		int a = s.nextInt();
+//		Scanner s = new Scanner(System.in);
+//		int a = s.nextInt();
 
 //			 求大于200的最小质数
-			boolean flag = true;
+			boolean f = true;
 			for(int i=200;;i++) {
 				for(int j=2;j<i;j++) {
 					if(i%j == 0) {
-						//如果找到一个i能被j整除，则证明不是质数
-						flag = false;
-						break;
+						//如果找到一个i能被j整除，则不是质数
+						f = false;
+//						break;
 					}
 				}
-				if(flag) {
+				if(f) {
 					System.out.println("大于200的最小质数："+i);
 					break;
 				}
-				flag = true;
+				f = true;
 			}
 			
 

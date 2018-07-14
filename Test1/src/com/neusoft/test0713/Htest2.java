@@ -18,10 +18,10 @@ public class Htest2 {
 		
 		double i=1,j = 0;
 		while(i<=10){
-			j=1.5*i+1;
+			j=1.5*i;
 			i++;
 		}
-		System.out.println(j);
+		System.out.println(j+1);
 	}
 
 }
