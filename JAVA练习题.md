@@ -13,7 +13,7 @@
 
 > [判定年份是否为闰年](#判定年份是否为闰年)
 
-> [根据分数区分等级](#根据分数区分等级)
+> [求大于200的最小质数](#求大于200的最小质数)
 
 > [求1-100以内奇数和值](#求1-100以内奇数和值)
 
@@ -70,8 +70,14 @@ public static void main(String[] args) {
 			System.out.print(n+"  ");
 		}	
 	}
+	
+	//arrays.sort排序
+	Arrays.sort(a);
+	for(int i=0;i<a.length;i++){
+		System.out.print(a[i]+" ");
+	}
 ```
->>* 冒泡排序，主要使用双重for循环，第一层for循环，为了控制循环次数,j<a.length循环次数小于数组长度，否则会出现数组越界情况；
+>>* 思想：冒泡排序，主要使用双重for循环，第一层for循环，为了控制循环次数,j<a.length循环次数小于数组长度，否则会出现数组越界情况；
 				for循环，为了比较数组内数组的大小，共对数组内数字比较a.length-1-j次。
 				if语句循环，a[i]a[i+1]两两数进行比较，并互换位置。
 ####  学学人家作弊
@@ -103,8 +109,28 @@ public static void main(String[] args) {
 		}
 	}
 ```
->>* 使用数组（可以打印任何形状，缺点：太麻烦，大数值键盘会碎=。= ，无脑操作！），对数组进行定位a[i],若`a[i]==1`，则输出 ` *` ，则输出其他内容（自己定）使用`（i+1）%行数  `控制来行数。
-
+>>* 思想：使用数组（可以打印任何形状，缺点：太麻烦，大数值键盘会碎=。= ，无脑操作！），对数组进行定位a[i],若`a[i]==1`，则输出 ` *` ，则输出其他内容（自己定）使用`（i+1）%行数  `控制来行数。
+#### 数值调换位置
+> 输入四位整数1234  进行反转  4321
+```
+public static void main(String[] args) {
+//		输入四位整数1234  进行反转  4321
+		Scanner s = new Scanner(System.in);
+		int a = s.nextInt();
+		int sum=0;
+		
+		while(a!=0){
+			/*
+			 * 1234
+			 * 4  321
+			 */
+			sum = a%10+sum*10;
+			a = a/10;
+		}
+		System.out.println(sum);
+	}
+```
+>> 思想：大部分第一时间都会想到：我可以将这些数按个位十位百位千位提炼出来，然后再依次放入对应的位置。我想说：方法很好，不错，但是你就没有想过优化一下嘛？来，让我们想想：每次取完位数，我们可以把它和对应位数互换，一次一次进行循环。
 ####  判定年份是否为闰年
 >  编写程序，判断给定的某个年份是否是闰年。闰年的判断规则如下：（1）若某个年份能被4整除但不能被100整除，则是闰年。（2）若某个年份能被400整除，则也是闰年。
 ```
@@ -123,61 +149,48 @@ public static void main(String[] args) {
 		}		
 	}
 ```
-####  根据分数区分等级
-> 给定一个百分制的分数，输出相应的等级。 90分以上 A级,80~89 B级,70~79 C级,60~69  D级,60分以下 E级。
-```
-public static void main(String[] args) {
-		System.out.println("请输入一个整数分数：");
-		for(;;){
-			Scanner s = new Scanner(System.in);
-			int a = s.nextInt();
-			
-			if(90<=a&&a<=100){
-				System.out.println("A级!");
-			}
-			if(80<=a&&a<=89){
-				System.out.println("B级!");
-			}
-			if(70<=a&&a<=79){
-				System.out.println("C级!");
-			}
-			if(60<=a&&a<=69){
-				System.out.println("D级!");
-			}else{
-				System.out.println("E级");
-			}
-		}
-	}
+####  求大于200的最小质数
 
 ```
+public static void main(String[] args) {
+	boolean f = true;
+	for(int i=200;;i++) {
+		for(int j=2;j<i;j++) {
+			if(i%j == 0) {
+				//如果找到一个i能被j整除，则不是质数
+				f = false;
+			}
+		}
+		if(f) {
+			System.out.println("大于200的最小质数："+i);
+			break;
+		}
+		f = true;
+	}
+}
+```
 ####  求1-100以内奇数和值
->  编写程序求 1+3+5+7+……+99 的和值。
+>  编写程序求截止到某位数之前所有奇数的的和值。
 ```
 public static void main(String[] args) {
 		System.out.println("请输入一个正整数：");
 		Scanner sr = new Scanner(System.in);
 		int n = sr.nextInt();
 		int s = 0;
+		//此处为for循环的关键点，a+=2：求奇数
 		for(int a = 1;a<=n;a+=2){
 			s = s+a;	
 		}
 		System.out.println("截止到"+n+"所有奇数和为："+s);
-		
-//		int a = 1;
-//		int s = 0;
-//		while(a<=5){
-//			s = s+a;
-//			a=a+2;	
-//		}
-//		System.out.println(s);
-//		
 	}
 ```
+>>* 思想：输入一个数，求这个数范围内奇数和。我们需要去想，怎末才会得到奇数的问题，最后再把他们相加起来呢？奇数 = 1+2、3+2、5+2，
+也就是说：起点为奇数，每次加2，结果得到下一位奇数，依次循环并相加这些奇数。提示：运用for循环。
 #### 打印99表
 >  利用for while dowhile循环打印 9*9  表?
 ```
 public static void main(String[] args) {
-		//for 行列进行打印
+		//for 循环行列进行打印
 /*		for(int i=0;i<9;i++){
 			
 			for(int j=1;j<9;j++){
@@ -188,7 +201,7 @@ public static void main(String[] args) {
 		System.out.println();
 */
 		
-		//while
+		//while循环
 		
 /*		int i=0;
 		while(i<9){
@@ -198,8 +211,8 @@ public static void main(String[] args) {
 			}
 			System.out.println(" * ");
 		}
-	*/	
-		//do while
+*/	
+		//do while循环
 		int a = 1;
 		int s = 0;
 		do{
@@ -209,8 +222,6 @@ public static void main(String[] args) {
 			}
 			System.out.println(" * ");
 		}while(a<9);
-		
-		
 	}
 ```
 ####  求水仙花数
@@ -239,6 +250,7 @@ public static void main(String[] args) {
 		}
 	}
 ```
+>>* 思想：要判断是否为水仙花数，那么我就需要将这三位数提取出来，个位：a/100、十位:(a/10)%10、百位数:a%10 提炼出来，再进行计算。提示：根据求余进行计算。
 ####  输出正三角形
 > 在屏幕上打印出n行的金字塔图案，如，若n=5,则图案如下：
         *
