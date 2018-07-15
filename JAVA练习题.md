@@ -9,9 +9,13 @@
 
 > [冒泡排序](#冒泡排序)
 
+>[二维数组遍历](#二维数组遍历)
+
 > [学学人家作弊](#学学人家作弊)
 
 > [数值调换位置](#数值调换位置)
+
+> [数组从新排列](#数组从新排列)
 
 > [判定年份是否为闰年](#判定年份是否为闰年)
 
@@ -90,34 +94,78 @@ public static void main(String[] args) {
 >>* 思想：冒泡排序，主要使用双重for循环，第一层for循环，为了控制循环次数,j<a.length循环次数小于数组长度，否则会出现数组越界情况；
 				for循环，为了比较数组内数组的大小，共对数组内数字比较a.length-1-j次。
 				if语句循环，a[i]a[i+1]两两数进行比较，并互换位置。
+#### 二维数组遍历
+> 使用三种循环方式对数组进行遍历
+```
+public static void main(String[] args) {
+       //a[] 代表第几位数组  [] 代表第一个数组中的第几位数  相当于x,y轴
+	int[][] a = { {1,2,3},{2,3,6} };
+	System.out.println(a[0][0]);
+	System.out.println("------------二维数组for循环的遍历----------");
+
+	System.out.println("while循环遍历");
+	int i=0;
+	int n=0;
+	while(n<a.length){
+		while(i<a[n].length){
+			System.out.print(a[n][i]+",");
+			i++;
+		}
+		i=0;
+		n++;
+		System.out.println();
+	}
+
+	System.out.println("while for结合循环遍历");
+	int i=0;
+	for(int n=0;n<a.length;n++){
+		while(i<a[n].length){
+			System.out.print(a[n][i]+",");
+			i++;
+		}
+		i=0;
+		System.out.println();
+	}
+
+	System.out.println("foreach结合循环遍历");
+	for(int[] b:a){
+		for(int n:b){
+			System.out.println(n+",");
+		}
+	}
+
+
+}
+```
+
 ####  学学人家作弊
 > 输出空心正方形
 ```
 public static void main(String[] args) {
-		//开始作弊了昂
-		//直接打印64个*   如果对8取余   换行		
-		//使用数组
-		int[] a = {
-				1,1,1,1,1,1,1,1,
-				1,0,0,0,0,0,0,1,
-				1,0,0,0,0,0,0,1,
-				1,0,0,0,0,0,0,1,
-				1,0,0,0,0,0,0,1,
-				1,0,0,0,0,0,0,1,
-				1,0,0,0,0,0,0,1,
-				1,1,1,1,1,1,1,1
-				};
-		for(int i=0;i<a.length;i++){
-			if(a[i]==1){
-				System.out.print("*");
-			}else if(a[i]==0){
-				System.out.print(" ");
-			}
-			if((i+1)%8==0){
-				System.out.println();
-			}
+	//开始作弊了昂
+	//直接打印64个*   如果对8取余   换行		
+	//使用数组
+	int[] a = {
+			1,1,1,1,1,1,1,1,
+			1,0,0,0,0,0,0,1,
+			1,0,0,0,0,0,0,1,
+			1,0,0,0,0,0,0,1,
+			1,0,0,0,0,0,0,1,
+			1,0,0,0,0,0,0,1,
+			1,0,0,0,0,0,0,1,
+			1,1,1,1,1,1,1,1
+			};
+	for(int i=0;i<a.length;i++){
+		if(a[i]==1){
+			System.out.print("*");
+		}else if(a[i]==0){
+			System.out.print(" ");
+		}
+		if((i+1)%8==0){
+			System.out.println();
 		}
 	}
+}
 ```
 >>* 思想：使用数组（可以打印任何形状，缺点：太麻烦，大数值键盘会碎=。= ，无脑操作！），对数组进行定位a[i],若`a[i]==1`，则输出 ` *` ，则输出其他内容（自己定）使用`（i+1）%行数  `控制来行数。
 #### 数值调换位置
@@ -125,59 +173,85 @@ public static void main(String[] args) {
 ```
 //第一种方法
 public static void main(String[] args) {
-//		输入四位整数1234  进行反转  4321
-		Scanner s = new Scanner(System.in);
-		int a = s.nextInt();
-		int sum=0;
-		
-		while(a!=0){
-			/*
-			 * 1234
-			 * 4  321
-			 */
-			sum = a%10+sum*10;
-			a = a/10;
-		}
-		System.out.println(sum);
+//	输入四位整数1234  进行反转  4321
+	Scanner s = new Scanner(System.in);
+	int a = s.nextInt();
+	int sum=0;
+
+	while(a!=0){
+		/*
+		 * 1234
+		 * 4  321
+		 */
+		sum = a%10+sum*10;
+		a = a/10;
 	}
+	System.out.println(sum);
+}
 //第二种方法
 public static void main(String[] args) {		
-//		控制台输入值
-		int a = 0;
-		int b = 0;
-		int temp = 0;
-		Scanner sc = new Scanner(System.in);
-		System.out.println("请输入a的值：");
-		a = sc.nextInt();
-		System.out.println("请输入b的值：");
-		b = sc.nextInt();
-		System.out.println("输入的a的值为"+a+"输入的b值为"+b);
-		
-		temp = a;
-		a = b;
-		b = temp;
-		System.out.println("交换后：");
-		System.out.println("输入的a的值为"+a+"输入的b值为"+b);
-	}
+//	控制台输入值
+	int a = 0;
+	int b = 0;
+	int temp = 0;
+	Scanner sc = new Scanner(System.in);
+	System.out.println("请输入a的值：");
+	a = sc.nextInt();
+	System.out.println("请输入b的值：");
+	b = sc.nextInt();
+	System.out.println("输入的a的值为"+a+"输入的b值为"+b);
+
+	temp = a;
+	a = b;
+	b = temp;
+	System.out.println("交换后：");
+	System.out.println("输入的a的值为"+a+"输入的b值为"+b);
+}
 ```
 >> 思想：大部分第一时间都会想到：我可以将这些数按个位十位百位千位提炼出来，然后再依次放入对应的位置。我想说：方法很好，不错，但是你就没有想过优化一下嘛？来，让我们想想：每次取完位数，我们可以把它和对应位数互换，一次一次进行循环。
+#### 数组从新排列
+> 有2个多维数组分别是 `2 3 4` , `4 6 8` 和  `1 5 2 8 `,`5 9 10 -3 `,` 2 7 -5 -18`。按照如下方式进行运算。生成一个2行4列的数组。此数组的第1行1列是2*1+3*5+4*2第1行2列是2*5+3*9+4*7  第2行1列是4*1+6*5+8*2 依次类推。
+```
+public static void main(String[] args) {
+	int[][] a = { { 2, 3, 4 }, { 4, 6, 8 } };
+	int[][] b = { { 1, 5, 2, 8 }, { 5, 9, 10, -3 }, { 2, 7, -5, -18 } };
+
+	int c[][] = new int[2][4];
+	int k=0,j=0,add=0;
+	for (k=0;k<2;k++) {
+		for (j=0;j<4;j++) {
+			for (int i = 0; i < 3; i++) {
+				add = add + a[k][i] * b[i][j];
+			}
+			c[k][j] = add;
+		}
+	}
+	//遍历二维数组
+	for(int[] e:a){
+		for(int n:e){
+			System.out.println(n+",");
+		}
+	}
+
+}
+```
 ####  判定年份是否为闰年
 >  编写程序，判断给定的某个年份是否是闰年。闰年的判断规则如下：（1）若某个年份能被4整除但不能被100整除，则是闰年。（2）若某个年份能被400整除，则也是闰年。
 ```
-     public static void main(String[] args) {
-	   System.out.println("请输入一个整数年份：");		
-       for(;;){
-			Scanner s = new Scanner(System.in);
-			int a = s.nextInt();
-			if(a%400==0){
-				System.out.println("今年是闰年啊！");continue;
-			}else if(a%4==0&&a%100!=0){
-				System.out.println("今年是闰年啊！");continue;
-			}else{
-				System.out.println("不是闰年哦！！");continue;
-			}
-		}		
-	}
+public static void main(String[] args) {
+   System.out.println("请输入一个整数年份：");		
+for(;;){
+		Scanner s = new Scanner(System.in);
+		int a = s.nextInt();
+		if(a%400==0){
+			System.out.println("今年是闰年啊！");continue;
+		}else if(a%4==0&&a%100!=0){
+			System.out.println("今年是闰年啊！");continue;
+		}else{
+			System.out.println("不是闰年哦！！");continue;
+		}
+	}		
+}
 ```
 ####  求大于200的最小质数
 
@@ -203,16 +277,16 @@ public static void main(String[] args) {
 >  编写程序求截止到某位数之前所有奇数的的和值。
 ```
 public static void main(String[] args) {
-		System.out.println("请输入一个正整数：");
-		Scanner sr = new Scanner(System.in);
-		int n = sr.nextInt();
-		int s = 0;
-		//此处为for循环的关键点，a+=2：求奇数
-		for(int a = 1;a<=n;a+=2){
-			s = s+a;	
-		}
-		System.out.println("截止到"+n+"所有奇数和为："+s);
+	System.out.println("请输入一个正整数：");
+	Scanner sr = new Scanner(System.in);
+	int n = sr.nextInt();
+	int s = 0;
+	//此处为for循环的关键点，a+=2：求奇数
+	for(int a = 1;a<=n;a+=2){
+		s = s+a;	
 	}
+	System.out.println("截止到"+n+"所有奇数和为："+s);
+}
 ```
 >>* 思想：输入一个数，求这个数范围内奇数和。我们需要去想，怎末才会得到奇数的问题，最后再把他们相加起来呢？奇数 = 1+2、3+2、5+2，
 也就是说：起点为奇数，每次加2，结果得到下一位奇数，依次循环并相加这些奇数。提示：运用for循环。
@@ -220,65 +294,65 @@ public static void main(String[] args) {
 >  利用for while dowhile循环打印 9*9  表?
 ```
 public static void main(String[] args) {
-		//for 循环行列进行打印
+	//for 循环行列进行打印
 /*		for(int i=0;i<9;i++){
-			
-			for(int j=1;j<9;j++){
-				System.out.print(" * ");
-			}
-			System.out.println(" * ");
+
+		for(int j=1;j<9;j++){
+			System.out.print(" * ");
 		}
-		System.out.println();
-*/
-		
-		//while循环
-		
-/*		int i=0;
-		while(i<9){
-			i++;
-			for(int j=1;j<9;j++){
-				System.out.print(" * ");
-			}
-			System.out.println(" * ");
-		}
-*/	
-		//do while循环
-		int a = 1;
-		int s = 0;
-		do{
-			a++;
-			for(int j=1;j<9;j++){
-				System.out.print(" * ");
-			}
-			System.out.println(" * ");
-		}while(a<9);
+		System.out.println(" * ");
 	}
+	System.out.println();
+*/
+
+	//while循环
+
+/*		int i=0;
+	while(i<9){
+		i++;
+		for(int j=1;j<9;j++){
+			System.out.print(" * ");
+		}
+		System.out.println(" * ");
+	}
+*/	
+	//do while循环
+	int a = 1;
+	int s = 0;
+	do{
+		a++;
+		for(int j=1;j<9;j++){
+			System.out.print(" * ");
+		}
+		System.out.println(" * ");
+	}while(a<9);
+}
 ```
 ####  求水仙花数
 > 5、输出所有的水仙花数，把谓水仙花数是指一个数3位数，其各各位数字立方和等于其本身，例如： 153 = 1*1*1 + 3*3*3 + 5*5*5  
 ```
 public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
-		for(;;){
-			System.out.print("请输入水仙花数值：");
-			int a = sc.nextInt();
-			
-			int b = a/100;
-			System.out.println("个位数为："+b);
-			int c = (a/10)%10;
-			System.out.println("十位数为："+c);
-			int d = a%10;
-			System.out.println("百位数为："+d);
-			
-			 if((b*b*b+c*c*c+d*d*d)== a){
-				 System.out.println();
-				 System.out.println("水仙花数为："+a);
-			 }else{
-				 System.out.println("不是水仙花数！");
-				 System.out.println();
-			 }continue;
-		}
+	for(;;){
+		System.out.print("请输入水仙花数值：");
+		int a = sc.nextInt();
+
+		int b = a/100;
+		System.out.println("个位数为："+b);
+		int c = (a/10)%10;
+		System.out.println("十位数为："+c);
+		int d = a%10;
+		System.out.println("百位数为："+d);
+
+		 if((b*b*b+c*c*c+d*d*d)== a){
+			 System.out.println();
+			 System.out.println("水仙花数为："+a);
+		 }else{
+			 System.out.println("不是水仙花数！");
+			 System.out.println();
+		 }continue;
 	}
+}
 ```
 >>* 思想：要判断是否为水仙花数，那么我就需要将这三位数提取出来，个位：a/100、十位:(a/10)%10、百位数:a%10 提炼出来，再进行计算。提示：根据求余进行计算。
 ####  输出正三角形
@@ -290,21 +364,21 @@ public static void main(String[] args) {
     *********
 ```
 public static void main(String[] args) {
-//			正三角形
-			int l=5;
-			for(int i=0;i<l;i++){
+//		正三角形
+		int l=5;
+		for(int i=0;i<l;i++){
 
-		        for(int j=0;j<l-1-i;j++){
-		                System.out.print(" ");
-		            }
-		           
-		        for( int j=0;j<2*i+1;j++){
-		            System.out.print("*");
-		        }
-		               
-		            System.out.println();
-	        } 	
-		}		
+		for(int j=0;j<l-1-i;j++){
+			System.out.print(" ");
+		    }
+
+		for( int j=0;j<2*i+1;j++){
+		    System.out.print("*");
+		}
+
+		    System.out.println();
+	} 	
+	}		
 ```
 #### 数组排序找出最大值及其下标
 在一个有8个整数（18，25，7，36，13，2，89，63）的数组中找出其中最大的数及其下标
