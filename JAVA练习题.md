@@ -25,6 +25,13 @@
 
 > [输出正三角形](#输出正三角形)
 
+> [数组排序找出最大值及其下标](#数组排序找出最大值及其下标)
+
+> [清除数组中重复元素](#清除数组中重复元素)
+
+> [数组拷贝](#数组拷贝)
+
+
 ---
 ---
 
@@ -278,6 +285,59 @@ public static void main(String[] args) {
 	        } 	
 		}		
 ```
+#### 数组排序找出最大值及其下标
+在一个有8个整数（18，25，7，36，13，2，89，63）的数组中找出其中最大的数及其下标
+```
+public static void main(String[] args) {		
+	int[] a = {18,25,7,36,13,2,89,63};
+	//		Arrays类中的sort()使用的是经过调优的快速排序法;
+	Arrays.sort(a);
+	int i=0;
+	for(i=0;i<a.length;i++){
+		if(i==(a.length-1)){
+			System.out.println("数组下标为："+i);
+		}
+	}
+	System.out.println(a[a.length-1]);
 
-
-
+}
+```
+#### 清除数组中重复元素
+按照如下方式进行运算。生成一个2行4列的数组。此数组的第1行1列是`2*1+3*5+4*2`第1行2列是`2*5+3*9+4*7`第2行1列是`4*1+6*5+8*2` 依次类推。（知识点：多维数组定义和创建、数组遍历、数组元素访问）
+```
+public static void main(String[] args) throws ParseException {
+		
+/*	有2个多维数组分别是 2 3 4   和  1 5 2 8 
+4 6 8       5 9 10 -3 
+	    2 7 -5 -18
+*/
+//		将一个数组中的重复元素保留一个其他的清零
+	String[] a ={"1","2","2","3","3","3","6"};
+	TreeSet ts = new TreeSet();
+	for(String s:a) {
+	    ts.add(s);
+	}
+	String[] array = (String[])ts.toArray(new String[]{});
+	System.out.println(Arrays.toString(array));
+}
+```
+#### 数组拷贝
+public static void main(String[] args) {
+		// TODO Auto-generated method stub
+//		将一个字符数组的值（neusofteducation）拷贝到另一个字符数组中
+		String[] a = {"neusofuducation"};
+		
+		String[] b = new String[1];
+		
+		System.arraycopy(a, 0, b, 0, a.length);
+		
+		for(String n:b){
+			System.out.print(n);
+		}
+		
+	}
+	
+	
+	
+	
+	
