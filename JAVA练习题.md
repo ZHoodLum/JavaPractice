@@ -123,6 +123,7 @@ public static void main(String[] args) {
 #### 数值调换位置
 > 输入四位整数1234  进行反转  4321
 ```
+//第一种方法
 public static void main(String[] args) {
 //		输入四位整数1234  进行反转  4321
 		Scanner s = new Scanner(System.in);
@@ -138,6 +139,25 @@ public static void main(String[] args) {
 			a = a/10;
 		}
 		System.out.println(sum);
+	}
+//第二种方法
+public static void main(String[] args) {		
+//		控制台输入值
+		int a = 0;
+		int b = 0;
+		int temp = 0;
+		Scanner sc = new Scanner(System.in);
+		System.out.println("请输入a的值：");
+		a = sc.nextInt();
+		System.out.println("请输入b的值：");
+		b = sc.nextInt();
+		System.out.println("输入的a的值为"+a+"输入的b值为"+b);
+		
+		temp = a;
+		a = b;
+		b = temp;
+		System.out.println("交换后：");
+		System.out.println("输入的a的值为"+a+"输入的b值为"+b);
 	}
 ```
 >> 思想：大部分第一时间都会想到：我可以将这些数按个位十位百位千位提炼出来，然后再依次放入对应的位置。我想说：方法很好，不错，但是你就没有想过优化一下嘛？来，让我们想想：每次取完位数，我们可以把它和对应位数互换，一次一次进行循环。
