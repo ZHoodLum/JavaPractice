@@ -46,11 +46,11 @@ public class Test10 {
 		
 */		
 		System.out.println("foreach结合循环遍历");
-//		for(int[] b:a){
-//			for(int n:b){
-//				System.out.println(n+",");
-//			}
-//		}
+		for(int[] b:a){
+			for(int n:b){
+				System.out.println(n+",");
+			}
+		}
 		
 		
 	}
