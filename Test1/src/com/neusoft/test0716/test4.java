@@ -3,7 +3,7 @@ package com.neusoft.test0716;
 import java.util.Arrays;
 import java.util.TreeSet;
 
-public class test4 {
+public class Test4 {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

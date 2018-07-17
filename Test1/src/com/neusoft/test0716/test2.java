@@ -2,7 +2,7 @@ package com.neusoft.test0716;
 
 import java.util.Scanner;
 
-public class test2 {
+public class Test2 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

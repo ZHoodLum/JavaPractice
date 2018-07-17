@@ -1,6 +1,6 @@
 package com.neusoft.test0716;
 
-public class test3 {
+public class Test3 {
 	public static void main(String[] args) {
 		double sum=0;
 		
