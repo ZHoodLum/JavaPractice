@@ -2,7 +2,7 @@ package Test1;
 
 import java.util.Scanner;
 
-public class trangle2 {
+public class Trangle2 {
 	public static void main(String[] args) {
 		//倒三角形
 		int line=6;//定义行数

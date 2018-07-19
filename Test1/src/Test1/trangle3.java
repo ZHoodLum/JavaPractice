@@ -2,7 +2,7 @@ package Test1;
 
 import java.util.Scanner;
 
-public class trangle3 {
+public class Trangle3 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int[][] a = { { 2, 3, 4 }, { 4, 6, 8 } };
