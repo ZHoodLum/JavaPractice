@@ -24,9 +24,6 @@ Object object =new Object();
 String str ="hello";
  强引用有引用变量指向时永远不会被垃圾回收，JVM宁愿抛出OutOfMemory错误也不会回收这种对象。
 
-[java] view plain copy
- 
- 在CODE上查看代码片派生到我的代码片
  ```
 <pre name="code" class="java">public class Main {  
     public static void main(String[] args) {  
@@ -44,9 +41,6 @@ String str ="hello";
 
 比如Vector类的clear方法中就是通过将引用赋值为null来实现清理工作的：
 
-[java] view plain copy
- 
- 在CODE上查看代码片派生到我的代码片
  ```
 <pre name="code" class="java">
 /** 
@@ -97,34 +91,34 @@ SoftReference aSoftRef=new SoftReference(aRef);
 此时，对于这个MyObject对象，有两个引用路径，一个是来自SoftReference对象的软引用，一个来自变量aReference的强引用，所以这个MyObject对象是强可及对象。
 
 随即，我们可以结束aReference对这个MyObject实例的强引用:
-`[java] view plain copy`
- 
- 在CODE上查看代码片派生到我的代码片
-`<pre name="code" class="java">aRef = null;  `
+```
+<pre name="code" class="java">aRef = null; 
+````
 此后，这个MyObject对象成为了软引用对象。如果垃圾收集线程进行内存垃圾收集，并不会因为有一个SoftReference对该对象的引用而始终保留该对象。
 Java虚拟机的垃圾收集线程对软可及对象和其他一般Java对象进行了区别对待:软可及对象的清理是由垃圾收集线程根据其特定算法按照内存需求决定的。
 也就是说，垃圾收集线程会在虚拟机抛出OutOfMemoryError之前回收软可及对象，而且虚拟机会尽可能优先回收长时间闲置不用的软可及对象，对那些刚刚构建的或刚刚使用过的“新”软可反对象会被虚拟机尽可能保留。在回收这些对象之前，我们可以通过:
-[java] view plain copy
- 
- 在CODE上查看代码片派生到我的代码片
-<pre name="code" class="java">MyObject anotherRef=(MyObject)aSoftRef.get();  
+```
+<pre name="code" class="java">MyObject anotherRef=(MyObject)aSoftRef.get(); 
+```
 重新获得对该实例的强引用。而回收之后，调用get()方法就只能得到null了。
 使用ReferenceQueue清除失去了软引用对象的SoftReference：
 
 作为一个Java对象，SoftReference对象除了具有保存软引用的特殊性之外，也具有Java对象的一般性。所以，当软可及对象被回收之后，虽然这个SoftReference对象的get()方法返回null,但这个SoftReference对象已经不再具有存在的价值，需要一个适当的清除机制，避免大量SoftReference对象带来的内存泄漏。在java.lang.ref包里还提供了ReferenceQueue。如果在创建SoftReference对象的时候，使用了一个ReferenceQueue对象作为参数提供给SoftReference的构造方法，如:
-[java] view plain copy
- 
- 在CODE上查看代码片派生到我的代码片
-`<pre name="code" class="java">ReferenceQueue queue = new  ReferenceQueue();  
-SoftReference  ref=new  SoftReference(aMyObject, queue);  `
+
+```
+<pre name="code" class="java">ReferenceQueue queue = new  ReferenceQueue();  
+SoftReference  ref=new  SoftReference(aMyObject, queue);  
+```
 那么当这个SoftReference所软引用的aMyOhject被垃圾收集器回收的同时，ref所强引用的SoftReference对象被列入ReferenceQueue。也就是说，ReferenceQueue中保存的对象是Reference对象，而且是已经失去了它所软引用的对象的Reference对象。另外从ReferenceQueue这个名字也可以看出，它是一个队列，当我们调用它的poll()方法的时候，如果这个队列中不是空队列，那么将返回队列前面的那个Reference对象。
 
   在任何时候，我们都可以调用ReferenceQueue的poll()方法来检查是否有它所关心的非强可及对象被回收。如果队列为空，将返回一个null,否则该方法返回队列中前面的一个Reference对象。利用这个方法，我们可以检查哪个SoftReference所软引用的对象已经被回收。于是我们可以把这些失去所软引用的对象的SoftReference对象清除掉。常用的方式为:
   
-`<pre name="code" class="java">SoftReference ref = null;  
+```
+<pre name="code" class="java">SoftReference ref = null;  
 while ((ref = (EmployeeRef) q.poll()) != null) {  
     // 清除ref  
-}  `
+} 
+```
 
 * 3.弱引用（WeakReference）
 
