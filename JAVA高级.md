@@ -90,10 +90,6 @@ SoftReference的特点是它的一个实例保存对一个Java对象的软引用
 另外，一旦垃圾线程回收该Java对象之 后，get()方法将返回null。
 
 举个栗子：
-
-[java] view plain copy
- 
- 在CODE上查看代码片派生到我的代码片
  ```
 <pre name="code" class="java">MyObject aRef = new  MyObject();  
 SoftReference aSoftRef=new SoftReference(aRef);  
