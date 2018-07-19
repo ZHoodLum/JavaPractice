@@ -957,9 +957,44 @@ public class CoditionA implements Condition{
 
 * 多态
 * 内部类
-* 异常及异常处理
+####  异常及异常处理（Exception Handing）
+* 引言：在Java中，运行时错误会作为异常抛出（而不是编译时的语法错误）。异常是一种对象，表示组织正常进行程序执行的错误或者情况。如果异常没有被处理，南无程序将会非正常终止。
   
-  
+* Throwable下包括：Error和Exception
+
+* Error：Error层次结构描述了JAVA运行时系统内部错误和资源耗尽。
+* Exception：有两个分支：一个分支是派生于RuntiomeException;另一个是分支包含其他异常（IOException）。
+* 派生于Error或RunTimeException类的所有异常成为`未检查性(unchecked)异常`，所有其他的异常成为`已检查(checked)异常`。
+
+* 异常类型
+* 检查性异常（checked exception）
+> 若系统运行时可能产生该类异常，则必须写出相应的处理代码，否则无法通过编译
+> 非RuntimeException异常
+* 非检查性异常（unchecked exception）
+> 若系统运行时可能产生该类异常，则不必在程序中声明对该类异常的处理，就可以编译执行
+> RuntimeException：运行时异常
+
+非检查异常|说明
+|--|:--:|
+RuntimeException|java.lang包中多数异常的基类
+ArithmeticException|算术错误，如除以0
+lllegalArgumentException|方法收到非法参数
+ArrayIndexOutOfBoundsException|数组下标越界
+NullPointerException|试图访问null对象引用
+
+检查异常|说明
+|--|:--:|
+ClassNotFoundException|无法找到想要创建对象的类文件
+IOException|I/O异常的根类
+FileNotFoundException|不能找到文件
+EOFException|文件结束
+lllegaAccessException|请求方法不存在
+InterruptedException|线程中断
+
+##### 规则：
+> 有程序错误导致的异常属于RuntimeException；而程序本身没有问题，但由于I/O错误这类问题导致的异常属于其他异常。
+> 如果出现RunTimeException异常，那么就一定是你的问题。很有道理的定理。
+ 
   
   
   
