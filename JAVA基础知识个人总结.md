@@ -920,8 +920,11 @@ public class CoditionA implements Condition{
 
 * 接口注意事项：
 > 接口不是一个类，没有构造器，不能被实例化
+
 > 接口使用interface关键字来定义，而不是class
+
 > 接口默认：常量：public static final ; 抽象方法： public abstract
+
 > 接口在与多方面与类相似，但是它的目的是指`明相关`或者`不相关类的多个对象的共同行为`。
 
 * 接口语法格式：
@@ -934,17 +937,24 @@ public class CoditionA implements Condition{
 ```
 * 接口和类的关系
 > 类实现接口 — implements
+
 >> 为了使用一个接口，你要编写实现接口的类
+
 >> 如果一个类要实现一个接口，那么这个类就必须实现接口中所有抽象方法。否则这个类只能声明为抽象类
+
 >> 多个无关的类可以实现一个接口，一个类可以实现多个无关的接口
+
 >> 一个类可以在继承一个父类的同时，实现一个或多个接口
+
 * 语法格式：
 ```
 [修饰符]  class 类名 extends 类名 implements 接口1,接口2{  类的成员    }
 ```
 > 接口可以实现多继承：
 >> 用接口可以实现混合类型（主类型，副类型），在Java 中可以通过接口分出主次类型；
+
 >> 主类型使用继承，副类型使用接口实现。
+
 >> 接口可以使方法的定义和实现相分离，降低模块间或系统间的耦合性
 
 * 接口与抽象类相同点与不同点
@@ -968,10 +978,15 @@ public class CoditionA implements Condition{
 ~~注：图片在JAVA技术卷I   P473页~~
 ##### 异常类型
 * 检查性异常（checked exception）
+
 > 若系统运行时可能产生该类异常，则必须写出相应的处理代码，否则无法通过编译
+
 > 非RuntimeException异常
+
 * 非检查性异常（unchecked exception）
+
 > 若系统运行时可能产生该类异常，则不必在程序中声明对该类异常的处理，就可以编译执行
+
 > RuntimeException：运行时异常
 
 非检查异常|说明
@@ -990,8 +1005,10 @@ FileNotFoundException|不能找到文件
 EOFException|文件结束
 IllegaAccessException|请求方法不存在
 InterruptedException|线程中断
+
 * 规则：
 > 有程序错误导致的异常属于RuntimeException；而程序本身没有问题，但由于I/O错误这类问题导致的异常属于其他异常。
+
 > 如果出现RunTimeException异常，那么就一定是你的问题。很有道理的定理。
 
 ##### 声明异常
@@ -1007,20 +1024,26 @@ InterruptedException|线程中断
 throw new IllegaAccessException("Wrong Arfument 出现异常啦！！");
 ```
 抛出异常关键字是：`throw`  。
+
 > throws声明异常  有可能出现问题的异常类型
+
 > 次方法中有异常 所以要向上抛  谁调用我 谁需要解决异常
 
 ##### 捕获异常
 * 处理异常两种方式：
+
 > 自行处理：可能引发异常的语句封入在 try 块内，而处理异常的相应语句则封入在 catch 块内。
+
 > 回避异常：在方法声明中包含 throws 子句，通知潜在调用者，如果发生了异常，必须由调用者处理。
 
 * 异常处理机制
+
 > 每次try块有异常抛出，系统会试着从上到下往每个catch块中传参，直到遇到一个类型匹配的catch块为止。
 
 > 如上示例中最后一个catch块中的形参为Exception类型，它是所有异常类的父类，任何异常都可以传参到该块中，该块可以处理任何类型的异常。因此，这个catch块只能放到最后面，否则所有的异常都被它处理了，其他的catch块就不能分门别类的起作用了。
 
 > 一般一个catch块中是专门处理异常的代码，在程序中这里还可以是记录日志的语句，当发生异常时记录该日志，无异常时将不会记录。
+
 > 如果编写过程中我们违背了异常继承顺序，会产生编译错误
 ```
 catch (ArrayIndexOutOfBoundsException e) {
@@ -1043,10 +1066,123 @@ catch{}内的语句是对异常的处理
 ```
 > 和特殊异常类相关联的catch()块必须写在和普通异常类相关联的catch()之前。
 
+* finally子句
+
+> 无论异常是否产生，finally子句总是会被执行的。
+
+> 通常在finally语句中可以进行资源的清除操作，如：关闭打开文件、删除临时文件
+
+> 对应finally代码中的语句，即使try代码块和catch代码块中使用了return语句退出当前方法或般若break跳出某个循环，相关的finally代码块都有执行。
+
+> 当try或catch代码块中执行了System.exit(0)时，finally代码块中的内容不被执行
+```
+public static void main(String[] args) {
+		//异常：运行时  出现的错误，而不是编译时出现的错误
+		/**
+		 * 不需要对异常做处理
+		 * eg:数组下标越界。。。。等
+		 * 
+		 * 需要对异常做处理 解决异常报错
+		 * Exception in thread "main" java.lang.StackOverflowError
+		 */
+		int[] b;
+		try {
+			b = new int[5];
+			//数组下标越界
+			System.out.println(b[6]);
+		} 
+		catch (NullPointerException e) {
+//			e.printStackTrace();
+			System.err.println("空指针异常");
+		}
+		//自行捕获异常 并处理  继续向下运行
+		catch (ArrayIndexOutOfBoundsException e) {
+//			e.printStackTrace();
+			System.err.println("数组下标越界异常");
+		}
+		catch(Exception e){
+			System.out.println("出现异常！");
+		}
+		finally{
+			System.out.println("不管try是否有异常，不论catch到异常与否，都会会执行finally方法！");
+		}
+		System.out.println("----");	
+	}
+	
+	static void  method1(){
+		method1();
+	}
+    void  method2() throws IOException{
+    	
+    	//出现检查性异常 必须解决解决方式：1、try catch  2、声明throws异常
+		System.out.println("IOException");
+	}
+	void  method3(){
+		try {
+			method2();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	void method4() throws IOException{
+		method2();
+	}
+/**
+ * throw抛出异常
+ * throws声明异常  有可能出现问题的异常类型
+ */
+	//次方法中有异常 所以要向上抛  谁调用我 谁需要解决异常
+	void method5()throws IOException{
+		throw new ArrayIndexOutOfBoundsException();//属于非检查性异常  
+//		throw new IOException;  //属于检查性异常   
+	}
+```
+##### 自定义异常
+如果Java提供的异常类型不能满足程序设计的需要，我们可以定义自己的异常类型。用户自定义的异常类应为 Exception 类（或者Exception 类的子类）的子类
+```
+public class Exception_sample_5 {
+  public static void main(String[] args) {
+    try {
+      int a = new Scanner(System.in).nextInt();
+      int b = new Scanner(System.in).nextInt();
+      add(a,b);
+    } catch (MyException e) {
+      System.out.println("输入错误!");
+    }
+  }
+  public static void add(int a,int b)throws MyException{
+    if(a<0&&b<0){
+      throw new MyException();
+    }else{
+      System.out.println(a+b);
+    }
+  }
+}
+
+```
 
 
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   
   
