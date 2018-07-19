@@ -948,7 +948,9 @@ public class CoditionA implements Condition{
 >> 接口可以使方法的定义和实现相分离，降低模块间或系统间的耦合性
 
   
-  
+* 多态
+* 内部类
+* 异常及异常处理
   
   
   
