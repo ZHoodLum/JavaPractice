@@ -494,3 +494,4 @@ WeakHashMap 有一个名为 expungeStaleEntries() 的私有方法，大多数 Ma
 也可以如下的构造型方式。
 
  
+ 
