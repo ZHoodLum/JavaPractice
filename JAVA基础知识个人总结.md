@@ -965,7 +965,7 @@ public class CoditionA implements Condition{
 > Error：Error层次结构描述了JAVA运行时系统内部错误和资源耗尽。
 > Exception：有两个分支：一个分支是派生于RuntiomeException;另一个是分支包含其他异常（IOException）。
 * 派生于Error或RunTimeException类的所有异常成为`未检查性(unchecked)异常`，所有其他的异常成为`已检查(checked)异常`。
-
+~~注：图片在JAVA技术卷I   P473页~~
 ##### 异常类型
 * 检查性异常（checked exception）
 > 若系统运行时可能产生该类异常，则必须写出相应的处理代码，否则无法通过编译
@@ -978,7 +978,7 @@ public class CoditionA implements Condition{
 |--|:--:|
 RuntimeException|java.lang包中多数异常的基类
 ArithmeticException|算术错误，如除以0
-lllegalArgumentException|方法收到非法参数
+IllegalArgumentException|方法收到非法参数
 ArrayIndexOutOfBoundsException|数组下标越界
 NullPointerException|试图访问null对象引用
 
@@ -988,14 +988,63 @@ ClassNotFoundException|无法找到想要创建对象的类文件
 IOException|I/O异常的根类
 FileNotFoundException|不能找到文件
 EOFException|文件结束
-lllegaAccessException|请求方法不存在
+IllegaAccessException|请求方法不存在
 InterruptedException|线程中断
-
-##### 规则：
+* 规则：
 > 有程序错误导致的异常属于RuntimeException；而程序本身没有问题，但由于I/O错误这类问题导致的异常属于其他异常。
 > 如果出现RunTimeException异常，那么就一定是你的问题。很有道理的定理。
- 
-  
+
+##### 声明异常
+为了在方法中声明异常，就要在方法头中使用关键字throws, 若是多个异常，异常间用逗号隔开。
+```
+ public void Mwthod1() throws Exception1,Exception2   {   }
+```
+声明异常关键字是：`throws` 
+
+##### 抛出异常
+检测到错误的长须可以创建一个合适的异常类型的实例并抛出他，成为抛出异常
+```
+throw new IllegaAccessException("Wrong Arfument 出现异常啦！！");
+```
+抛出异常关键字是：`throw`  。
+> throws声明异常  有可能出现问题的异常类型
+> 次方法中有异常 所以要向上抛  谁调用我 谁需要解决异常
+
+##### 捕获异常
+* 处理异常两种方式：
+> 自行处理：可能引发异常的语句封入在 try 块内，而处理异常的相应语句则封入在 catch 块内。
+> 回避异常：在方法声明中包含 throws 子句，通知潜在调用者，如果发生了异常，必须由调用者处理。
+
+* 异常处理机制
+> 每次try块有异常抛出，系统会试着从上到下往每个catch块中传参，直到遇到一个类型匹配的catch块为止。
+
+> 如上示例中最后一个catch块中的形参为Exception类型，它是所有异常类的父类，任何异常都可以传参到该块中，该块可以处理任何类型的异常。因此，这个catch块只能放到最后面，否则所有的异常都被它处理了，其他的catch块就不能分门别类的起作用了。
+
+> 一般一个catch块中是专门处理异常的代码，在程序中这里还可以是记录日志的语句，当发生异常时记录该日志，无异常时将不会记录。
+> 如果编写过程中我们违背了异常继承顺序，会产生编译错误
+```
+catch (ArrayIndexOutOfBoundsException e) {
+   System.out.println(“Out of Bounds!”); 
+}
+catch (RuntimeException e) {
+   System.out.println(“Runtime Exception!”);
+}
+catch (Exception e) {
+   System.out.println(“Exception!”); 
+}
+```
+
+* 规则
+> 如果程序抛出多个不同类型的异常，我们需要多个catch()语句来处理。catch块，是用来捕获并处理try块抛出的异常的代码块。
+```
+try{}表示可能发生异常的语句
+catch( )内的参数异常类对象的声明
+catch{}内的语句是对异常的处理
+```
+> 和特殊异常类相关联的catch()块必须写在和普通异常类相关联的catch()之前。
+
+
+
   
   
   
