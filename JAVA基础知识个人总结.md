@@ -58,7 +58,7 @@
 
 [抽象类和接口](#抽象类和接口)
 
-[异常及异常处理（Exception Handing）](#异常及异常处理（Exception Handing）)
+[异常及异常处理（Exception Handing）](#异常及异常处理)
 
 ---
 ---
@@ -968,7 +968,7 @@ public class CoditionA implements Condition{
 抽象类|无限制|子类通过构造方法链调用构造方法，抽象类不能用new操作符来实例化|无限制
 接口|所有变量必须是public static final|没有构造方法。接口不能用new来实例化|所有方法必须是公共的抽象类实例方法
 
-###  异常及异常处理（Exception Handing）
+###  异常及异常处理
 * 引言：在Java中，运行时错误会作为异常抛出（而不是编译时的语法错误）。异常是一种对象，表示组织正常进行程序执行的错误或者情况。如果异常没有被处理，南无程序将会非正常终止。
   
 * Throwable下包括：Error和Exception
