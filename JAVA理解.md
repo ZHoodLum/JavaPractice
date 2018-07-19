@@ -10,7 +10,7 @@
 ---
 Java的四种引用方式
 --
-[博客园:] http://www.cnblogs.com/a986771570/p/8592660.html
+[来源于博客园:] http://www.cnblogs.com/a986771570/p/8592660.html
 
 java内存管理分为内存分配和内存回收，都不需要程序员负责，垃圾回收的机制主要是看对象是否有引用指向该对象。
 
@@ -493,7 +493,7 @@ WeakHashMap 有一个名为 expungeStaleEntries() 的私有方法，大多数 Ma
 
 为什么使用抽象类？有什么好处？
 ----
-[博客园:]https://www.cnblogs.com/heyonggang/p/3142338.html
+[来源于博客园:]https://www.cnblogs.com/heyonggang/p/3142338.html
 
 最简单的说法也是最重要的理由：接口和实现分离
 
