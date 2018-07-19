@@ -962,11 +962,11 @@ public class CoditionA implements Condition{
   
 * Throwable下包括：Error和Exception
 
-* Error：Error层次结构描述了JAVA运行时系统内部错误和资源耗尽。
-* Exception：有两个分支：一个分支是派生于RuntiomeException;另一个是分支包含其他异常（IOException）。
+> Error：Error层次结构描述了JAVA运行时系统内部错误和资源耗尽。
+> Exception：有两个分支：一个分支是派生于RuntiomeException;另一个是分支包含其他异常（IOException）。
 * 派生于Error或RunTimeException类的所有异常成为`未检查性(unchecked)异常`，所有其他的异常成为`已检查(checked)异常`。
 
-* 异常类型
+##### 异常类型
 * 检查性异常（checked exception）
 > 若系统运行时可能产生该类异常，则必须写出相应的处理代码，否则无法通过编译
 > 非RuntimeException异常
