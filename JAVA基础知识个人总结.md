@@ -1171,7 +1171,8 @@ public class Exception_sample_5 {
 
 ### 工具类
 #### 常用类
-:&nbsp;:|:java.lang包下的类:|:&nbsp;:
+&nbsp;|java.lang包下的类|:&nbsp;
+:----|:----:|----:
 Boolean|Object|Error
 Byte|String|Throwable
 Character|StringBuffer|Exception
