@@ -1264,10 +1264,31 @@ public String toString()
 这个要看你具体如何实现你的hashcode，如果你希望他们的值一样hashcode也一样，你就可以这样实现。 但是hashcode的实现，一般要满足几个特征，比如 自反性，传递性什么的。 
 
 
-* 包装类
+#### 包装类
+* Everything is object.
+> Java编程语言不把基本数据类型看作对象。Java 编程语言提供包装类来将基本数据类型看作对象。
+> 在功能上包装类能够完成数据类型之间（除boolean）的相互转换，尤其是基本数据类型和String类型的转换。
+> 包装类中包含了对应基本数据类型的值，封装了String和基本数据类型之间相互转换的方法，还有一些处理这些基本数据类型时非常有用的属性和方法
 
+* 基本数据类型和对应包装类
 
+数据类型|包装类
+:--:|:--:
+boolean|Boolean
+byte|Byte
+char|Char
+double|Double
+float|Float
+int|Int
+long|Long
+short|Short
 
+* 包装类常用方法和属性
+
+类型|最大值|最小值
+&nbsp;|属性|数值|属性|数值
+:--:|:--:|:--:|:--:|:--:|
+byte|Byte.MAX_VALUE|127|Byte.MIN_VALUE|-128
 ### 内部类
 
 
