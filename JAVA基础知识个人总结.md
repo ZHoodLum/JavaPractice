@@ -1174,8 +1174,8 @@ public class Exception_sample_5 {
 
 ### 工具类
 #### 常用类
-&nbsp;|java.lang包下的类|:&nbsp;
-:----|:----:|----:
+&nbsp;|java.lang包下的类|&nbsp;
+:----:|:----:|:----:
 Boolean|Object|Error
 Byte|String|Throwable
 Character|StringBuffer|Exception
@@ -1184,6 +1184,17 @@ Float|System|NullPointerException
 Integer|Math|NumberFormatException
 Long|Runnable(接口)|RuntimeException
 Short|Thread|ArithmeticException
+
+&nbsp;|java.util包下的类|&nbsp;
+:----:|:----:|:----:
+Collection(接口)|Arrays|Calender
+Iterator(接口)|Set(接口)|Date
+ListIterator|HashSet|Random
+List(接口)|TreeSet|Scanner
+ArrayList|Map(接口)|Collections
+LinkedList|HashMap|&nbsp;
+Vector|Hashtable|&nbsp;
+Stack|TreeMap|&nbsp;
 
 #### Object类
 * Object介绍：
