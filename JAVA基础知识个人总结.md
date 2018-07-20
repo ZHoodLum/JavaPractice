@@ -998,6 +998,7 @@ IllegalArgumentException|方法收到非法参数
 ArrayIndexOutOfBoundsException|数组下标越界
 NullPointerException|试图访问null对象引用
 
+~~需要进行异常处理，否则无法进行编译~~
 检查异常|说明
 |--|:--:|
 ClassNotFoundException|无法找到想要创建对象的类文件
