@@ -1174,6 +1174,15 @@ public class Exception_sample_5 {
 
 ### 工具类
 #### 常用类
+* java.lang
+> Java语言包，包含String、StringBuffer、Integer、Math、System。任何类中，该包中的类都会被自动导入。在java.lang不用引包.
+* java.util
+> 包含一些实用的工具类（ 包含list, calendar, date等类）
+* java.io
+> 提供多种输入/输出功能的类。 
+* java.net
+> 提供网络应用功能的类。
+
 &nbsp;|java.lang包下的类|&nbsp;
 :----:|:----:|:----:
 Boolean|Object|Error
