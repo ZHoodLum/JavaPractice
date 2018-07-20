@@ -984,6 +984,17 @@ public class CoditionA implements Condition{
 
 > 非RuntimeException异常
 
+~~注：     需要进行异常处理，否则无法进行编译~~
+
+检查异常|说明
+|--|:--:|
+ClassNotFoundException|无法找到想要创建对象的类文件
+IOException|I/O异常的根类
+FileNotFoundException|不能找到文件
+EOFException|文件结束
+IllegaAccessException|请求方法不存在
+InterruptedException|线程中断
+
 * 非检查性异常（unchecked exception）
 
 > 若系统运行时可能产生该类异常，则不必在程序中声明对该类异常的处理，就可以编译执行
@@ -998,16 +1009,9 @@ IllegalArgumentException|方法收到非法参数
 ArrayIndexOutOfBoundsException|数组下标越界
 NullPointerException|试图访问null对象引用
 
-~~需要进行异常处理，否则无法进行编译~~
 
-检查异常|说明
-|--|:--:|
-ClassNotFoundException|无法找到想要创建对象的类文件
-IOException|I/O异常的根类
-FileNotFoundException|不能找到文件
-EOFException|文件结束
-IllegaAccessException|请求方法不存在
-InterruptedException|线程中断
+
+
 
 * 规则：
 > 有程序错误导致的异常属于RuntimeException；而程序本身没有问题，但由于I/O错误这类问题导致的异常属于其他异常。
