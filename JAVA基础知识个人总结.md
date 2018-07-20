@@ -1184,7 +1184,7 @@ public class Exception_sample_5 {
 > 提供网络应用功能的类。
 
 &nbsp;|java.lang包下的类|&nbsp;
-:----:|:----:|:----:
+:----|:----|:----
 Boolean|Object|Error
 Byte|String|Throwable
 Character|StringBuffer|Exception
@@ -1273,7 +1273,7 @@ public String toString()
 * 基本数据类型和对应包装类
 
 数据类型|包装类
-:--:|:--:
+:--|:--
 boolean|Boolean
 byte|Byte
 char|Char
@@ -1286,7 +1286,7 @@ short|Short
 * 包装类常用方法和属性
 
 类型|最大值|最小值
-:--:|:--:|:--:|
+:--|:--|:--|
 byte|Byte.MAX_VALUE  &nbsp;&nbsp;&nbsp;  127|Byte.MIN_VALUE  &nbsp;&nbsp;&nbsp;  -128
 short|Short.MAX_VALUE  &nbsp;&nbsp;&nbsp;  32767|Short.MIN_VALUE  &nbsp;&nbsp;&nbsp;  -32767
 int|Int.MAX_VALUE  &nbsp;&nbsp;&nbsp;  0x7fffffff|Int.MIN_VALUE  &nbsp;&nbsp;&nbsp;  0x80000000
