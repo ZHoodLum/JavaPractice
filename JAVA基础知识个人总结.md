@@ -1293,20 +1293,14 @@ int|Int.MAX_VALUE  &nbsp;&nbsp;&nbsp;  0x7fffffff|Int.MIN_VALUE  &nbsp;&nbsp;&nb
 long|Long.MAX_VALUE  &nbsp;&nbsp;&nbsp;  0x7fffffffffffffffL|Long.MIN_VALUE  &nbsp;&nbsp;&nbsp;  0x8000000000000000L
 
 * 字符串与基本数据类型、包装类型转换图
-                                         
-	-----------------------------------------包装类的parsexxx(方法)------------------------------------------
-    |	                                                                                                       |
-    |	 ---------------------包装类的toString()----------------                                                |
-    |	|                                                     |                                                |  
-    |	|                                                     |                                                |         
-    |	|                                                     |                                                |
-    |	v                                                     |                                                v
-`字符串类型(String)`-----使用包装类构造器valueOf()------->`包装类Wrapper`------包装类xxxValue()方法--------->`基本数据类型`
-                                                           ^                                             |
-							   |						 |
-							   |						 |
-                                                           ------------包装类通过构造器.valueOf()----------						 
-* `基本数据类型`---------String类的valueOf方法，用连字符"+"-------->`字符串类型(String)`
+
+> * `字符串类型(String)`-----使用包装类构造器valueOf()------->`包装类Wrapper`			
+> * `包装类Wrapper`------包装类xxxValue()方法--------->`基本数据类型`	
+> * `基本数据类型`---------String类的valueOf方法，用连字符"+"-------->`字符串类型(String)`
+> * `基本数据类型`---------包装类通过构造器.valueOf()-------->`包装类Wrapper`
+> * `字符串类型(String)`---------包装类的parsexxx(方法)------->`基本数据类型`
+
+
 
 ### 内部类
 
