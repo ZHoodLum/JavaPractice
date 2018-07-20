@@ -1287,7 +1287,11 @@ short|Short
 
 类型|最大值|最小值
 :--:|:--:|:--:|
-byte|Byte.MAX_VALUE   127|Byte.MIN_VALUE    -128
+byte|Byte.MAX_VALUE  &nbsp;&nbsp;&nbsp;  127|Byte.MIN_VALUE  &nbsp;&nbsp;&nbsp;  -128
+short|Short.MAX_VALUE  &nbsp;&nbsp;&nbsp;  32767|Short.MIN_VALUE  &nbsp;&nbsp;&nbsp;  -32767
+int|Int.MAX_VALUE  &nbsp;&nbsp;&nbsp;  0x7fffffff|Int.MIN_VALUE  &nbsp;&nbsp;&nbsp;  0x80000000
+long|Long.MAX_VALUE  &nbsp;&nbsp;&nbsp;  0x7fffffffffffffffL|Long.MIN_VALUE  &nbsp;&nbsp;&nbsp;  0x8000000000000000L
+
 ### 内部类
 
 
