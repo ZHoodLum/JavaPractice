@@ -1195,7 +1195,7 @@ Long|Runnable(接口)|RuntimeException
 Short|Thread|ArithmeticException
 
 &nbsp;|java.util包下的类|&nbsp;
-:----:|:----:|:----:
+:----|:----|:----
 Collection(接口)|Arrays|Calender
 Iterator(接口)|Set(接口)|Date
 ListIterator|HashSet|Random
@@ -1291,6 +1291,22 @@ byte|Byte.MAX_VALUE  &nbsp;&nbsp;&nbsp;  127|Byte.MIN_VALUE  &nbsp;&nbsp;&nbsp; 
 short|Short.MAX_VALUE  &nbsp;&nbsp;&nbsp;  32767|Short.MIN_VALUE  &nbsp;&nbsp;&nbsp;  -32767
 int|Int.MAX_VALUE  &nbsp;&nbsp;&nbsp;  0x7fffffff|Int.MIN_VALUE  &nbsp;&nbsp;&nbsp;  0x80000000
 long|Long.MAX_VALUE  &nbsp;&nbsp;&nbsp;  0x7fffffffffffffffL|Long.MIN_VALUE  &nbsp;&nbsp;&nbsp;  0x8000000000000000L
+
+* 字符串与基本数据类型、包装类型转换图
+                                         
+	-----------------------------------------包装类的parsexxx(方法)------------------------------------------
+    |	                                                                                                       |
+    |	 ---------------------包装类的toString()----------------                                                |
+    |	|                                                     |                                                |  
+    |	|                                                     |                                                |         
+    |	|                                                     |                                                |
+    |	v                                                     |                                                v
+`字符串类型(String)`-----使用包装类构造器valueOf()------->`包装类Wrapper`------包装类xxxValue()方法--------->`基本数据类型`
+                                                           ^                                             |
+							   |						 |
+							   |						 |
+                                                           ------------包装类通过构造器.valueOf()----------						 
+* `基本数据类型`---------String类的valueOf方法，用连字符"+"-------->`字符串类型(String)`
 
 ### 内部类
 
