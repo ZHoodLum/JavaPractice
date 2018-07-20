@@ -1,5 +1,5 @@
-# JavaPractice
-异常错误
+# 异常错误
+
 
 ### 一般报java.lang.NullPointerException的原因有以下几种： 
 * 字符串变量未初始化； 
