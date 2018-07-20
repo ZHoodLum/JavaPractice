@@ -1286,9 +1286,8 @@ short|Short
 * 包装类常用方法和属性
 
 类型|最大值|最小值
-&nbsp;|属性|数值|属性|数值
-:--:|:--:|:--:|:--:|:--:|
-byte|Byte.MAX_VALUE|127|Byte.MIN_VALUE|-128
+:--:|:--:|:--:|
+byte|Byte.MAX_VALUE   127|Byte.MIN_VALUE    -128
 ### 内部类
 
 
