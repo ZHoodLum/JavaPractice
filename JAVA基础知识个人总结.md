@@ -1172,6 +1172,17 @@ public class Exception_sample_5 {
 ### 内部类
 
 ### 工具类
+#### 常用类
+:--&nbsp;--:|:--java.lang包下的类:--|:--&nbsp;--:
+Boolean|Object|Error
+Byte|String|Throwable
+Character|StringBuffer|Exception
+Double|StringBuilder|ClassNotFoundException
+Float|System|NullPointerException
+Integer|Math|NumberFormatException
+Long|Runnable(接口)|RuntimeException
+Short|Thread|ArithmeticException
+
 #### Object类
 * Object介绍：
 * 1、bject类是所有类的超类。
