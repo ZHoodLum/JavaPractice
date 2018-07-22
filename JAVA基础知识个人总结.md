@@ -1473,7 +1473,15 @@ StringBuilder insert(int index,Object o)|将 Object 参数的字符串表示形�
 > StringBuffer在JDK1.0中就有，而StringBuilder是在JDK5.0后才出现的。
 > StringBuilder的一些方法实现要比StringBuffer快些。
 
-
+```
+输入一个手机号码，将中间四位使用星号替代。例如：输入：13312349876,  输出：133****9876
+public static void main(String[] args) {
+	// TODO Auto-generated method stub
+	String s = "13588889999";
+	String a = s.substring(0, 3)+"****"+s.substring(7,s.length());
+	System.out.println(a);
+}
+```
 #### Math
 #### Date
 
