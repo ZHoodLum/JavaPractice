@@ -1529,7 +1529,167 @@ public static void main(String[] args) {
 }
 ```
 #### Math
+
+* Math类
+> Math类提供了大量用于数学运算的方法
+> Math类是final类，因此不能从Math类继承
+> Math类中的方法都是static方法，因此不必创建Math类的对象就可以直接使用该类的方法
+* Math类中的常量
+```
+public static final double PI
+public static final double E
+```
+
+* Math类中的常用方法
+方法|含义
+:--|:--
+static int abs(int)|返回参数的绝对值，返回值类型与参数类型相同
+static double abs(double)|返回参数的绝对值
+static double ceil(double)|返回大于所给参数的最小的整数值
+static double floor(double)|返回不大于所给参数的最大的整数值
+static int   max(int a,int b)|返回两个int值中较大的一个
+static double max(double,double)|返回两个double值中较大的一个
+static int min(int a,int b)|返回两个int值中较小的一个
+static double min(double,double)|返回两个double值中较小的一个
+static double random( )|返回在0.0~1.0之间的随机的double值
+static int round(double)|返回同所给值最接近的整数，采用4舍5入法
+static double sin/cos/tan(double)|返回给定的弧度值对应的三角函数值
+static double sqrt(double)|返回所给值的平方根，若所给值为负数则返回NaN
+
 #### Date
+
+* 1、Date 类
+> java.util.Date。
+> Date 类表示指定的时间信息，可以精确到毫秒。
+> 不支持国际化。
+> 该类的许多方法已过时。
+> 获取当前系统时间：
+
+* 注意：现在我们更应该多使用 Calendar 类实现日期和时间字段之间转换，使用 DateFormat 类来格式化和分析日期字符串；Date 中的相应方法已废弃
+
+* 2、Date类常用方法
+
+方法|含义
+:--|:--
+boolean after(Date when)|测试此日期是否在指定日期之后
+boolean before(Date when)|测试此日期是否在指定日期之前
+int compareTo(Date anotherDate)|比较两个日期的顺序。如果参数Date等于此 Date，则返回值0；如果此Date在 Date参数之前，则返回小于0 的值；如果此Date在Date参数之后，则返回大于0 的值。
+boolean equals(Object obj)|比较两个日期的相等性。
+  
+* 3、 Calendar类
+> java.util.Calendar。
+>> java.util.GregorianCalendar 
+> 常用的日期处理的对象。可以设置自己的时区和国际化格式。
+> 是一个抽象类。
+> Calendar 抽象类定义了足够的方法，让我们能够表述日历的规则 。
+>* 获取Calendar对象的实例：
+```
+Calendar c = Calendar.getInstance();
+```
+>* 设置Calendar实例所表示的时间：
+```
+c.set(2016,9,9);
+```
+>* 获取指定的时间属性  
+```
+c.get(Calendar.YEAR);
+```
+* Calendar类常用属性
+  
+属性|含义
+:--|:--
+static int HOUR|小时时间
+static int MINUTE|分时间
+static int SECOND |秒时间
+static int DATE |日期的Date部分
+static int MONTH |日期的Month部分
+static int YEAR |日期的年部分
+```
+public static void main(String[] args) {
+	Calendar c1 = Calendar.getInstance();
+	c1.set(2012, 2,8);
+	System.out.print(c1.get(1));
+	//瞬间可用毫秒值来表示，它是距历元（即格林威治标准时间 1970 年 1 月 1 日的 00:00:00.000，格里高利历）的偏移量。
+	//获取对应数据
+	//获得指定年月日时当年的第几天
+	System.out.print(c1.get(Calendar.DAY_OF_YEAR));
+}
+```
+* SimpleDateFormat类
+
+>* SimpleDateFormat类 ：java.text.SimpleDateFormat 
+> 一个以与语言环境相关的方式来格式化和分析日期的具体类。是抽象类java.text.DateFormat类的子类。
+> SimpleDateFormat使得可以选择任何用户定义的日期-时间格式的模式。
+>* SimpleDateFormat类的使用
+获取SimpleDateFormat的实例
+```
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+```
+将日期格式成指定的字符串
+```
+sdf.format(new Date());
+```
+将格式化的字符串转换成日期对象
+```
+sdf.parse("2018-9-9");
+```
+
+* SimpleDateFormat格式说明
+
+字母|日期或时间元素
+:--|:--
+y |年 
+M |年中的月份
+d |月份中的天数
+E |星期中的天数
+a |Am/pm标记
+H |一天中的小时数（0-23）
+h |am/pm中的小时数（1-12）
+m |小时中的分钟数
+s |分钟中的秒数
+S |毫秒数
+```
+public static void main(String[] args) throws ParseException{
+//		当前系统时间
+		Date d = new Date();
+		System.out.println(d);
+		Date d1 = new Date(3,3,2033);
+		//当前时间是否在d1指定时间之后
+		System.out.println(d.after(d1));
+		System.out.println(d.before(d1));
+		//大小
+		System.out.println(d.compareTo(d1));
+
+		System.out.println(d.getTime());
+		System.out.println(d.getDate());
+		
+		d.setTime(01);
+		//当前系统时间中国是UTC+8所开始的时间  1970.1.1 08：00：00
+		//当前系统时间为UTC  世界标准时间  1970.1.1 08：00：00
+		System.out.println(d);
+		//设置的long值实际上是距离 1970.1.1 08：00：00  的毫秒数
+		d.setTime(10001);
+		System.out.println(d);
+		
+		/**
+		 * CHina
+		 * date转换为String类型
+		 */
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS zz");//时间格式
+		Date nowDate = new Date();//得到当前时间
+		String date = sdf.format(nowDate );
+		System.out.println(date);
+		
+		/**
+		 * String转换为date类型
+		 */
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");//时间格式
+		String str="2008-7-7";
+		Date d2 = sdf1.parse(str);
+		System.out.println(str);
+			
+	}
+```
 
 ---
 ### 集合类
