@@ -1391,24 +1391,8 @@ System.out.println(str1.equals(str2));--------->true
 
 总结：操作符`==`只能检测两个字符串`是否只想同一个对象`（即内存地址是否相同），但他不会告诉你两个字符串的内容是否相同。若想检查`字符串内容是否相同`，可以使用`equals()方法`进行检测。
 
-* 字符串`compareTo`与`equals`区别：
+* 字符串`compareTo`：
 如果两个字符串相等，equals方法返回true;如果他们不相等，返回false。compareTo方法会根据一个字符串是否等于、大于、小于另一个字符串，分贝返回0、正整数、负整数。
-```
-
-```
-
-* 6、String对象的比较方法
-
-方法|描述
-:--|:--|
-equals(s1)|如果该字符串等于字符串s1，返回值为true
-equalsIgnoreCase(s1)|如果该字符串等于字符串s1，返回值为true,不区分大小写
-compareTo(s1)|返回一个大于0、等于0、小于0的整数，表明一个字符串是否大于等于小于s1
-compareToIgnoreCase(s1)|和compareTo一样，除了比较是区分大小写的之外
-startsWith(prefix)|如果字符串以特定的前缀开始，返回值为true
-endsWith(suffix)|如果字符串以特定的后缀结束，返回值为true
-contains(s1)|如果s1是该字符串的子字符串，返回值为true
-
 ```
 输入两个城市，然后以字母表顺序进行显示
 public static void main(String[] args) {
@@ -1430,6 +1414,65 @@ public static void main(String[] args) {
 
 * 注： 使用`.nextLine()`为了能够输入一个包含空格的字符串。
 ```
+
+* 6、String对象的比较方法
+
+方法|描述
+:--|:--|
+equals(s1)|如果该字符串等于字符串s1，返回值为true
+equalsIgnoreCase(s1)|如果该字符串等于字符串s1，返回值为true,不区分大小写
+compareTo(s1)|返回一个大于0、等于0、小于0的整数，表明一个字符串是否大于等于小于s1
+compareToIgnoreCase(s1)|和compareTo一样，除了比较是区分大小写的之外
+startsWith(prefix)|如果字符串以特定的前缀开始，返回值为true
+endsWith(suffix)|如果字符串以特定的后缀结束，返回值为true
+contains(s1)|如果s1是该字符串的子字符串，返回值为true
+
+#### StringBuffer类
+
+* 1、StringBuffer类用于内容可以改变的字符串
+> 可以使用StringBuffer来对字符串的内容进行动态操作，不会产生额外的对象
+
+* 2、StringBuffer对象的创建
+> 构造一个其中不带字符的字符串缓冲区，其初始容量为 16 个字符
+StringBuffer 变量名 = new StringBuffer();
+> 构造一个不带字符，但具有指定初始容量的字符串缓冲区。
+StringBuffer 变量名 = new StringBuffer(int capacity);
+> 构造一个字符串缓冲区，并将其内容初始化为指定的字符串内容
+StringBuffer 变量名 = new StringBuffer(String value);
+
+* 3、StringBuilder常用方法
+
+方法|含义
+:--|:--
+int  capacity( )|返回当前容量 
+int  length( )|返回长度（字符数）
+StringBuilder  reverse( )|将此字符序列用其反转形式取代 
+void  setCharAt(int index,char ch)|将给定索引index处的字符设置为 ch 
+StringBuilder   delete(int begin,int end)|移除此序列的子字符串中的字符 
+char  charAt(int index)|返回此序列中指定索引处的 char 值 
+String  toString( )|将StringBuilder对象转换成相应的String
+StringBuilder  append(String str)|将指定的字符串追加到此字符序列 
+StringBuilder append(int num)|将 int 参数的字符串表示形式追加到此序列 
+StringBuilder append(Object o)|追加 Object 参数的字符串表示形式 
+StringBuilder insert(int index,String str)|将字符串插入此字符序列中 
+StringBuilder insert(int index,char ch)|将字符插入此字符序列中 
+StringBuilder insert(int index,Object o)|将 Object 参数的字符串表示形式插入此字符序列中 
+
+### String类与StringBuilder类的比较
+* Java中定义了String与StringBuffer两个类来封装对
+> 字符串的各种操作
+* String类与StringBuffer类都被放到了java.lang包中
+* 两者的主要区别在于
+> String类对象中的内容初始化不可以改变
+> StringBuffer类对象中的内容可以改变
+* StringBuffer和StringBuilder都是长度可变的字符串。
+* 两者的操作基本相同。
+* 两者的主要区别在于
+> StringBuffer类是线程安全的；
+> StringBuilder类是线程不安全的。
+> StringBuffer在JDK1.0中就有，而StringBuilder是在JDK5.0后才出现的。
+> StringBuilder的一些方法实现要比StringBuffer快些。
+
 
 #### Math
 #### Date
