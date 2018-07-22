@@ -1427,6 +1427,32 @@ startsWith(prefix)|如果字符串以特定的前缀开始，返回值为true
 endsWith(suffix)|如果字符串以特定的后缀结束，返回值为true
 contains(s1)|如果s1是该字符串的子字符串，返回值为true
 
+* String类中常用的方法
+
+方法|含义
+:--|:--|
+String substring(int begin)|返回一个新字符串，该字符串是从begin开始的字符串的内容
+String trim( )|返回新的字符串，忽略前导空白和尾部空白 
+int   length( )|返回此字符串的长度
+&nbsp;|&nbsp;
+String toLowerCase( )|将String对象中的所有字符都转换为小写 
+boolean  equals(String)|判断两个字符串对象的内容是否相等
+boolean  equalsIgnoreCase(String)比较两个字符串的内容是否相等，忽略大小写
+String substring(int begin,int end)|返回一个新字符串，该字符串是从begin开始到end-1结束的字符串的内容
+int   indexOf/lastIndexOf(char)|返回指定字符在此字符串中第一次/最后一次出现处的索引。 
+int   indexOf/lastIndexOf(char,int)|从指定的索引开始搜索，返回在此字符串中第一次/最后一次出现指定字符处的索引
+int   indexOf/lastIndexOf(String)|返回第一次出现的指定子字符串在此字符串中的索引
+int   indexOf/lastIndexOf(String,int)|从指定的索引开始搜索，返回在此字符串中第一次/最后一次出现指定字符串处的索引
+
+
+  
+ 
+
+
+
+
+
+
 #### StringBuffer类
 
 * 1、StringBuffer类用于内容可以改变的字符串
