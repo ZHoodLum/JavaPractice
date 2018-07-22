@@ -1348,6 +1348,59 @@ public static void main(String[] args) {
 	}
 ```
 #### String字符串
+* 1、字符串是我们在编程中最常使用的一种数据类型，它的表现形式可以分为两种：
+> String
+> StringBuffer。
+* 字符串不属于8种基本的数据类型，而是一种引用类型。
+* String对象代表一组不可改变的Unicode字符序列，对它的任何修改实际上又产生一个新的字符串，String类对象的内容一旦被初始化就不能再改变。
+* StringBuffer对象代表一组可改变的Unicode字符序列。
+* String类是final类型的类。
+
+* 2、String的创建：有两种方式:
+> 静态方式（常用）。`String 变量 = "字符串";`像是给变量直接赋值一样来使用。如：String s1 = “abc”; String s2 = “abc”;
+
+> 动态方式。动态的内存分配，`使用new运算符进行`。如：String s3= new String(“abc”); String s4= new String(“abc”);
+
+* 3、两种方式创建的字符串区别：
+> 使用静态方式创建的字符串，在方法区的常量池中只会产生唯一一个字符串对象，使用该方式产生同样一个字符串时，内存中不再开辟另外一块空间，而是两个引用变量指向同一个字符串对象。
+
+> 使用动态方式创建的字符串，在堆内存中会产生出不同的对象
+
+* 4、连接操作符
+> 使用concat方法连接两个字符串。`String s3 = s1.concat(s2);`
+> 使用(+)号连接两个或者多个字符串。 `String s3 = s1 + s2;`
+
+* 5、字符串`==`与`equals`区别：
+
+> 任何一个String对象在创建之后都不能对它的内容作出任何改变（immutable）
+
+> 连接、获得子串和改变大小写等操作，如果返回值同原字符串不同，实际上是产生了一个新的String对象
+
+> 在程序的任何地方，相同的字符串字面常量都是同一个对象
+
+> String类重置了equals方法，用于比较两个字符串的内容
+
+```
+String str1 = “hello ”;
+String str2 =  new String(“hello”);
+System.out.println(str1==str2);--------->false
+System.out.println(str1.equals(str2));--------->true
+```
+上面这个实例：str1创建字符串hello,str2使用new关键字一个字符又创建一个字符串hello，可以说实在堆内存当中分配了一快内存空间，此时两个字符串的内存地址是不同的，但字符串内容是相同的。
+
+总结：操作符`==`只能检测两个字符串`是否只想同一个对象`（即内存地址是否相同），但他不会告诉你两个字符串的内容是否相同。若想检查`字符串内容是否相同`，可以使用`equals()方法`进行检测。
+
+* 6、String对象的比较方法
+方法|描述
+|:--|:--|
+equals(s1)|如果该字符串等于字符串s1，返回值为true
+equalsIgnoreCase(s1)|如果该字符串等于字符串s1，返回值为true,不区分大小写
+compareTo(s1)|返回一个大于0、等于0、小于0的整数，表明一个字符串是否大于等于小于s1
+compareToIgnoreCase(s1)|和compareTo一样，除了比较是区分大小写的之外
+startsWith(prefix)|如果字符串以特定的前缀开始，返回值为true
+endsWith(suffix)|如果字符串以特定的后缀结束，返回值为true
+contains(s1)|如果s1是该字符串的子字符串，返回值为true
+
 #### Math
 #### Date
 
