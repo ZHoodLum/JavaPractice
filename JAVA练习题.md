@@ -9,7 +9,9 @@
 
 > [冒泡排序](#冒泡排序)
 
->[二维数组遍历](#二维数组遍历)
+> [使用Math方法](#使用Math方法)
+
+> [二维数组遍历](#二维数组遍历)
 
 > [学学人家作弊](#学学人家作弊)
 
@@ -77,8 +79,7 @@ public static void main(String[] args) {
 		for(int j=0;j<a.length;j++){
 			//1\最大值放在提取出来13 23 6 45 12 4 1 78
 			//1\第二大放在提取出来13 6 23 12 4 1 45 78
-			//每次排序进行比较
-			//for(int i=0;i<a.length-1;i++) 加j与不加j区别  需要优化
+			//每次排序进行比较 加j与不加j区别  需要优化
 			for(int i=0;i<a.length-1-j;i++){
 				if(a[i]>a[i+1]){
 					int temp = 0;
@@ -104,6 +105,26 @@ public static void main(String[] args) {
 >>* 思想：冒泡排序，主要使用双重for循环，第一层for循环，为了控制循环次数,j<a.length循环次数小于数组长度，否则会出现数组越界情况；
 				for循环，为了比较数组内数组的大小，共对数组内数字比较a.length-1-j次。
 				if语句循环，a[i]a[i+1]两两数进行比较，并互换位置。
+#### 使用Math方法
+```
+public static void main(String[] args) {
+		//从大到小
+		int[] a = {34,45,67,49,97,43,89,3,113};
+		for(int j=0;j<a.length;j++){
+			for(int i=0;i<a.length-j-1;i++){
+				int temp=a[i];
+				a[i] = Math.max(a[i], a[i+1]);
+				a[i+1] = Math.min(temp, a[i+1]);	
+			}
+		}
+		for(int n:a){
+			System.out.println(n);
+		}
+	
+	}
+```
+
+
 #### 二维数组遍历
 > 使用三种循环方式对数组进行遍历
 ```
@@ -589,7 +610,56 @@ public static void main(String[] args) {
 
 		    System.out.println();
 	} 	
-	}		
+	}
+	
+---------------------------------------------
+public static void main(String[] args) {
+		//倒三角形
+		int line=6;//定义行数
+       for(int i=0;i<line;i++){
+	        for(int j=0;j<i;j++){
+	            System.out.print("^");
+	        }
+	        //打印@的个数
+	        for( int j=0;j<2*(line-i)-1;j++){
+	            System.out.print("@");
+	        }
+	        //打印完记得换行
+	        System.out.println();
+        }
+       /*        
+
+        //打印一行
+        //打印上半部分
+        for(int i=0;i<line;i++){
+            //打印i个空格
+	        for(int j=0;j<line-1-i;j++){
+	                System.out.print(" ");
+	            }
+	            //打印*的个数
+	        for( int j=0;j<2*i+1;j++){
+	            System.out.print("@");
+	        }
+	                //打印完* 记得换行
+	            System.out.println();
+        } 
+	*/	
+		
+		//控制台输入
+//		   System.out.print("打印一个倒立的正三角形，底边长为（请输入大于或等于三的奇数）：");  
+//		    Scanner in=new Scanner(System.in);  
+//		    int m=in.nextInt();  
+//		    int n=(m-1)/2;   
+//		    for(int i=0;i<=n;i++){  
+//		        for(int j=0;j<=i;j++){  
+//		            System.out.print(" ");  
+//		        }  
+//		        for(int j=0;j<=2*n-2*i;j++){  
+//		            System.out.print("@");  
+//		        }  
+//		        System.out.println();  
+//		    }
+	}
 ```
 #### 数组排序找出最大值及其下标
 在一个有8个整数（18，25，7，36，13，2，89，63）的数组中找出其中最大的数及其下标
