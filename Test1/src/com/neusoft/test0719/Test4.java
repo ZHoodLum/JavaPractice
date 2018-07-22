@@ -16,6 +16,12 @@ public class Test4 {
 		System.out.println(s1==s2);
 		System.out.println(s1==s3);
 		
+		System.out.println("----------");
+		String s5 = s1.toUpperCase();
+		System.out.println(s5);
+		System.out.println(s1.equals(s5));
+		System.out.println(s1==s5);
+		
 		
 	}
 }

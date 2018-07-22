@@ -49,16 +49,21 @@ public class Htest7{
 		if(s1==0){
 			s1 = query1(s1);
 		}
+//		else if(s2==0){
+//			s2 = query1(s2);
+//		}
 		else{
 			if(s1>s2){
 				c = s1-s2;
 				System.out.println("税后工资"+s1+"与"+"税后工资"+s2+"两者之间的差为："+c);
-			}else{
+			}
+			else{
 				c = s2-s1;
 				System.out.println("税后工资"+s1+"与"+"税后工资"+s2+"两者之间的差为："+c);
 			}
 			
 		}
+		
 		if(s2==0){
 			s2 = query1(s2);
 		}
@@ -66,7 +71,8 @@ public class Htest7{
 			if(s1>s2){
 				c = s1-s2;
 				System.out.println("税后工资"+s1+"与"+"税后工资"+s2+"两者之间的差为："+c);
-			}else{
+			}
+			else{
 				c = s2-s1;
 				System.out.println("税后工资"+s1+"与"+"税后工资"+s2+"两者之间的差为："+c);
 			}

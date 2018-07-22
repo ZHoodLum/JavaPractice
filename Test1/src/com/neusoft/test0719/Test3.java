@@ -3,6 +3,7 @@ package com.neusoft.test0719;
 public class Test3 {
 	public static void main(String[] args) {
 		
+		//如果忘记包装类型长度，试着输出一下最大值与最小值
 		System.out.println(Byte.MAX_VALUE);
 		System.out.println(Byte.MIN_VALUE);
 		
