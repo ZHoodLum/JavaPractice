@@ -1484,6 +1484,26 @@ StringBuilder insert(int index,String str)|将字符串插入此字符序列中
 StringBuilder insert(int index,char ch)|将字符插入此字符序列中 
 StringBuilder insert(int index,Object o)|将 Object 参数的字符串表示形式插入此字符序列中 
 
+* 4、StringBuffer常用方法
+
+
+方法|含义
+:--|:--
+int  capacity( )|返回当前容量 
+int  length( )|返回长度（字符数）
+StringBuffer  reverse( )|将此字符序列用其反转形式取代 
+void  setCharAt(int,char)|将给定索引index处的字符设置为 ch 
+StringBuffer   delete(int begin,int end)|移除此序列的子字符串中的字符 
+char  charAt(int)|返回此序列中指定索引处的 char 值 
+String  toString( )|将StringBuilder对象转换成相应的String
+StringBuffer  append(String str)|将指定的字符串追加到此字符序列 
+StringBuffer append(int num)|将 int 参数的字符串表示形式追加到此序列 
+StringBuffer append(Object o)|追加 Object 参数的字符串表示形式 
+StringBuffer insert(int index,String str)|将字符串插入此字符序列中 
+StringBuffer insert(int index,char ch)|将字符插入此字符序列中 
+StringBuffer insert(int index,Object o)|将 Object 参数的字符串表示形式插入此字符序列中 
+
+
 ### String类与StringBuilder类的比较
 * Java中定义了String与StringBuffer两个类来封装对
 > 字符串的各种操作
