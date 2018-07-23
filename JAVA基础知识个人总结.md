@@ -1695,10 +1695,10 @@ public static void main(String[] args) throws ParseException{
 ### 集合类
 
 #### Collection接口
-* 一组称为元素的对象
-* 一个Collection中可以放不同类型的数据
-* 是Set接口和List接口的父类
-* 是否有特定的顺序以及是否允许重复，取决于它的实现
+* 1、一组称为元素的对象
+* 2、一个Collection中可以放不同类型的数据
+* 3、是Set接口和List接口的父类
+* 4、是否有特定的顺序以及是否允许重复，取决于它的实现
 > Set － 无序的集合；不允许重复
 >* HashSet
 > List － 有序的集合；允许重复
@@ -1722,9 +1722,119 @@ boolean containsAll(Collection) |判断集合内是否包含子集
 boolean retainAll(Collection) |仅保留此 collection 中那些也包含在指定 collection 的元素
 void clear() |清空集合
 
+##### Set接口
+* 1、Collection的子接口
+* 2、用来包含一组 无序无重复 的对象
+> 无序 — 是指元素存入顺序和集合内存储的顺序不同；
+> 无重复 — 两个对象e1和e2，如果e1.equals(e2)返回true，则认为e1和e2重复，在set中只保留一个。
+* 3、Set接口的实现类
+> HashSet — HashSet的特性在于其内部对象的散列存取，即采用哈希技术
+> TreeSet — TreeSet存入的顺序跟存储的顺序不同，但是存储是按照排序存储的
+* 4、使用foreach方式遍历Set集合
+
+##### List接口
+* 1、List接口
+> Collection的子接口
+> 用来包含一组 `有序有重复 `的对象
+> List中的元素都对应一个整数型的序号，记载其在容器中的位置，可以根据序号存取容器中的元素
+> List有两种主要的集合实现类：
+>> ArrayList
+>> LinkedList
+* 2、两个实现类的区别：
+> ArrayList
+>> ArrayList是线性顺序存储的，是一种线性表
+>> 它的特性和数组很接近，数组大小是不变的，而ArrayList的大小是可以动态改变的
+> LinkedList
+>> 是数据结构中链表的java实现
+>> 相对于List来说，LinkedList最主要的功能方面的增强是可以在List的头部和尾部添加、删除、取得元素，直接提供了这些方法的实现。所以它可以非常方便的实现我们数据结构中的常见的Stack(栈)、queue(队列)等
+
+##### List接口常用用法
+ 
+方法含义
+:--|:--
+void add(int index,Object element) |在列表中的index位置，添加element元素
+Object get(int index) |返回列表中指定位置的元素 
+int indexOf(Object o) |在list中查询元素的索引值，如不存在，返回－1。
+int lastIndexOf(Object o) |List中如果存在多个重复元素，indexOf()方法返回第一个匹配元素的index。lastIndexOf(o)是返回最后一个匹配元素的index.
+ListIterator listIterator() |返回列表中元素的列表迭代器 
+Object remove(int index) |移除列表中指定位置的元素 
+Object set(int index,Object element) |用指定元素替换列表中指定位置的元素 
+
+##### 实现类的初始化
+ 
+* ArrayList的构造方法
+```
+ArrayList 变量名 = new ArrayList();
+ArrayList 变量名 = new ArrayList(int capacity);
+ArrayList 变量名 = new ArrayList(Collection c);
+```
+* LinkedList类的构造方法
+```
+LinkedList  变量名 = new  LinkedList() ;
+LinkedList 变量名 = new LinkedList(Collection c) ;
+```
+
+##### ArrayList和LinkedList
+* LinkList增加方法
+
+方法|含义
+:--|:--
+void addFirst(Object o) |将给定元素插入此列表的开头
+void addLast(Object o)  |将给定元素追加到此列表的结尾
+Object getFirst() |返回此列表的第一个元素
+Object getLast() |返回此列表的最后一个元素
+Object removeFirst() |移除并返回此列表的第一个元素
+ObjectremoveLast() |移除并返回此列表的最后一个元素
+  
+* List接口的实现类
+> ArrayList与LinkedList的比较
+>>* 1、存储结构
+>> ArrayList是线性顺序存储 
+>> LinkedList对象间彼此串连起来的一个链表
+>>* 2、操作性能
+>> ArrayList适合随机查询的场合
+>> LinkedList元素的插入和删除操作性高
+>>* 3、从功能上，LinkedList要多一些
+
+##### Iterator接口
+* 1、Iterator对象称作迭代器，用来方便的实现对容器内的元素进行遍历操作
+* 2、所有实现了Collection接口的集合类都有一个iterator( )方法，返回一个实现了Iterator接口的对象
+* 3、Iterator对象实现了统一的一个用来遍历Collection中对象的方法
+* 4、Iterator是为遍历而设计，能够从集合中取出元素和删除元素，但是没有添加元素的功能
+* 5、Iterator的功能上比较简单，
+* 6、使用中，只能单向移动
+
+##### Iterator接口方法
+
+方法|含义
+:--|:--
+Object  next() |返回游标右边的元素并将游标移动到下一个位置
+boolean hasNext() |判断游标右边是否有元素
+void remove() |删除游标左边的元素，在执行完next之后，该操作只能执行一次
+
+#### Collections类
+* Collections类是类似于Arrays类的公用工具类 ,它提供了一些static方法供集合类使用或操作集合类 。
+* Collections类中的方法
+
+##### Collections类中的方法
+
+方法含义
+Object max(Collection c,Comparator comp) |max算法采用Comparator比较算法
+Object max(collection c) |返回集合中的最大元素，需要考虑比较接口的实现
+Object min(Collection c) |返回集合中的最小元素
+void reverse(Collection c) |把集合中的元素顺序反转
+void copy(List dest,List src) |src集合中元素复制到dest集合
+void fill(List list,Object o) |填充list集合，填充元素为o
+int binarySearch(List list,Object key) |对排序后的集合list进行查询元素操作
+void sort(List list) |对一种List做排序
+
 
   
  
+
+
+
+
 
 
 
