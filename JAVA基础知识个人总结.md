@@ -1694,6 +1694,44 @@ public static void main(String[] args) throws ParseException{
 ---
 ### 集合类
 
+#### Collection接口
+* 一组称为元素的对象
+* 一个Collection中可以放不同类型的数据
+* 是Set接口和List接口的父类
+* 是否有特定的顺序以及是否允许重复，取决于它的实现
+> Set － 无序的集合；不允许重复
+>* HashSet
+> List － 有序的集合；允许重复
+>* ArrayList
+>* LinkedList
+
+#### Collection接口常用方法
+
+方法|含义
+:--|:--
+boolean add(Object) |集合中加入一个对象，成功时返回true
+boolean addAll(Collection) |集合中加入另外一个集合对象
+int size() |集合内容纳的元素数量
+boolean isEmpty() |集合是否为空
+boolean contains(Object) |集合内是否含有参数对象
+Iterator iterator() |产生一个迭代器
+Object[] toArray() |返回一个包含所有元素的对象数组
+boolean remove(Object) |从集合中删除对象
+boolean removeAll(Collection) |清空指定集合
+boolean containsAll(Collection) |判断集合内是否包含子集
+boolean retainAll(Collection) |仅保留此 collection 中那些也包含在指定 collection 的元素
+void clear() |清空集合
+
+
+  
+ 
+
+
+
+  
+ 
+
+
 #### 链表
 * 每一个链表实际上就是由多个接待你组成的。开头节点为`root(根)`,结尾节点指向`null`
 > data----->保存数据。
