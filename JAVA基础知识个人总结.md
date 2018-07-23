@@ -62,7 +62,7 @@
 
 [工具类](#工具类)
 
-
+[集合类](#集合类)
 
 
 ---
@@ -1444,15 +1444,6 @@ int   indexOf/lastIndexOf(char,int)|从指定的索引开始搜索，返回在�
 int   indexOf/lastIndexOf(String)|返回第一次出现的指定子字符串在此字符串中的索引
 int   indexOf/lastIndexOf(String,int)|从指定的索引开始搜索，返回在此字符串中第一次/最后一次出现指定字符串处的索引
 
-
-  
- 
-
-
-
-
-
-
 #### StringBuffer类
 
 * 1、StringBuffer类用于内容可以改变的字符串
@@ -1486,7 +1477,6 @@ StringBuilder insert(int index,Object o)|将 Object 参数的字符串表示形�
 
 * 4、StringBuffer常用方法
 
-
 方法|含义
 :--|:--
 int  capacity( )|返回当前容量 
@@ -1502,7 +1492,6 @@ StringBuffer append(Object o)|追加 Object 参数的字符串表示形式
 StringBuffer insert(int index,String str)|将字符串插入此字符序列中 
 StringBuffer insert(int index,char ch)|将字符插入此字符序列中 
 StringBuffer insert(int index,Object o)|将 Object 参数的字符串表示形式插入此字符序列中 
-
 
 ### String类与StringBuilder类的比较
 * Java中定义了String与StringBuffer两个类来封装对
@@ -1693,7 +1682,55 @@ public static void main(String[] args) throws ParseException{
 
 ---
 ### 集合类
+* 注：数组预习：
+```
+/**
+  *数组拷贝
+  */
+public static void main(String[] args) {	
+	int[] a = {12,23,34,53,6};
+	//所谓的数组就是新分配一块内存空间
+	System.out.println("old  "+a.length);
+	System.out.println(a);
+	
+	int[] b = {12,23,34,53,6};
+	System.out.println(b.length);
 
+	a = Arrays.copyOf(a, 10);
+	System.out.println("new  "+a.length);
+	System.out.println(a);
+	/**
+	 * 数组中拷贝方法
+	 * a 源数组 原数组中的开始位置
+	 * b 目标数组  目标数组的开始位置  
+	 * 拷贝长度 
+	 */
+	System.arraycopy(a, 0, b, 0, 5);
+
+	for(int n:a){
+		System.out.println(n);
+	}	
+}
+/**
+  *使用方法TreeSet方法
+  */
+public static void main(String[] args) throws ParseException {	
+/*	有2个多维数组分别是 2 3 4   和  1 5 2 8 
+       			 4 6 8       5 9 10 -3 
+                        2 7 -5 -18
+按照如下方式进行运算。生成一个2行4列的数组。此数组的第1行1列是2*1+3*5+4*2第1行2列是2*5+3*9+4*7  第2行1列是4*1+6*5+8*2 依次类推。（知识点：多维数组定义和创建、数组遍历、数组元素访问） [选作题]
+*/
+//	将一个数组中的重复元素保留一个其他的清零 次方法只适用于String类型数组
+	String[] a ={"1","2","2","3","3","3","6"};
+	TreeSet ts = new TreeSet();
+	for(String s:a) {
+	    ts.add(s);
+	}
+	String[] array = (String[])ts.toArray(new String[]{});
+	System.out.println(Arrays.toString(array));
+
+}
+```
 #### Collection接口
 * 1、一组称为元素的对象
 * 2、一个Collection中可以放不同类型的数据
@@ -1721,7 +1758,40 @@ boolean removeAll(Collection) |清空指定集合
 boolean containsAll(Collection) |判断集合内是否包含子集
 boolean retainAll(Collection) |仅保留此 collection 中那些也包含在指定 collection 的元素
 void clear() |清空集合
+```
+public static void main(String[] args) {
+	//集合中可以自动扩容
+	Collection c1 = new ArrayList();
+	/**
+	 * Object是所有类的超类
+	 * 也是包装数据类型的超类
+	 * 因为 基本数据类型，性质：自动装箱：
+	 * 所以int 类型的10   转换为integer类型的10   int 10  -----> integer  10
+	 * 因为包装数据类型的超类，所以integer 10  相当于变为Object类型 的父类引用指向子类对象的引用  形式
+	 * 所以10  可以放到方法的参数当中
+	 */
+	c1.add(10);
+	c1.add(20);
+	c1.add(30);
+	c1.add(40);
+	c1.add(50);
+	c1.size();
+	System.out.println(c1.size());
+	System.out.println(c1.toArray());
 
+	Object[] o1array = c1.toArray();
+	/**
+	 * 遍历数组
+	 * 为甚麽可以遍历Object类型的数组？
+	 * 在syso当中输出一个类相当于自动调用toString方法
+	 * 因为有了，父类引用指向子类对象的形式，Object o = new Integer(10);
+	 * 所以  调用toString方法是发生重写，实际调用的是Integer当中的toString方法  即输出数字10
+	 */
+	for(Object o:o1array){
+		System.out.println(o);
+	}	
+}
+```
 ##### Set接口
 * 1、Collection的子接口
 * 2、用来包含一组 无序无重复 的对象
@@ -1759,7 +1829,74 @@ int lastIndexOf(Object o) |List中如果存在多个重复元素，indexOf()方�
 ListIterator listIterator() |返回列表中元素的列表迭代器 
 Object remove(int index) |移除列表中指定位置的元素 
 Object set(int index,Object element) |用指定元素替换列表中指定位置的元素 
+```
+public static void main(String[] args) {
+	/**
+	 * 数组要有统一的数据类型
+	 * List接口<>泛型， 存取顺序一致，------》有序，可重复
+	 * 
+	 * 初始值10   每次扩容1.5倍   查找快 增删慢  数组结构
+	 */
+	List list = new ArrayList();
+	//创建一个int类型的数组
+	//int[] a = new int[10];
+	
+	Integer[] a = new Integer[10];
+	String[] b = new String[10];
 
+	a[0] = 1;
+	System.out.println(a[0]);
+	b[0] = "aaaa";
+	System.out.println(b[0]);
+
+	//int ---->String
+	b[0] = 1 + "";
+
+	//Object是所有类的父类
+	//显然 这样的数据是没有灵魂的  我要装相同数据类型的数据，这时候就要用到泛型
+	Object[] c = new Object[10];
+	c[0] = 111;
+	c[1] = "aaa";
+	System.out.println(c[0]+" "+c[1]);
+	/*
+	* 使用泛型 <>   里面定义数据类型
+	* 使用集合 应学会如何去遍历数组
+	 */
+	List<String> list1 = new ArrayList<>();
+	list1.add("古天乐");
+	list1.add("渣渣会");
+	list1.add("爱迪生");
+	//删除数据  数据位置
+	list1.remove(1);
+	//根据数组下标进行修改
+	list1.set(1, "想改我渣渣辉！");
+	//查询第一次出现指定元素的索引  如果不包含该元素  则返回-1
+	System.out.println(list1.indexOf("HHH"));
+	System.out.println("------------------------");
+	
+	//对数组进行遍历 数组遍历方法
+	//1、List(arrayList)  把集合转换为数组 再遍历数组
+
+	Object[] o = list1.toArray();
+	for(Object n:o){
+		System.out.println(n);
+	}
+	System.out.println("------------------------");
+	//2、迭代器  iterator 使用泛型  保证数据为String类型数据
+	ListIterator<String> i1 = list.listIterator();
+//		Iterator<String> i1 = list1.iterator();
+	while(i1.hasNext()){//判断 不移动指针
+
+		String a1 = i1.next();//判断 移动指针
+		if(a1 == "孙红雷"){
+			i1.remove(); //使用迭代器来操作
+			i1.add("黛埃迪");			//	c.Integer  没有add方法，再操作list集合想使用add方法需要使用ListIterator
+		}		
+		System.out.println(a1);
+	}
+	System.out.println(list1);
+}
+```
 ##### 实现类的初始化
  
 * ArrayList的构造方法
