@@ -1799,7 +1799,60 @@ public static void main(String[] args) {
 > 无重复 — 两个对象e1和e2，如果e1.equals(e2)返回true，则认为e1和e2重复，在set中只保留一个。
 * 3、Set接口的实现类
 > HashSet — HashSet的特性在于其内部对象的散列存取，即采用哈希技术
+>* 无序 不可重复   输出时数据无序  允许使用main值
+>* 如果equles值相等  那么Hashcode值一定相等
+>* 注：    凡是Hash  都是无序的
+```
+public static void main(String[] args) {
+	// TODO Auto-generated method stub
+	/**
+	 * TreeSet
+	 * 
+	 * HashSet   无序 不可重复   输出时数据无序  允许使用main值
+	 * 如果equles值相等  那么Hashcode值一定相等
+	 * 凡是Hash  都是无序的
+	 */
+	Set s = new HashSet();
+	s.add("aaa");
+	s.add("bbb");
+	s.add("ccc");
+	s.add("ddd");
+	Iterator i = s.iterator();
+	while(i.hasNext()){
+		System.out.println(i.next());
+	}
+}
+```
 > TreeSet — TreeSet存入的顺序跟存储的顺序不同，但是存储是按照排序存储的
+```
+public static void main(String[] args) {
+	/**
+	 * 无序  输入顺序与输出顺序不同  所以无序  不可重复
+	 * 
+	 *  树状结构  
+	 */
+
+	/**
+	 * 红黑树性质：
+	 * 节点颜色是红、黑色
+	 * 根节点是黑色的
+	 * 每个叶节点（NIL节点，空节点）是黑色的
+	 * 每个红色节点的两个子节点都是黑色的（从每个叶子到根的所有路径不能有两个连续的红色节点）
+	 * 从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点。
+	 * 
+	 */
+	TreeSet t = new TreeSet();
+	t.add(2);
+	t.add(22);
+	t.add(23);
+	t.add(28);
+	t.add(92);
+	Iterator i = t.iterator();
+	while(i.hasNext()){
+		System.out.println(i.next());
+	}
+}
+```
 * 4、使用foreach方式遍历Set集合
 
 ##### List接口
