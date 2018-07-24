@@ -62,7 +62,7 @@
 
 [工具类](#工具类)
 
-
+[集合类](#集合类)
 
 
 ---
@@ -1444,15 +1444,6 @@ int   indexOf/lastIndexOf(char,int)|从指定的索引开始搜索，返回在�
 int   indexOf/lastIndexOf(String)|返回第一次出现的指定子字符串在此字符串中的索引
 int   indexOf/lastIndexOf(String,int)|从指定的索引开始搜索，返回在此字符串中第一次/最后一次出现指定字符串处的索引
 
-
-  
- 
-
-
-
-
-
-
 #### StringBuffer类
 
 * 1、StringBuffer类用于内容可以改变的字符串
@@ -1486,7 +1477,6 @@ StringBuilder insert(int index,Object o)|将 Object 参数的字符串表示形�
 
 * 4、StringBuffer常用方法
 
-
 方法|含义
 :--|:--
 int  capacity( )|返回当前容量 
@@ -1502,7 +1492,6 @@ StringBuffer append(Object o)|追加 Object 参数的字符串表示形式
 StringBuffer insert(int index,String str)|将字符串插入此字符序列中 
 StringBuffer insert(int index,char ch)|将字符插入此字符序列中 
 StringBuffer insert(int index,Object o)|将 Object 参数的字符串表示形式插入此字符序列中 
-
 
 ### String类与StringBuilder类的比较
 * Java中定义了String与StringBuffer两个类来封装对
@@ -1693,6 +1682,355 @@ public static void main(String[] args) throws ParseException{
 
 ---
 ### 集合类
+* 注：数组预习：
+```
+/**
+  *数组拷贝
+  */
+public static void main(String[] args) {	
+	int[] a = {12,23,34,53,6};
+	//所谓的数组就是新分配一块内存空间
+	System.out.println("old  "+a.length);
+	System.out.println(a);
+	
+	int[] b = {12,23,34,53,6};
+	System.out.println(b.length);
+
+	a = Arrays.copyOf(a, 10);
+	System.out.println("new  "+a.length);
+	System.out.println(a);
+	/**
+	 * 数组中拷贝方法
+	 * a 源数组 原数组中的开始位置
+	 * b 目标数组  目标数组的开始位置  
+	 * 拷贝长度 
+	 */
+	System.arraycopy(a, 0, b, 0, 5);
+
+	for(int n:a){
+		System.out.println(n);
+	}	
+}
+/**
+  *使用方法TreeSet方法
+  */
+public static void main(String[] args) throws ParseException {	
+/*	有2个多维数组分别是 2 3 4   和  1 5 2 8 
+       			 4 6 8       5 9 10 -3 
+                        2 7 -5 -18
+按照如下方式进行运算。生成一个2行4列的数组。此数组的第1行1列是2*1+3*5+4*2第1行2列是2*5+3*9+4*7  第2行1列是4*1+6*5+8*2 依次类推。（知识点：多维数组定义和创建、数组遍历、数组元素访问） [选作题]
+*/
+//	将一个数组中的重复元素保留一个其他的清零 次方法只适用于String类型数组
+	String[] a ={"1","2","2","3","3","3","6"};
+	TreeSet ts = new TreeSet();
+	for(String s:a) {
+	    ts.add(s);
+	}
+	String[] array = (String[])ts.toArray(new String[]{});
+	System.out.println(Arrays.toString(array));
+
+}
+```
+#### Collection接口
+* 1、一组称为元素的对象
+* 2、一个Collection中可以放不同类型的数据
+* 3、是Set接口和List接口的父类
+* 4、是否有特定的顺序以及是否允许重复，取决于它的实现
+> Set － 无序的集合；不允许重复
+>* HashSet
+> List － 有序的集合；允许重复
+>* ArrayList
+>* LinkedList
+
+#### Collection接口常用方法
+
+方法|含义
+:--|:--
+boolean add(Object) |集合中加入一个对象，成功时返回true
+boolean addAll(Collection) |集合中加入另外一个集合对象
+int size() |集合内容纳的元素数量
+boolean isEmpty() |集合是否为空
+boolean contains(Object) |集合内是否含有参数对象
+Iterator iterator() |产生一个迭代器
+Object[] toArray() |返回一个包含所有元素的对象数组
+boolean remove(Object) |从集合中删除对象
+boolean removeAll(Collection) |清空指定集合
+boolean containsAll(Collection) |判断集合内是否包含子集
+boolean retainAll(Collection) |仅保留此 collection 中那些也包含在指定 collection 的元素
+void clear() |清空集合
+```
+public static void main(String[] args) {
+	//集合中可以自动扩容
+	Collection c1 = new ArrayList();
+	/**
+	 * Object是所有类的超类
+	 * 也是包装数据类型的超类
+	 * 因为 基本数据类型，性质：自动装箱：
+	 * 所以int 类型的10   转换为integer类型的10   int 10  -----> integer  10
+	 * 因为包装数据类型的超类，所以integer 10  相当于变为Object类型 的父类引用指向子类对象的引用  形式
+	 * 所以10  可以放到方法的参数当中
+	 */
+	c1.add(10);
+	c1.add(20);
+	c1.add(30);
+	c1.add(40);
+	c1.add(50);
+	c1.size();
+	System.out.println(c1.size());
+	System.out.println(c1.toArray());
+
+	Object[] o1array = c1.toArray();
+	/**
+	 * 遍历数组
+	 * 为甚麽可以遍历Object类型的数组？
+	 * 在syso当中输出一个类相当于自动调用toString方法
+	 * 因为有了，父类引用指向子类对象的形式，Object o = new Integer(10);
+	 * 所以  调用toString方法是发生重写，实际调用的是Integer当中的toString方法  即输出数字10
+	 */
+	for(Object o:o1array){
+		System.out.println(o);
+	}	
+}
+```
+##### Set接口
+* 1、Collection的子接口
+* 2、用来包含一组 无序无重复 的对象
+> 无序 — 是指元素存入顺序和集合内存储的顺序不同；
+> 无重复 — 两个对象e1和e2，如果e1.equals(e2)返回true，则认为e1和e2重复，在set中只保留一个。
+* 3、Set接口的实现类
+> HashSet — HashSet的特性在于其内部对象的散列存取，即采用哈希技术
+>* 无序 不可重复   输出时数据无序  允许使用main值
+>* 如果equles值相等  那么Hashcode值一定相等
+>* 注：    凡是Hash  都是无序的
+```
+public static void main(String[] args) {
+	// TODO Auto-generated method stub
+	/**
+	 * TreeSet
+	 * 
+	 * HashSet   无序 不可重复   输出时数据无序  允许使用main值
+	 * 如果equles值相等  那么Hashcode值一定相等
+	 * 凡是Hash  都是无序的
+	 */
+	Set s = new HashSet();
+	s.add("aaa");
+	s.add("bbb");
+	s.add("ccc");
+	s.add("ddd");
+	Iterator i = s.iterator();
+	while(i.hasNext()){
+		System.out.println(i.next());
+	}
+}
+```
+> TreeSet — TreeSet存入的顺序跟存储的顺序不同，但是存储是按照排序存储的
+```
+public static void main(String[] args) {
+	/**
+	 * 无序  输入顺序与输出顺序不同  所以无序  不可重复
+	 * 
+	 *  树状结构  
+	 */
+
+	/**
+	 * 红黑树性质：
+	 * 节点颜色是红、黑色
+	 * 根节点是黑色的
+	 * 每个叶节点（NIL节点，空节点）是黑色的
+	 * 每个红色节点的两个子节点都是黑色的（从每个叶子到根的所有路径不能有两个连续的红色节点）
+	 * 从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点。
+	 * 
+	 */
+	TreeSet t = new TreeSet();
+	t.add(2);
+	t.add(22);
+	t.add(23);
+	t.add(28);
+	t.add(92);
+	Iterator i = t.iterator();
+	while(i.hasNext()){
+		System.out.println(i.next());
+	}
+}
+```
+* 4、使用foreach方式遍历Set集合
+
+##### List接口
+* 1、List接口
+> Collection的子接口
+> 用来包含一组 `有序有重复 `的对象
+> List中的元素都对应一个整数型的序号，记载其在容器中的位置，可以根据序号存取容器中的元素
+> List有两种主要的集合实现类：
+>> ArrayList
+>> LinkedList
+* 2、两个实现类的区别：
+> ArrayList
+>> ArrayList是线性顺序存储的，是一种线性表
+>> 它的特性和数组很接近，数组大小是不变的，而ArrayList的大小是可以动态改变的
+> LinkedList
+>> 是数据结构中链表的java实现
+>> 相对于List来说，LinkedList最主要的功能方面的增强是可以在List的头部和尾部添加、删除、取得元素，直接提供了这些方法的实现。所以它可以非常方便的实现我们数据结构中的常见的Stack(栈)、queue(队列)等
+
+##### List接口常用用法
+ 
+方法含义
+:--|:--
+void add(int index,Object element) |在列表中的index位置，添加element元素
+Object get(int index) |返回列表中指定位置的元素 
+int indexOf(Object o) |在list中查询元素的索引值，如不存在，返回－1。
+int lastIndexOf(Object o) |List中如果存在多个重复元素，indexOf()方法返回第一个匹配元素的index。lastIndexOf(o)是返回最后一个匹配元素的index.
+ListIterator listIterator() |返回列表中元素的列表迭代器 
+Object remove(int index) |移除列表中指定位置的元素 
+Object set(int index,Object element) |用指定元素替换列表中指定位置的元素 
+```
+public static void main(String[] args) {
+	/**
+	 * 数组要有统一的数据类型
+	 * List接口<>泛型， 存取顺序一致，------》有序，可重复
+	 * 
+	 * 初始值10   每次扩容1.5倍   查找快 增删慢  数组结构
+	 */
+	List list = new ArrayList();
+	//创建一个int类型的数组
+	//int[] a = new int[10];
+	
+	Integer[] a = new Integer[10];
+	String[] b = new String[10];
+
+	a[0] = 1;
+	System.out.println(a[0]);
+	b[0] = "aaaa";
+	System.out.println(b[0]);
+
+	//int ---->String
+	b[0] = 1 + "";
+
+	//Object是所有类的父类
+	//显然 这样的数据是没有灵魂的  我要装相同数据类型的数据，这时候就要用到泛型
+	Object[] c = new Object[10];
+	c[0] = 111;
+	c[1] = "aaa";
+	System.out.println(c[0]+" "+c[1]);
+	/*
+	* 使用泛型 <>   里面定义数据类型
+	* 使用集合 应学会如何去遍历数组
+	 */
+	List<String> list1 = new ArrayList<>();
+	list1.add("古天乐");
+	list1.add("渣渣会");
+	list1.add("爱迪生");
+	//删除数据  数据位置
+	list1.remove(1);
+	//根据数组下标进行修改
+	list1.set(1, "想改我渣渣辉！");
+	//查询第一次出现指定元素的索引  如果不包含该元素  则返回-1
+	System.out.println(list1.indexOf("HHH"));
+	System.out.println("------------------------");
+	
+	//对数组进行遍历 数组遍历方法
+	//1、List(arrayList)  把集合转换为数组 再遍历数组
+
+	Object[] o = list1.toArray();
+	for(Object n:o){
+		System.out.println(n);
+	}
+	System.out.println("------------------------");
+	//2、迭代器  iterator 使用泛型  保证数据为String类型数据
+	ListIterator<String> i1 = list.listIterator();
+//		Iterator<String> i1 = list1.iterator();
+	while(i1.hasNext()){//判断 不移动指针
+
+		String a1 = i1.next();//判断 移动指针
+		if(a1 == "孙红雷"){
+			i1.remove(); //使用迭代器来操作
+			i1.add("黛埃迪");			//	c.Integer  没有add方法，再操作list集合想使用add方法需要使用ListIterator
+		}		
+		System.out.println(a1);
+	}
+	System.out.println(list1);
+}
+```
+##### 实现类的初始化
+ 
+* ArrayList的构造方法
+```
+ArrayList 变量名 = new ArrayList();
+ArrayList 变量名 = new ArrayList(int capacity);
+ArrayList 变量名 = new ArrayList(Collection c);
+```
+* LinkedList类的构造方法
+```
+LinkedList  变量名 = new  LinkedList() ;
+LinkedList 变量名 = new LinkedList(Collection c) ;
+```
+
+##### ArrayList和LinkedList
+* LinkList增加方法
+
+方法|含义
+:--|:--
+void addFirst(Object o) |将给定元素插入此列表的开头
+void addLast(Object o)  |将给定元素追加到此列表的结尾
+Object getFirst() |返回此列表的第一个元素
+Object getLast() |返回此列表的最后一个元素
+Object removeFirst() |移除并返回此列表的第一个元素
+ObjectremoveLast() |移除并返回此列表的最后一个元素
+  
+* List接口的实现类
+> ArrayList与LinkedList的比较
+>>* 1、存储结构
+>> ArrayList是线性顺序存储 
+>> LinkedList对象间彼此串连起来的一个链表
+>>* 2、操作性能
+>> ArrayList适合随机查询的场合
+>> LinkedList元素的插入和删除操作性高
+>>* 3、从功能上，LinkedList要多一些
+
+##### Iterator接口
+* 1、Iterator对象称作迭代器，用来方便的实现对容器内的元素进行遍历操作
+* 2、所有实现了Collection接口的集合类都有一个iterator( )方法，返回一个实现了Iterator接口的对象
+* 3、Iterator对象实现了统一的一个用来遍历Collection中对象的方法
+* 4、Iterator是为遍历而设计，能够从集合中取出元素和删除元素，但是没有添加元素的功能
+* 5、Iterator的功能上比较简单，
+* 6、使用中，只能单向移动
+
+##### Iterator接口方法
+
+方法|含义
+:--|:--
+Object  next() |返回游标右边的元素并将游标移动到下一个位置
+boolean hasNext() |判断游标右边是否有元素
+void remove() |删除游标左边的元素，在执行完next之后，该操作只能执行一次
+
+#### Collections类
+* Collections类是类似于Arrays类的公用工具类 ,它提供了一些static方法供集合类使用或操作集合类 。
+* Collections类中的方法
+
+##### Collections类中的方法
+
+方法含义
+Object max(Collection c,Comparator comp) |max算法采用Comparator比较算法
+Object max(collection c) |返回集合中的最大元素，需要考虑比较接口的实现
+Object min(Collection c) |返回集合中的最小元素
+void reverse(Collection c) |把集合中的元素顺序反转
+void copy(List dest,List src) |src集合中元素复制到dest集合
+void fill(List list,Object o) |填充list集合，填充元素为o
+int binarySearch(List list,Object key) |对排序后的集合list进行查询元素操作
+void sort(List list) |对一种List做排序
+
+
+  
+ 
+
+
+
+
+
+
+
+  
+ 
+
 
 #### 链表
 * 每一个链表实际上就是由多个接待你组成的。开头节点为`root(根)`,结尾节点指向`null`
