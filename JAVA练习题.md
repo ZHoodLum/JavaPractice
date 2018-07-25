@@ -48,6 +48,8 @@
 > [使用封装方法对三角形进行判断](#使用封装方法对三角形进行判断)
 
 [类中File类使用方法](#类中File类使用方法)
+
+[查找文件夹及文件名](#查找文件夹及文件名)
  
 
 ---
@@ -1096,5 +1098,63 @@ public class Test5 {
     }
 }
 ```
+### 查找文件夹及文件名
+```
+在本机的磁盘系统中，找一个文件夹，利用 File类的提供方法，列出该文件夹中的所有文件的 文件名和文件的路径，执行效果如下：[必做题] • 路径是xxx的文件夹内的文件有：   文件名：abc.txt  路径名：c:\temp\abc.txt   --------------------------------------------  文件名：def.txt  路径名：c:\temp\def.txt
+* 第一个版本
+public class getFile {
+	public static void main(String[] args) {
+		getFileListame("C:\\Users\\shuai\\Desktop\\作业");
+	}
+	public static void getFileListame(String strPath) {
+		File dir = new File(strPath);
+		File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				System.out.println(files[i].getName());
+				if (files[i].isDirectory()) { // 判断是文件还是文件夹
+					getFileListame(files[i].getAbsolutePath()); // 获取文件绝对路径
+					System.out.println(files[i].getAbsolutePath() + files[i].getName());
+				}
+			}
+		}
+	}
+}
 
-	
+* 第二个 完善版
+public class Test22 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in); 
+		System.out.println("请输入要打印出的文件夹：(windows下分隔符请使用“\\”)"); 
+		String ML = sc.next();
+		File file = new File(ML);
+		getFile(file);
+	}
+	public static void getFile(File file) {
+		//listFiles() 返回一个抽象路径名数组这些路径名表示此抽象路径名表示的目录中的文件
+		// 该文件目录文件放入数组
+		File[] files = file.listFiles(); 
+		if(file.exists()){
+			if (files != null) {
+				for (int i = 0; i < files.length; i++) {
+				
+				System.out.println("文件名= " + files[i].getName());
+				//获取文件名
+				/*File tempFile =new File( files[i].getAbsolutePath().trim());
+			        String fileName = tempFile.getName();
+			        System.out.println("文件名= " + fileName);*/
+				
+			        // 获取文件绝对路径
+			        System.out.println("文件的绝对路径= " + files[i].getAbsolutePath());
+			        System.out.println("---------------------");	 
+				}
+			}
+		}else{
+			System.out.println("输入有误！");
+		}
+ 
+	}
+
+}
+```
