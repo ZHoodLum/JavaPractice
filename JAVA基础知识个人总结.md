@@ -2018,43 +2018,76 @@ void fill(List list,Object o) |填充list集合，填充元素为o
 int binarySearch(List list,Object key) |对排序后的集合list进行查询元素操作
 void sort(List list) |对一种List做排序
 
-
-  
- 
-
-
-
-
-
-
-
-  
- 
-
-
 #### 链表
 * 每一个链表实际上就是由多个接待你组成的。开头节点为`root(根)`,结尾节点指向`null`
 > data----->保存数据。
 > next------>要保存的下一个节点。
 
+### 文件管理
+#### 概述
+* java中的对文件管理，通过java.io包中的`File`类实现
+* java中文件的管理，主要是针对文件或是目录路径名的管理
+> 文件的属性信息
+> 文件的检查
+> 文件的删除等
+> 不包括文件的访问
+#### File类
+* File类的构造方法：  
+* File  变量名 = new  File(String pathname) ; 
+> 通过将给定路径名字符串转换成抽象路径名来创建一个新 File 实例:  File f1 = new File (“d:/temp/abc.txt”); 
 
+* File  变量名 = new  File(URI uri) ; 
+> 通过将给定File的uri转换成抽象路径名来创建一个新 File 实例 :  File f2 = new File(“abc.txt”);  
+ 
+* File  变量名 = new  File(String parent,Stirng child) ;    
+> 根据 parent 路径名字符串和 child 路径名字符串创建一个新 File 实例 :  File f3 = new File(“d:/temp”,“abc.txt”);  
 
+* File  变量名 = new  File(File parent,Stirng child) ; 
+> 根据 parent 抽象路径名和 child 路径名字符串创建一个新 File 实例 :  File f = new File(“d:/temp”);File f4 = new File(f,“abc.txt”);
 
+方法|含义
+:--|:--
+boolean  createNewFile()  |当且仅当不存在具有此抽象路径名指定的名 称的文件时，原子地创建由此抽象路径名指 定的一个新的空文件。 static File createTempFile(String prefix,String suffix)  |在默认临时文件目录中创建一个空文件，使 用给定前缀和后缀生成其名称 static File createTempFile(String prefix,Stirng suffix,File directory)  |在指定目录中创建一个新的空文件，使用给 定的前缀和后缀字符串生成其名称
 
+boolean exists( )  | 测试此抽象路径名表示的文件或目录是否存在
+boolean delete( )  | 删除此抽象路径名表示的文件或目录
+boolean equals(Object obj) |测试此抽象路径名与给定对象是否相等  
+boolean canRead() | 测试应用程序是否可以读取此抽象路径名表示 的文件
+boolean canWrite()  |测试应用程序是否可以修改此抽象路径名表示 的文件
+String[] list( )  |返回由此抽象路径名所表示的目录中的文件和 目录的名称所组成字符串数
+String getAbsolutePath( )   |返回抽象路径名的绝对路径名字符串 
+String getName( )   |返回由此抽象路径名表示的文件或目录的名 称，不包括路径名称
+String getPath( )   |将此抽象路径名转换为一个路径名字符串
+File[] listFiles()   |返回一个抽象路径名数组，这些路径名表示 此抽象路径名所表示目录中的文件  
+boolean renameTo(File dest )   |重新命名此抽象路径名表示的文件 
+long length( )   |返回由此抽象路径名表示的文件的大小，以 byte为单位 
+boolean mkdir( )   |创建此抽象路径名指定的目录 
+boolean mkdirs( )   |创建此抽象路径名指定的目录，包括创建必 需但不存在的父目录。注意，如果此操作失 败，可能已成功创建了一些必需的父目录
 
+### 流的概念及API
 
+* 流（Stream )的概念代表的是程序中数据的流通 
+* 数据流是一串连续不断的数据的集合
+* 在Java程序中，对于数据的输入/输出操作是以流(Stream)的方式进行的 
+> 输入流 — 流入程序的数据 
+> 输出流 — 流出程序的数据
+> 在java程序中，从输入流读取数据（读到内存中），而从输出 流输出数据（从内存存储到文件或显示到屏幕上） 
 
-
-
-
-
-
-
+* 流的分类
+>* 按流的方向不同
+>> 输入流、输出流
+>* 按处理数据的单位不同
+>> 字节流、字符流 
+>* 按功能不同
+>> 节点流、处理流 
+* Java语言中，控制数据流的 类都放在java.io包中 
+字节流 字符流 输入流 InputStream Reader 输出流 OutputStream Writer 。java.io包中有两大继承体系：以byte处理为主的Stream类， 他们的命名方式是XXXStream：以字符处理为主的Reader / Writer类，他们的命名方式 XXXReader或XXXWriter：InputStream、OutputStream、Reader、 Writer这四个类，是这两大继承体系的父类 
   
-  
-  
-  
-  
+&nbsp;|字节流|字符流
+:--|:--|:--
+输入流|InputStream|Reader
+输出流|OutputStream|Writer
+
   
   
   
