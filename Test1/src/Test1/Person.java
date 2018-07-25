@@ -1,6 +1,8 @@
 package Test1;
 
-public class Person {
+import java.io.Serializable;
+
+public class Person implements Serializable{
 //	protected String name = "Person";
 //	int age = 0;
 	
@@ -9,8 +11,11 @@ public class Person {
 //		String s = null;
 //		s.concat("abc");
 //	}
-	 private String name;
+		private String name;
 	    private int age;
+//	    transient int age;
+	    
+	    
 	    public Person() {
 	    }
 	    public Person(String name) {

@@ -14,7 +14,7 @@ public class Test5IO {
 		 */
 		
 		File f1 = new File("C:\\Users\\15532\\Desktop\\项目\\iotest\\aaa.jpg");
-		File f2 = new File("C:\\Users\\15532\\Desktop\\项目\\iotest\\bbb.jpg");
+		File f2 = new File("C:\\Users\\15532\\Desktop\\项目\\iotest\\bbw.jpg");
 		
 		//从aaa.txt当中取数据  从外存到内存------>input
 		
@@ -22,7 +22,9 @@ public class Test5IO {
 		FileOutputStream fos1 = new FileOutputStream(f2,true);
 		
 		int n=0;
-		
+		//1kb=1024b   1M=1024M
+//		byte[] b1 = new byte[1024*1024];
+//		while((fis1.read(b1))!=-1){
 		while((n=fis1.read())!=-1){
 			fos1.write(n);
 		}
