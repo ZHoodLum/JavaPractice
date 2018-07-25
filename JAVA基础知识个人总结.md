@@ -2047,8 +2047,9 @@ void sort(List list) |对一种List做排序
 
 方法|含义
 :--|:--
-boolean  createNewFile()  |当且仅当不存在具有此抽象路径名指定的名 称的文件时，原子地创建由此抽象路径名指 定的一个新的空文件。 static File createTempFile(String prefix,String suffix)  |在默认临时文件目录中创建一个空文件，使 用给定前缀和后缀生成其名称 static File createTempFile(String prefix,Stirng suffix,File directory)  |在指定目录中创建一个新的空文件，使用给 定的前缀和后缀字符串生成其名称
-
+boolean  createNewFile()  |当且仅当不存在具有此抽象路径名指定的名 称的文件时，原子地创建由此抽象路径名指 定的一个新的空文件。
+static File createTempFile(String prefix,String suffix)  |在默认临时文件目录中创建一个空文件，使 用给定前缀和后缀生成其名称 
+static File createTempFile(String prefix,Stirng suffix,File directory) |在指定目录中创建一个新的空文件，使用给 定的前缀和后缀字符串生成其名称
 boolean exists( )  | 测试此抽象路径名表示的文件或目录是否存在
 boolean delete( )  | 删除此抽象路径名表示的文件或目录
 boolean equals(Object obj) |测试此抽象路径名与给定对象是否相等  
