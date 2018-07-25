@@ -933,7 +933,7 @@ public class SJXTest {
 	}
 }
 ```
-### java中File类的使用方法
+### Java中File类的使用方法
 
 #### 构造函数
 ```
