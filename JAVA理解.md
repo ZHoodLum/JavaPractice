@@ -4,7 +4,7 @@
 
 [为什么使用抽象类？有什么好处？](#为什么使用抽象类有什么好处)
 
-[Interface、extends、implement的区别](#Interface、extends、implement的区别)
+[Interface\extends\implement的区别](#Interface\extends\implement的区别)
 
 ---
 ### Java的四种引用方式
@@ -551,7 +551,7 @@ WeakHashMap 有一个名为 expungeStaleEntries() 的私有方法，大多数 Ma
 
 ---
 
-### Interface、extends、implement的区别
+### Interface\extends\implement的区别
 
 * interface是定义接口的关键字。
 * implement是实现接口的关键字。
