@@ -4,8 +4,7 @@
 
 [为什么使用抽象类？有什么好处？](#为什么使用抽象类有什么好处)
 
-
-
+[Interface、extends、implement的区别](#Interface、extends、implement的区别)
 
 ---
 ### Java的四种引用方式
@@ -264,8 +263,11 @@ public SoftReference(T referent, ReferenceQueue<? super T> q) {
 
 * 3．使用软引用构建敏感数据的缓存
 > 3.1 为什么需要使用软引用
+```
    首先，我们看一个雇员信息查询系统的实例。我们将使用一个Java语言实现的雇员信息查询系统查询存储在磁盘文件或者数据库中的雇员人事档案信息。作为一个用户，我们完全有可能需要回头去查看几分钟甚至几秒钟前查看过的雇员档案信息(同样，我们在浏览WEB页面的时候也经常会使用“后退”按钮)。这时我们通常会有两种程序实现方式:一种是把过去查看过的雇员信息保存在内存中，每一个存储了雇员档案信息的Java对象的生命周期贯穿整个应用程序始终;另一种是当用户开始查看其他雇员的档案信息的时候，把存储了当前所查看的雇员档案信息的Java对象结束引用，使得垃圾收集线程可以回收其所占用的内存空间，当用户再次需要浏览该雇员的档案信息的时候，重新构建该雇员的信息。很显然，第一种实现方法将造成大量的内存浪费，而第二种实现的缺陷在于即使垃圾收集线程还没有进行垃圾收集，包含雇员档案信息的对象仍然完好地保存在内存中，应用程序也要重新构建一个对象。我们知道，访问磁盘文件、访问网络资源、查询数据库等操作都是影响应用程序执行性能的重要因素，如果能重新获取那些尚未被回收的Java对象的引用，必将减少不必要的访问，大大提高程序的运行速度。
+   ```
 > 3.2 如果使用软引用
+```
 SoftReference的特点是它的一个实例保存对一个Java对象的软引用，该软引用的存在不妨碍垃圾收集线程对该Java对象的回收。也就是说，一旦SoftReference保存了对一个Java对象的软引用后，在垃圾线程对这个Java对象回收前，SoftReference类所提供的get()方法返回Java对象的强引用。另外，一旦垃圾线程回收该Java对象之后，get()方法将返回null。
 看下面代码:
 MyObject aRef = new  MyObject();
@@ -276,7 +278,9 @@ aRef = null;
 此后，这个MyObject对象成为了软可及对象。如果垃圾收集线程进行内存垃圾收集，并不会因为有一个SoftReference对该对象的引用而始终保留该对象。Java虚拟机的垃圾收集线程对软可及对象和其他一般Java对象进行了区别对待:软可及对象的清理是由垃圾收集线程根据其特定算法按照内存需求决定的。也就是说，垃圾收集线程会在虚拟机抛出OutOfMemoryError之前回收软可及对象，而且虚拟机会尽可能优先回收长时间闲置不用的软可及对象，对那些刚刚构建的或刚刚使用过的“新”软可反对象会被虚拟机尽可能保留。在回收这些对象之前，我们可以通过:
 MyObject anotherRef=(MyObject)aSoftRef.get();
     重新获得对该实例的强引用。而回收之后，调用get()方法就只能得到null了。
+    ```
 > 3.3 使用ReferenceQueue清除失去了软引用对象的SoftReference
+```
 作为一个Java对象，SoftReference对象除了具有保存软引用的特殊性之外，也具有Java对象的一般性。所以，当软可及对象被回收之后，虽然这个SoftReference对象的get()方法返回null,但这个SoftReference对象已经不再具有存在的价值，需要一个适当的清除机制，避免大量SoftReference对象带来的内存泄漏。在java.lang.ref包里还提供了ReferenceQueue。如果在创建SoftReference对象的时候，使用了一个ReferenceQueue对象作为参数提供给SoftReference的构造方法，如:
 ReferenceQueue queue = new  ReferenceQueue();
 SoftReference  ref=new  SoftReference(aMyObject, queue);
@@ -287,8 +291,9 @@ while ((ref = (EmployeeRef) q.poll()) != null) {
     // 清除ref
 }
 理解了ReferenceQueue的工作机制之后，我们就可以开始构造一个Java对象的高速缓存器了。
-
+```
 > 3.4通过软可及对象重获方法实现Java对象的高速缓存
+```
     利用Java2平台垃圾收集机制的特性以及前述的垃圾对象重获方法，我们通过一个雇员信息查询系统的小例子来说明如何构建一种高速缓存器来避免重复构建同一个对象带来的性能损失。我们将一个雇员的档案信息定义为一个Employee类:
 publicclass Employee {
     private String id;// 雇员的标识号码
@@ -310,8 +315,10 @@ publicclass Employee {
        // 给name，department，plone，salary等变量
        // 同时将origin赋值为"From DataBase"
     }
-……
+```
 这个Employee类的构造方法中我们可以预见，如果每次需要查询一个雇员的信息。哪怕是几秒中之前刚刚查询过的，都要重新构建一个实例，这是需要消耗很多时间的。下面是一个对Employee对象进行缓存的缓存器的定义:
+```
+
 ```
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
@@ -391,6 +398,7 @@ publicclass EmployeeCache {
 * 4．使用弱引用构建非敏感数据的缓存
 4.1全局 Map 造成的内存泄漏
 无意识对象保留最常见的原因是使用Map将元数据与临时对象（transient object）相关联。假定一个对象具有中等生命周期，比分配它的那个方法调用的生命周期长，但是比应用程序的生命周期短，如客户机的套接字连接。需要将一些元数据与这个套接字关联，如生成连接的用户的标识。在创建Socket时是不知道这些信息的，并且不能将数据添加到Socket对象上，因为不能控制 Socket 类或者它的子类。这时，典型的方法就是在一个全局 Map 中存储这些信息，如下面的 SocketManager 类所示：使用一个全局 Map 将元数据关联到一个对象。
+```
 publicclass SocketManager {
     private Map<Socket, User> m = new HashMap<Socket, User>();
  
@@ -406,6 +414,7 @@ publicclass SocketManager {
        m.remove(s);
     }
 }
+```
 这种方法的问题是元数据的生命周期需要与套接字的生命周期挂钩，但是除非准确地知道什么时候程序不再需要这个套接字，并记住从 Map 中删除相应的映射，否则，Socket 和 User 对象将会永远留在 Map 中，远远超过响应了请求和关闭套接字的时间。这会阻止 Socket 和 User 对象被垃圾收集，即使应用程序不会再使用它们。这些对象留下来不受控制，很容易造成程序在长时间运行后内存爆满。除了最简单的情况，在几乎所有情况下找出什么时候 Socket 不再被程序使用是一件很烦人和容易出错的任务，需要人工对内存进行管理。
  
 4.2如何使用WeakHashMap
