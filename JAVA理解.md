@@ -8,8 +8,8 @@
 
 
 ---
-Java的四种引用方式
---
+### Java的四种引用方式
+
 [来源于博客园:] http://www.cnblogs.com/a986771570/p/8592660.html
 
 java内存管理分为内存分配和内存回收，都不需要程序员负责，垃圾回收的机制主要是看对象是否有引用指向该对象。
@@ -491,8 +491,8 @@ WeakHashMap 有一个名为 expungeStaleEntries() 的私有方法，大多数 Ma
 
 也可以如下的构造型方式。
 
-为什么使用抽象类？有什么好处？
-----
+### 为什么使用抽象类？有什么好处？
+
 [来源于博客园:]https://www.cnblogs.com/heyonggang/p/3142338.html
 
 最简单的说法也是最重要的理由：接口和实现分离
@@ -540,7 +540,69 @@ WeakHashMap 有一个名为 expungeStaleEntries() 的私有方法，大多数 Ma
 
 记住一点，面向对象不是来自于Java，面向对象就在你的生活中。而Java的面向对象是方便你解决复杂的问题。这不是说面向对象很简单，虽然面向对象很复杂，但Java知道，你很了解面向对象，因为它就在你身边。
 
+---
 
+### Interface、extends、implement的区别
+
+* interface是定义接口的关键字。
+* implement是实现接口的关键字。
+* extends是子类继承父类的关键字。
+>* 1、interface接口定义不能包含任何属性（如：public、private等），但是在实现接口的类定义中，可以包含必须标记为public。
+```
+例如： （1）、interface interfaceName [extends interfaceName] {}
+
+       （2）、有一类东西，都具有同样的行为，而这个共有的行为实现方式不一样。
+
+如：笔这类东西，都有共同的行为“写”，铅笔、毛笔、圆珠笔、钢笔都有“写”的功能，但实现起来不一样。那么我们就可以抽象出一个接口“笔”
+
+interface 笔{ //定义一个接口“笔”
+
+void 写(); //定义一个“写”的方法
+
+}
+
+implement的意思是指在铅笔、毛笔、圆珠笔要有”写“的这个功能，就需要实现接口”笔“的”写“功能。而这个关键字implement就是实现的意思，如：
+
+class 铅笔 implement 笔{ //用“铅笔”这个类实现“笔”的功能
+
+void 写(){
+
+用铅芯画
+
+}
+
+}
+
+class 钢笔 implement 笔{ //用“钢笔”这个类实现“笔”的功能
+
+void 写(){
+
+用墨水画
+
+}
+
+}
+```
+ 
+
+>* 2、extends语句可以使用一个接口继承多个接口，通过implement语句可以使用一个类继承多个接口。
+
+extends是继承父类，继承只能继承一个类。
+
+extends是继承某个类之后可以使用父类的方法，也可以重写父类的方法。
+
+```
+例如： （1）、class A extends B implement C,D,E; //类A继承了类B，实  现了C,D,E三个接口
+
+       （2）、extends是指一个继承关系，子类继承父类的功能：父类”灯“具有”发光“的功能，而子类"台灯"，只需要extends（继承）父类”灯“就拥有了发光的共功能。
+```
+
+>* 3、implement是实现interface定义的类的具体方法功能。
+```
+      Implement可以实现多个接口，接口中的方法为空的，必须重写才能使用。
+```
+
+版权声明：本文为博主原创文章，未经博主允许不得转载。	https://blog.csdn.net/Warpar/article/details/72859529
 
 
 
