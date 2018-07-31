@@ -6,7 +6,10 @@
 
 [Interface口extends口implement的区别](#Interface口extends口implement的区别)
 
-[Java引用类型的强制类型转换](#Java引用类型的强制类型转换)
+[引用类型的强制类型转换](#引用类型的强制类型转换)
+
+[序列化与反序列化](#序列化与反序列化)
+
 
 ---
 ### Java的四种引用方式
@@ -615,7 +618,7 @@ extends是继承某个类之后可以使用父类的方法，也可以重写父�
 
 版权声明：本文为博主原创文章，未经博主允许不得转载。	https://blog.csdn.net/Warpar/article/details/72859529
 
-### Java引用类型的强制类型转换
+### 引用类型的强制类型转换
 
 （内容略有改动，作者出处：：https://blog.csdn.net/IBLiplus/article/details/81159710）
 
