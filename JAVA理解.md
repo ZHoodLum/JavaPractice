@@ -6,6 +6,8 @@
 
 [Interface口extends口implement的区别](#Interface口extends口implement的区别)
 
+[Java引用类型的强制类型转换](#Java引用类型的强制类型转换)
+
 ---
 ### Java的四种引用方式
 
@@ -613,8 +615,168 @@ extends是继承某个类之后可以使用父类的方法，也可以重写父�
 
 版权声明：本文为博主原创文章，未经博主允许不得转载。	https://blog.csdn.net/Warpar/article/details/72859529
 
+### Java引用类型的强制类型转换
+
+（内容略有改动，作者出处：：https://blog.csdn.net/IBLiplus/article/details/81159710）
+
+正如有时候需要将浮点型的数值转换为整型数值一样，有时候也可能需要将某个类的对象引用转换成两外一个类的对象引用。进行强制类型转换的唯一原因是：在暂时忽视对象的实际类型之后，使用对象的全部功能。
+```
+  编写Java程序时，引用类型只能调用声明该变量的类型的方法，也就是编译时类型的方法，不允许调用运行时类型所定义的方法，即使它实际所引用的对象包含该方法。解释一下就是我们说的，父类对象不能调用子类中新定义的方法，即使new 实例化的是子类类型。如果想要让这个父类类型的变量能够调用子类中新添的方法，就必须对该变量进行强制类型转换，将其转换成自类类型。强制转换类型的方式和基本类型的转换方式之一致的。
+```
+结合基本类型的强制转换，我们要注意一下：
+
+* 基本类型的强制类型转化是在数值类型之间进行，这里值得是Java中8种基本类型。但是数值类型和布尔类型之间不能转换。
+* 引用类型之间的转化只能是两个类型具有继承关系，就是说一个类型是另一个类型的子类类型。不具备继承关系的两个引用类型变量是不能进行强制类型转换的。否则程序会引发ClassCastException异常。
+```
+public class Cast {
+ 
+	public static void main(String[] args) {
+		double d = 1.23;
+		long l = (long) (d);
+		System.out.println(l);
+		int i = 3;
+		//boolean bl = (boolean)i;
+		//布尔类型的变量不能和数值类型的变量之间进行转换
+		Object obj = "hello";
+		//Java中String类继承于Object类
+		String objStr = (String)obj;
+		System.out.println(objStr);
+		Object obj1 = new Integer(20);
+		String str = (String)obj1;
+		//obj1 的编译时类型是Objext 运行时类型是Integer
+		// Object与Integer存在继承关系   
+		//可以强制类型转换 而obj1的实际类型是Integer
+		//所以下面的代码运行时会引发类型转换的异常 因为String类和integer类不存在继承关系
+		System.out.println(str);
+	}
+	
+}
+结果：
 
 
 
+因此 考虑到强制类型转换可能会引发程序异常，所以在进行引用类型的强制类型转换之前要先使用instanceof关键字进行判断。关键字是用来判断类类型的。
+
+String strr = "";
+if(  strr instanceof Object) {
+			
+    System.out.println("Yes");
+}
+if(strr instanceof String) {
+	System.out.println("Yes");
+}
+结果都是输出Yes.
+```
+* instanceof运算符的前一个操作数通常是一个引用类型的变量，后一个操作数通常是一个类，也可以是接口，可以把接口理解成为一种特殊的类，它用于判断前面的对象是否是后面的类，或者子类，实现类的实例。
+* 在使用instanceof关键字的时候要注意，instanceof运算符前面的操作数的编译时类型要么与后面的类相同，要么与后面的类具有父子继承关系，否则会引起编译错误。
+
+
+### 序列化与反序列化
+（对象流）(作者出处，内容略有改动)
+File 类的介绍：http://www.cnblogs.com/ysocean/p/6851878.html
+
+Java IO 流的分类介绍：http://www.cnblogs.com/ysocean/p/6854098.html
+
+Java IO 字节输入输出流：http://www.cnblogs.com/ysocean/p/6854541.html
+
+Java IO 字符输入输出流：https://i.cnblogs.com/EditPosts.aspx?postid=6859242
+
+Java IO 包装流：http://www.cnblogs.com/ysocean/p/6864080.html
+
+* 1、什么是序列化与反序列化？
+
+　　1) 序列化：指把堆内存中的 Java 对象数据，通过某种方式把对象存储到磁盘文件中或者传递给其他网络节点（在网络上传输）。这个过程称为序列化。通俗来说就是将数据结构或对象转换成二进制串的过程
+
+　　2) 反序列化：把磁盘文件中的对象数据或者把网络节点上的对象数据，恢复成Java对象模型的过程。也就是将在序列化过程中所生成的二进制串转换成数据结构或者对象的过程
 
  
+
+* 2、为什么要做序列化？
+
+　　1)在分布式系统中，此时需要把对象在网络上传输，就得把对象数据转换为二进制形式，需要共享的数据的 JavaBean 对象，都得做序列化。
+
+　　②、服务器钝化：如果服务器发现某些对象好久没活动了，那么服务器就会把这些内存中的对象持久化在本地磁盘文件中（Java对象转换为二进制文件）；如果服务器发现某些对象需要活动时，先去内存中寻找，找不到再去磁盘文件中反序列化我们的对象数据，恢复成 Java 对象。这样能节省服务器内存。
+
+ 
+
+* 3、Java 怎么进行序列化？
+
+　　1)需要做序列化的对象的类，必须实现序列化接口：Java.lang.Serializable 接口（这是一个标志接口，没有任何抽象方法），Java 中大多数类都实现了该接口，比如：String，Integer
+
+　　2)底层会判断，如果当前对象是 Serializable 的实例，才允许做序列化，Java对象 instanceof Serializable 来判断。
+
+　　3)在 Java 中使用对象流来完成序列化和反序列化
+```
+　　　　ObjectOutputStream:通过 writeObject()方法做序列化操作
+
+　　　　ObjectInputStream:通过 readObject() 方法做反序列化操作
+```
+* 第一步：创建一个 JavaBean 对象
+```
+public class Person implements Serializable{
+    private String name;
+    private int age;
+     
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    @Override
+    public String toString() {
+        return "Person [name=" + name + ", age=" + age + "]";
+    }
+    public Person(String name, int age) {
+        super();
+        this.name = name;
+        this.age = age;
+    }
+}　　
+ 
+```
+* 第二步：使用 ObjectOutputStream 对象实现序列化
+```
+在根目录下新建一个 io 的文件夹
+        OutputStream op = new FileOutputStream("io"+File.separator+"a.txt");
+        ObjectOutputStream ops = new ObjectOutputStream(op);
+        ops.writeObject(new Person("vae",1));
+        ops.close();
+　　我们打开 a.txt 文件，发现里面的内容乱码，注意这不需要我们来看懂，这是二进制文件，计算机能读懂就行了。
+```
+错误一：如果新建的 Person 对象没有实现 Serializable 接口，那么上面的操作会报错：
+
+　　　　
+
+* 第三步：使用ObjectInputStream 对象实现反序列化,反序列化的对象必须要提供该对象的字节码文件.class
+```
+    InputStream in = new FileInputStream("io"+File.separator+"a.txt");
+    ObjectInputStream os = new ObjectInputStream(in);
+    byte[] buffer = new byte[10];
+    int len = -1;
+    Person p = (Person) os.readObject();
+    System.out.println(p);  //Person [name=vae, age=1]
+    os.close();
+　　
+```
+* 问题1：如果某些数据不需要做序列化，比如密码，比如上面的年龄？
+
+> 解决办法：在字段面前加上 transient
+```
+  private String name;//需要序列化
+    transient private int age;//不需要序列化
+　　那么我们在反序列化的时候，打印出来的就是Person [name=vae, age=0]，整型数据默认值为 0 
+```
+
+* 问题2：序列化版本问题，在完成序列化操作后，由于项目的升级或修改，可能我们会对序列化对象进行修改，比如增加某个字段，那么我们在进行反序列化就会报错：
+
+> 解决办法：在 JavaBean 对象中增加一个 serialVersionUID 字段，用来固定这个版本，无论我们怎么修改，版本都是一致的，就能进行反序列化了
+```
+private static final long serialVersionUID = 8656128222714547171L;
+```
