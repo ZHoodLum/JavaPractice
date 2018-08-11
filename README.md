@@ -10,3 +10,9 @@
 [JAVA练习题](https://github.com/ZHoodLum/JavaPractice/blob/master/JAVA%E7%BB%83%E4%B9%A0%E9%A2%98.md)|JAVA练习题主要是循环和文件管理的使用，个人认为这里比较有价值的题型：冒泡排序、数组排序、文件管理
 &nbsp;|&nbsp;
 [数据库](https://github.com/ZHoodLum/JavaPractice/blob/master/%E6%95%B0%E6%8D%AE%E5%BA%93.md)|数据库知识点，主要是Oracle数据库，复杂查询（包括简单查询、限定查询、多表查询），数据库表的操作（约束、索引、视图、序列）
+
+
+---
+
+---
+本仓库主要是本人在学习JAVA的时候进行一些个人总结，`.md`文件是知识总结，Test1文件夹是学习JAVA时做的相关练习题。
