@@ -406,10 +406,14 @@ int data [][] = new int[][] {
 //外层循环控制数组的数据行内容
 for(int x =0;x<data.length;x++){
 	for(int y=0;y<data[x].length;y++){
-		
+		system.out.print(data[x][y]+"/t");
 	}
+	syso;
 }
 ```
+
+#### 数组与方法参数的传递
+在之前的所有方法传递的数据几乎都是基本数据类型，那么除了基本数据类型之外，还可以传递数组，传递数组，一定要观察内存分配图。
 
 
 ---
