@@ -1,4 +1,4 @@
-#关于java一些的日常练习sss
+#关于java一些的日常练习
 
 ## java环境变量的配置
 
@@ -586,6 +586,86 @@ public class ArrayDemo{
 
 init()方法返回的是一个数组，数组可以直接使用length取值长度，返回值可以直接拿来进行操作。
 
+### 数组拷贝
+System.arraycopy(原数组名称，原数组拷贝开始，目标数组名称，目标数组拷贝开始索引，长度);
+```
+数组A：1，2，3，4，5，6，7，8，9
+数组B：11，22，33，44，55，66，77，88
+要求拷贝后的数组B：11，22，33，5，6，7，77，88
+```
+
+实现方法：
+```
+public class ArrayDemo{
+	public static void main (String args[]){
+		int A[] =  new int[]{1，2，3，4，5，6，7，8，9};
+		int B[] =  new int[]{11，22，33，44，55，66，77，88};
+		System.arraycopy(A,4,B,2,3);
+	}
+	public static void print(int temp[]){
+		for(int x=0;x<temp.length;x++){
+			System.out.print(temp[x]+'、');
+		}
+		System.out.println();
+	}
+}
+```
+
+### 数组的排序
+java.util.Arrays.sort(数组名称)------------>升序
+
+冒泡排序等等。
+
+
+### 对象数组的概念
+数组是引用类型，类也是引用类型，如果是对象数组的话就表示一个引用类型嵌套了其他的引用类型，之前使用的数组都属于基本数据类型的数组，但是所有引用数据类型也同样可以定义数组，这样的数组称之为对象数组。
+
+* 动态初始化：开辟对象数组的内容都是null值
+>* 声明并开辟对象数组： 类名称 对象数组名称[] = new 类名称[长度];
+>* 分布完成：
+>>* 声明对象数组： 类名称 对象数组名称[] = null;
+>>* 开辟对象数组： 对象数组名称  = new 类名称[长度];
+
+* 静态初始化：
+>* 类名称 对象数组名称[] = new 类名称[]{实例化对象，实例化对象.......};
+```
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter、setter、无参构造方法省略
+	public Book(String t,double p){
+		title = t;
+		price = p;
+	}
+	public String getInfo(0{
+		return "书名"+title+",价格"+price;
+	}
+}
+//实现
+public class ArrayDemo{
+	public static void main (String args[]){
+	//两种数组实例化的方式，使用一种即可。
+		//动态实例化数组
+		Book books[] = new Book[3];
+		book[0] = new Book("Java",79.2);
+		book[1] = new Book("PHP",59.2);
+		book[2] = new Book("Android",75.2);
+		//静态实例化数组
+		Book books[] = new Book[]{
+			new Book("Java",79.2);
+			new Book("PHP",59.2);
+			new Book("Android",75.2);
+		}
+		//输出数组
+		for(x=0;x<books.length;x++){
+			Ststem.out.println(books[x]);
+		}
+
+	}
+}
+```
+对象数组就是将多个对象交给数组进行统一管理，但是数组的长度一旦定义就是固定的，所以限制的在开发中的使用。
 
 ---
 ---
