@@ -14,11 +14,15 @@
 ||
 6|---------------------------------------------|[数据库表的使用及管理](#数据库表的使用及管理)
 ||
-7|---------------------------------------------|[视图索引序列](#视图索引序列)
+7|---------------------------------------------|[约束](#约束)
 ||
-8|---------------------------------------------|[用户管理数据备份](#用户管理数据备份)
+8|---------------------------------------------|[集合序列](#集合序列)
 ||
-9|---------------------------------------------|[drop与delete与truncat区别](#drop与delete与truncat区别)
+9|---------------------------------------------|[视图索引同义词](#视图索引同义词)
+||
+10|---------------------------------------------|[用户管理数据备份](#用户管理数据备份)
+||
+11|---------------------------------------------|[drop与delete与truncat区别](#drop与delete与truncat区别)
 
 
 ---
@@ -1025,4 +1029,597 @@ name varchar2(10)
 )
 
 4、增加测试数据：
-insert into nation(name) values('
+insert into nation(name) values('中国')；
+insert into nation(name) values('美国')；
+insert into nation(name) values('荷兰')；
+insert into nation(name) values('巴西)；
+
+5、提交事务；
+commit;
+```
+
+##### 执行查询语句；
+```
+select
+from nation n1,nation n2
+where n1.name<>n2.name;
+```
+
+
+---
+
+### 约束
+
+(重点)通过约束完成，约束的主要功能是保证表中的数据合法性，按照约束的分类，一共有五种约束：非空约束唯一约束、主键约束、外键约束、检查约束。
+
+#### 非空约束(NOT NULL):NT
+当数据表中的某个字段，不希望设置为null的话，则可以使用not null来指定，对字段进行约束。
+```
+若字段进行非空约束，插入数据时，没有添加某字段数据，就会报错：
+ORA-01400:无法将null 插入("SCOTT","MEMBER","NAME");
+本程序中显示出“用户”，“表名称”，“字段” 出现了错误。
+``` 
+
+#### 唯一约束(UNIQUE):UK
+唯一约束指的是每一个列上的数据不允许重复的。
+```
+范例1：
+create table emp(
+    mid number  not null,
+    ename varchar2(50) not null,
+    email varchar2(50) unique
+)
+```
+
+##### 如果插入条件违反约束，就会有错误提示：
+```
+ORA-00001:违反唯一约束 条件（SCOTT.SYS_C005277）;
+
+可是这个时候的错误提示信息并不完善，与之前的非空错误提示相比，因为现在知识给出了一个代号而已，再定义约束的时候没有为约束指定一个名字，
+所以系统默认分配了，而且约束的名字建议格式：“ 约束类型——字段  ”，例如：“UK_email”,指定约束名称使用” constraint “完成。
+```
+
+##### 格式：CONSTRAINT 约束名称 UNIQUE (字段名|列名)；
+```
+范例2：
+create table emp(
+    mid number  not null,
+    ename varchar2(50) not null,
+    email varchar2(50),
+    constraint UK_email UNIQUE(email);
+)
+```
+
+##### 如果插入条件违反约束，就会有错误提示：
+```
+ORA-00001:违反唯一约束 条件（SCOTT.UK_EMAIL）;
+这个就明确提示用户约束的错误位置！！！！
+```
+
+---
+
+#### 主键约束（Primary Key）
+主键约束=非空约束+唯一约束，使用主键约束，不能为null,作为数据的唯一的一个标识出现。
+
+##### 建表时创建约束：
+```
+范例：
+create table tap(
+mid number primary key,
+name varchar2(23) not null
+)
+```
+
+##### 建表后添加约束：
+格式： constraint 约束名称 primary key (字段名称);
+```
+范例：
+constraint pk_mid primary key (mid);
+```
+
+注意：还存在复合主键，但是正常人都不会去设置复合主键，一般只适用id作为表的主键。永远只有一个主键！！！！
+```
+复合主键就是：存在主键1，主键2，当两个字段的值都相同就会报错
+创建：   constraint pk_mid_name primary key (mid,name);
+```
+
+---
+
+#### 检查约束（Check）:CK
+检查约束指的是为表中的数据增加一些过滤条件。
+```
+例如：
+设置年龄的时候范围是：0-250；
+设置性别约束：男，女，中；
+```
+
+##### 格式：constraint 约束名称 Check (字段名+限制条件)；
+```
+constraint ck_sex Check (sex in ('男','女','中'))；
+constraint ck_age Check (age between 0 and 250)；
+```
+
+---
+#### 主外键约束（核心难点）
+之前的四种约束都是单张表中进行的，而主外键约束是在两张表中进行的，这两张表是存在父子关系的，即：字表中的某个字段的取值范围由父表所决定的。
+```
+范例：要求创建两个表，并进行约束限制。
+
+主表：
+create table dept (
+    deptno number,
+    dname varchar2(23),
+    loc varchar2(20),
+    constraint pk_deptno primary key (deptno)
+)
+
+子表
+create table emp(
+    empno number,
+    ename varchar2(25),
+    deptno number,'
+    constraint pk_empno primary key(empno),
+    constraint fk_deptno foreign key(deptno) references dept(deptno)
+)
+
+```
+
+##### 此时，知识增加了一个约束，这样一来如果输入的数据有错误，就会提示：
+
+```
+ORA-02291:违反了完整约束条件（SCOTT FK_DEPTNO），未找到父项关键字；
+
+```
+
+##### 但是在删除数据的时候，如果主表的数据有对应的子表数据，则无法删除。此时只能先删除子表记录，之后再删除父表记录。（先删除子，再删除父！！！！）
+
+想想啊，这要是开出一个雇员，我还要逐条的将他的信息删除，很麻烦的啊！如果现在希望主表数据显出之后，子表对应的数据也可以删除的话，就可以再建立外键约束的的时候指定一个级联删除功能，修改数据库创建脚本：
+```
+范例：编写代码` on delete cascade`，进行级联删除操作。
+主表：
+create table dept (
+    deptno number,
+    dname varchar2(23),
+    loc varchar2(20),
+    constraint pk_deptno primary key (deptno)
+)
+
+子表
+create table emp(
+    empno number,
+    ename varchar2(25),
+    deptno number,'
+    constraint pk_empno primary key(empno),
+
+    constraint fk_deptno foreign key(deptno) references dept(deptno)
+    on delete cascade  --设置为级联操作
+)
+此时由于存在级联删除的操作，所以再主表的数据删除之后，对应的子表数据也都会被同时删除。
+```
+
+##### 上述的删除操作太霸道，这简直是弟弟行为啊！！！！！想想怎样才能让他成为我的贴身保镖。删除表的时候，让子表对应的数据设置为null。
+```
+当主表数据删除后，对应的字表中的数据相关项也希望将其设置为空，而不是删除，
+
+主表：
+create table dept (
+    deptno number,
+    dname varchar2(23),
+    loc varchar2(20),
+    constraint pk_deptno primary key (deptno)
+)
+
+子表
+create table emp(
+    empno number,
+    ename varchar2(25),
+    deptno number,'
+    constraint pk_empno primary key(empno),
+
+    constraint fk_deptno foreign key(deptno) references dept(deptno)
+
+    on delete   --将表设置为级联操作
+    set null       --  当主表数据删除后，子表数据为空值
+)
+
+```
+
+#####  那么问题又来了啊，突然有一天，主管让你来删除表，你不可能去数据库中找表之间对应的父子关系把，一张表有上百条子表呢，所有说，没办法筛选，但是啊！！！你用的是Oracle数据库啊，Oracle数据库就比较牛批了，强制删除操作，不再关系约束，不管你有没有儿子。
+
+格式：drop table 表名称 cascade constraint;
+```
+再删除语句中写上一句：`cascade constraint`,当然，你也可以让它永久消失，也就是直接删除，不再回收站中，请再添加一句：`purge`。
+
+范例：delete table emp cascade constraint pruge;
+此时，不关心子表是否存在，直接强制删除父表。。人生圆满啊！！！！
+
+注意：其实我想告诉你真正的做法：进行数据库表删除操作的时候，最好先删除子表，之后再删除父表。毕竟没买保险！！！！！
+```
+#### 总结创建主外键约束表：
+```
+主表：
+create table dept (
+    deptno number  primary key,--主键
+    dname varchar2(23),
+    loc varchar2(20)
+)
+
+子表
+create table emp(
+    empno number primary key,--主键
+    ename varchar2(25),
+    deptno number references dept(deptno) on delete cascade -- 级联表操作
+)
+
+希望你所创建的表是一气呵成的。当然，并不排除产品经理会让你改需求。
+
+产品经理：改需求，要求APP主题颜色随着客户心情变化而变化，我不管你怎么做，必须再上线之前做出来（3天），如果你不配合，我去找技术总监。
+程序猿：怎么滴，想干一架啊！！！！
+干架中.......
+开除！！！！！！之后两人又进同一家公司，待续。。。。。。。。
+```
+
+
+---
+
+#### 修改约束
+约束本身属于数据库对象，只要是修饰都是用alert指令，修改约束操作有：
+```
+为表添加约束：
+alert table 表名 add constraint 约束名称  约束类型（字段）;
+删除表中的约束：
+alert table 表名 drop constraint 约束名称;
+
+可是在这五种约束之中，可以发现，如果维护约束，肯定要一个正确的名字才可以，但是在这五种约束之中，非空约束（not null）作为一个特殊约束的约束无法操作。
+约束跟表的结构一样，最好不要修改，表建立的时候一定要将约束定义好。
+```
+
+#### 查询约束
+再Oracle之中的所有对象都会在 数据字典之中保存，而约束也是一样的，所以如果想知道有哪些约束，可以直接查询user_constraints 数据字典。 
+
+##### 格式：查询user_constraints 数据字典
+```
+select * from user_constraints;   或 者
+select owner,constraint_name,table_name  from user_constraints;
+此时的数据字典并不能满足我的需求啊！
+```
+
+##### 格式：查询user_cons_columns 数据字典，column_name显示约束的字段名。
+```
+select * from user_cons_columns; 或者
+select owner,constraint_name,table_name,column_name  from user_cons_columns;
+
+发现没，我靠，它串行啊，样式看着很难受，我决定要格式化一下，从新定义这个列表的宽度：
+col owner for A15;
+col constraint_name for A15;
+col table_name for A15;
+col column_name for A15;
+select owner,constraint_name,table_name,column_name  from user_cons_columns;
+
+可是啊，如果你是一名开发程序猿，不用去关心这些，做好自己的事。这些维护的工作大部分应该由专门的DBA负责，而不是作为程序开发的你。
+```
+
+---
+
+### 集合序列
+
+### 集合
+再数学的操作中存在交、差、并、补的概念，再数据查询中也存在此概念，有以下爱一个连接符号：
+```
+1）union:连接两个查询，相同部分不显示；
+select * from emp 
+union
+select * from emo20;
+
+2）union all:连接两个查询，相同的部分显示；
+select * from emp 
+union all
+select * from emo20;
+3）intersect:返回两个查询中相同的部分；
+select * from emp 
+union
+select * from emo20;
+
+4）minus:返回两个查询中的不同部分；
+select * from emp 
+union
+select * from emo20;
+```
+
+求所有领取奖金的人求出平均工资，所有不领取奖金的人求出平均工资:
+```
+这种问题只能依靠查询的连接操作，第一个查询负责查询出所有领取奖金的雇员，第二个查询所有不领取奖金的雇员。
+union
+select
+select  'comm',avg(sal) from emp where comm is noy null;
+```
+
+---
+
+### 序列
+再Oracle之中，自动增长列并不是自动控制的，而是需要用户手工控制的，这样主要为了方便
+
+1）create SEQUENCE sequence  --创建序列；
+```
+create sequence myseq;
+```
+
+序列名称 . nextval :让序列增长到下一个内容。
+序列名称 . currval :取得当前序列的内容。
+```
+select myseq.nextval from dual;
+select myseq.currval from dual;
+```
+
+一般作为主键使用
+```
+create table tab(
+    id number primary key,
+    name varchar2(20) not null
+)
+insert into tab values(myseq.nextval,'姓名');
+此时的id编号自动增长。
+```
+
+2） [INCREMENT BY n]  [start with n]
+```
+创建序列，从10开始，每次增长2.
+create sequence myseq increment by 2 start with 10;
+
+```
+
+3） [MAXVALUE n | MOMAXVALUE]
+4） [MINVALUE n | NOMINVALUE]
+5） [CYCLE | NOCYCLE]
+```
+希望定义一个序列，这个序列可以在1，3，5，7，9之间循环出现。
+create sequence myseq increment by 2 start with 1 maxvalue 10 minvalue 1 cycle nocache;
+```
+6） [CACHE n |  NOCACHE]
+
+在Oracle数据库中。已经为用户准备好了若干个已经生成好的序列，每次操作的时候是从这块空间之中去除序列的内容，但是有这样一个问题，如果现在数据库的实例关闭了，那么保存的这块空间的内容就消失了，但是虽然消失了，可是数据已经增长好了，这样就会出现跳号的问题。而如果想要取消这种问题，则最好的方式是将序列设置为不缓存，使用nocache。
+
+---
+### 视图索引同义词
+### 数据表的创建：
+* 主要数据类型：varchar2、number、date、clob;
+* 创建表的语法：create table 表名称 ;
+* 删除表的语法：drop table 表名称 ；
+* 清空回收站：purge recyclebin .
+### 约束：约束是保证表中数据完整性的一种手段，约束一定要在表建立的同时设置好，而且在表真正使用之前一定还要有约束。
+* 约束的分类：非空约束(NOT NULL)、唯一约束(UNIQUE)、主键(PRIMARY KEY)、检查(CHECK)、外键(FOREIGN KEY)；
+* 设置外键的注意事项：先删除子表在删除主表。
+>* 级联删除使用：on delete cascade;
+>* 级联设置：on delete set null;
+###  序列：sequence,可以形成自动增长。
+* 序列中的两个属性：nextval、currval ;
+* 序列的操作一定要手工进行控制
+
+### 视图
+(重点)
+视图创建语法：create [or replace]  view 视图名称 as 子查询
+
+```
+在创建视图的时候，不能有分组函数，如果使用，在分组函数后加一个别名。
+创建一张视图：
+create view myview as
+select d.loc,d.dname,d.deptno,count(e.empno) countempno,avg(sal) avgsal
+from emp e,dept d
+where e.deptno=d.deptno
+group by d.deptno,d.dname,d.loc
+
+查询视图：
+select * from myview;
+视图其实就是包装了SQL查询的操作。
+```
+
+另一视图创建语法：create  or replace view 视图名称 as 子查询
+```
+如果视图存在则进行替换，不存在则创建一张新的视图。但是在创建视图的时存在两个选项。
+```
+
+* 选项一： on with check option,更新试图的的时候，由于视图本身并不是一个实际的数据表，而更新操作又是视图的创建条件，很明显，这种做法时不可取得。
+```
+create or replace view myview as
+select * from emp where deptno=7698
+on with check option;
+```
+
+* 选项二：with read only
+```
+create or replace view myview as
+select * from emp where deptno=7698
+with read only;
+此时再次更新操作，会提示如下错误：
+ORA-01733:此处不允许虚拟列更新，此数据操作非法。
+```
+与之前得问题一样，现在得视图数据时属于统计而来得，根部不可能更新。视图得数量有可能超过表得数量。
+
+
+---
+
+### 同义词
+语法:
+```
+create[public] synonym 同义词名称 for 用户名  . 表名
+select * from myemp;
+
+create synonym myemp for scott.emp;
+这个只限制于scott用户一个人使用，其他用户无法使用。因为创建得不是公共同义词。那么公共同义词是：
+create public synonym myemp for scott.emp;
+select * from myemp;
+
+Oracle特性！！！！
+```
+---
+
+### 索引
+（理解）
+索引得主要功能就是提升数据库得操作性能。
+```
+利用代码进行分析：
+select * from emp where sal>1500;
+此时得sal上没有索引，所以它的查询是采用逐行判断的方式完成的，这种操作随着数据量的上升，则性能就会出现越来越多的问题，
+但是如果说将数据排列一下呢：
+
+把数据排列在树状结构上的话同样的查询，现在只会查询一部分。这就是索引！！！
+```
+
+创建索引方式：
+* 主键约束：如果一张表中的裂伤存在了主键约束的话会自动创建索引。
+* 手工创建：在某一个操作列上指定一个索引。
+
+```
+在emp   sal字段上创建索引。
+create index emp_sal_ind on emp(sal);
+但是索引有一个最大问题，要想性能提高，就必须维持上面的这棵树，那么如果这棵树的数据频繁的修改，则代码的性能肯定也会降低，
+
+所以索引一般只会使用在不会频繁修改的表中，如果在一张频繁的表中使用索引，肯定会影响性能。所以，性能提升永远是相对的！！！！
+
+Oracle有十几种，这个是最简单的一种，成为B树索引，还有位图索引、反向索引、函数索引等等！！
+```
+
+---
+
+### 用户管理
+创建新的用户：
+格式：
+```
+conn sys/change_on_install assysdba;
+create user dog IDENTIFIED BY wangwang;
+
+提示信息：用户无法登陆，没有创建session权限。
+ORA-01045:user dog lacks create session privilege denied;
+
+接下来，给用户授权：
+grant create session to dog;
+```
+
+但是，新人入职难做人啊！权限少啊，在创建表的时候该用户（dog）也没有权限，为了解决用户的授权操作，在Oracle之中为用户提供了许多角色，每一个角色会包含多个权限，而角色主要有两个：
+connect、resource.
+```
+范例：将这两个角色给权限dog用户：
+grant connect,resource to dog;
+```
+
+* 管理员修改用户的密码：
+```
+将dog用户的密码修改为miaomiao:
+alter user dog indentified by miaomiao;
+```
+
+* 锁定用户：
+```
+alter user dog account lock;
+```
+
+* 解锁用户：
+```
+alter user dog account unlock;
+```
+
+主要的权限有四个：insert  delete   select   update .
+* 将scott.emp表的select、insert权限给用户dog;
+```
+grant select,insert scott.emp to dog;
+```
+
+* 回收dog用户权限：
+```
+revoke select,insert on scott.emp from dog;
+删除用户全部权限：
+revoke connect,resource,create table,create session from dog;
+```
+
+* 删除用户：
+```
+使用级联删除：
+drop user dog cascade;
+```
+
+---
+
+### 数据的备份
+
+### 数据的导入与导出
+#### 数据的导出
+```
+在硬盘上创建一个文件夹：d:/backup
+mk backup //创建文件夹
+
+输入exp指令：导出的意思
+exp
+
+输入用户名和密码：
+scott/tiger
+
+设置导出文件的名称：
+expdat.dmp(文件名时默认的)
+
+接下来操作默认执行------>导出文件成功。
+```
+
+#### 数据的导入
+```
+进入导出文件的文件夹之中：
+cd backup
+
+输入dir命令:
+dir
+
+输入imp指令：导入的意思
+imp
+
+导入整个导出文件（yes/no）>yes
+
+接下来操作默认执行------>导入文件成功
+
+select * from tab;     查询所有表。
+```
+以上操作只适用于数据量小的情况，适用于简单备份。
+如果数据量大的情况，会损耗性能，时间也会很长。要想解决数据量大的问题，只能对数据分区操作。
+
+---
+
+### 数据表的冷备份
+
+在数据操作之中，有些用户不会进行事务的提交，在这种情况下，是无法进行完整的备份操作，而冷备份指的就是关闭数据库实例的情况下进行数据库备份的操作实现。
+
+如果可以进行数据的灾难恢复，直接通过进行冷备份，则需要备份数据库中的几个核心内容：
+```
+控制文件：指的是控制整个Oracle数据库的实例服务的核心文件，直接通过`v$controlfile`找到；
+重做日志文件：可以进行数据的灾难恢复，直接通过`v$logfile`找到；
+数据文件：表空间文件，保存在硬盘上的，通过`v$datafile`和`v$tablespace`找到；
+核心操作的配置文件（pfile）:通过`show parameter pfile`找到；
+```
+
+从实际的Oracle的部署来讲，所有文件 的为了达到IO平衡操作，都会保存到不同的硬盘上。
+却确定备份文件位置之后，开始备份操作：
+```
+1、使用超级管理员登陆: 管理员名称/管理员密码_on_install as sysdba;
+sys/oracle11g_on_install as sysdba;
+
+2、查找所有的文件控制目录
+select * from v$controfile
+控制文件一旦损坏，数据库无法使用，就会崩。
+
+3、备份重做日志文件
+select * from v$logfile
+
+4、数据文件
+select * from v$datafile //表空间的表文件
+select * from v$tablespace //表空间的表文件
+
+5、核心操作配置文件
+show parameter pfile
+
+6、关闭数据库实例
+shutdown immediate
+
+7、将所有查找到的数据备份到磁盘上
+
+8、启动数据库实例
+startup
+一般专业的DBA的开发人员，必须熟练以上操作，这样才能在灾难之后进行及时恢复
+```
+
