@@ -22,6 +22,10 @@
 
 [数组](#数组)
 
+[实现一维数组的转置](#实现一维数组的转置)
+
+[实现二维数组的转置](#实现二维数组的转置)
+
 [方法](#方法)
 
 ## 对象与类
@@ -414,8 +418,176 @@ for(int x =0;x<data.length;x++){
 
 #### 数组与方法参数的传递
 在之前的所有方法传递的数据几乎都是基本数据类型，那么除了基本数据类型之外，还可以传递数组，传递数组，一定要观察内存分配图。
+注：冒泡排序
+
+#### 实现一维数组的转置
+（首位交换）
+```
+范例：
+原始数组：1，2，3，4，5，6，7，8
+转置后的数组：8，7，6，5，4，3，2，1
+```
+
+实现转置思路：
+* 定义一个新的数组，将原始数组按照倒序的方式插入新的数组之中，虽有改变原始数组的引用。
+```
+public class ArrayDemo{
+	public static void main (String args[]){
+		int data[] = new int[]{1,2,3,4,5,6,7,8};
+		//定义一个新的数组,数组长度与原始数组相同
+		int temp[] = new int[data.length];
+		//对于新的数组按照索引由小到大的顺序循环输出
+		for(int x=0;x<temp.length;x++){
+			temp[x] = data[foot];
+			foot--;
+		}
+		//让data等于temp，而原始数据就会成为垃圾（被回收）
+		data = temp;
+		println(data);
+	}
+	
+	//专门定义一个输出的功能方法
+	public static void print(int temp[]){
+		for(int x=0;x<temp.length;x++){
+			System.out.print(temp[x]+'、');
+		}
+		System.out.println();
+	}
+}
+```
+上面的操作达到了转置要求，但是有垃圾。建议不采用。
+
+* 利用算法，在一个数组上完成转置操作
+```
+原始数组：1，2，3，4，5，6，7，8
+第一次转置：`8`，2，3，4，5，6，7，`1`
+第二次转置：8，`7`，3，4，5，6，`2`，1
+第三次转置：8，7，`6`，4，5，`3`，2，1
+第四次转置：8，7，6，`5`，`4`，3，2，1
+由此可以判断出，它是由索引控制的，一个向上加的索引，一个向下减的索引。与数组长度无关！！
+
+转换次数=数组长度/2
+
+实现方法：
+public class ArrayDemo{
+	public static void main (String args[]){
+		int data[] = new int[]{1,2,3,4,5,6,7,8};
+		reverse(data);
+		println(data);
+	}
+	//专门实现数组的转置操作
+	public static void reverse(int arr[]){
+		//转置次数
+		int len = arr.length/2;
+		//头部索引
+		int head = 0;
+		//尾部索引
+		int tail = arr.length-1;
+		for(int x=0;x<len;x++){
+			int temp = arr[head];
+			arr[head] = arr[tail];
+			arr[tail] = temp;
+			head++;
+			tail--;
+		}
+	}
+	//专门定义一个输出的功能方法
+	public static void print(int temp[]){
+		for(int x=0;x<temp.length;x++){
+			System.out.print(temp[x]+'、');
+		}
+		System.out.println();
+	}
+}
+```
+
+#### 实现二维数组的转置
+前提：行跟列完全相同得到数组
+```
+原始数组：
+1 2 3
+4 5 6
+7 8 9
+
+第一次转置：
+1 `4` 3
+`2` 5 6
+7 8 9
+第二次转置：
+1 4 `7` 
+2 5 6
+`9` 8 9
+第三次转置：
+1 4 7 
+2 5 `8` 
+3 `6` 9
+
+观察转置的数组，中间对角线没有变，而且变得数据行数和列数是相同的。
+
+实现方法：
+public class ArrayDemo{
+	public static void main (String args[]){
+		int data[][] = new int[][]{
+					{1,2,3},
+					{4,5,6},
+					{7,8,9}
+					  };
+		reverse(data);
+		println(data);
+	}
+	//专门实现数组的转置操作
+	public static void reverse(int arr[][]){
+		for(int x=0;x<arr.length;x++){
+			for(int y=x;y<arr[x].length;y++){
+				//行和列相同，进行交换
+				if(x != y ){
+					int temp = arr[x][y];
+					arr[x][y] = arr[y][x];
+					arr[y][x] = temp;
+				}
+			}
+		}
+	}
+	//专门定义一个输出的功能方法
+	public static void print(int temp[][]){
+		for(int x=0;x<temp.length;x++){
+			for(int y=0;y<temp[x].length;y++){
+				System.out.print(temp[x][y]+'、');
+			}
+		}
+		System.out.println();
+	}
+}
+```
+
+#### 匿名数组
+
+实现方法：
+```
+public class ArrayDemo{
+	public static void main (String args[]){
+		int data[] = init();
+		print(data);
+	}
+	//匿名数组
+	public staticint[] init(){
+		//重点关注方法的返回内容
+		return new int[]{1,2,3,4,5};
+	}
+	public static void print(int temp[]){
+		for(int x=0;x<temp.length;x++){
+			System.out.print(temp[x]+'、');
+		}
+		System.out.println();
+	}
+}
+```
+注：
+
+init()方法返回的是一个数组，数组可以直接使用length取值长度，返回值可以直接拿来进行操作。
 
 
+---
 ---
 
 方法
