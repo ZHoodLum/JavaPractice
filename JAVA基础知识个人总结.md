@@ -668,7 +668,89 @@ public class ArrayDemo{
 对象数组就是将多个对象交给数组进行统一管理，但是数组的长度一旦定义就是固定的，所以限制的在开发中的使用。
 
 ---
+
+### String类对象的两种实例化方式
+### String类的特点
+#### 两种实例化的方式
+```
+直接赋值：
+String 变量 = "字符串";
+
+以上的代码并没有使用关键字new对象
+构造方法：public String(String str); 在构造器中依然要接受一个本类对象。
+
+利用构造方法实例化：
+String str = new String("Hello world!");
+```
+String类有两种形式，建议采用第二种方式进行实例化。
+
+#### 字符串的比较
+两种比较方式 == 和equals
+```
+String stra = "hello";
+String strb = new String("hello");
+String strc = strb;
+syso(stra == strb); ----------->false
+syso(stra == strc); ----------->false
+syso(strb == strc); ----------->true
+```
+使用双等号，就要联系到内存关系，栈内存和堆内存。字符串的`==`确实进行的比较，但并不是比较字符串内容的比较，而是比较内存地址的数值。
+所以：==是属于数值比较，比较的是内存地址。
+
+
+那么，进行字符串内容比较要用到equals.
+```
+String stra = "hello";
+String strb = new String("hello");
+String strc = strb;
+syso(stra.equals(strb));----------->true
+syso(stra.equals(strc));----------->true
+syso(strb.equals(strc));----------->true
+```
+所以说，比较字符串内容的时候，千万不要使用==，要使用equals进行判断。
+
+
+#### 字符串常量就是String的匿名对象
+实际上任何语言没有提供字符串这一概念，很多语言里都是使用字符串数组来描述字符串的概念。在JAVA里也没有字符串的概念，所有开发都不可能离开字符串，在JAVA中字符串不属于基本数据类型，他将字符串作为String类的匿名对象的形式。匿名对象可以调用类中的定义方法的.
+```
+String stra = "hello";
+syso("hello".equals());--------->true
+匿名对象保存在堆内存当中
+所谓的直接赋值就是相当于将一个匿名对象设置了一个名字，匿名对象是由系统自动生成的，不再由用户自己直接创建。
+```
+
+为了避免空指向异常的出现，可以将字符串写在前面调用
+```
+String stra = "hello";----假设这个内容由用户输入的
+if(stra.equals("hello")){
+	syso("Hello World!!!");
+}
+--------------------->输出Hello World!!!
+
+但是如果由于用户输入错误，或者输入为空：
+String stra = null;----假设这个内容由用户输入的
+if(stra.equals("hello")){
+	syso("Hello World!!!");
+}
+--------------------->输出报错：java.lang.NullPointerException,空指向异常
+```
+
+##### 但是如果换一种方式输入：将输入的字符串放在equals的前面，即使用户输入错误，也不会报空指向异常的错误。这个euqals处理了null，永远不可嗯那个出现空指向异常。在开发的过程用，一定要使用这种方法！！！！！！！
+```
+String stra = "hello";----假设这个内容由用户输入的
+if("hello".equals(stra)){
+	syso("Hello World!!!");
+}
+```
+
+
+
 ---
+---
+---
+
+对象与类
+--
 
 方法
 --
@@ -724,9 +806,6 @@ public class ArrayDemo{
 >* 方法的返回值类型可以相同，也可以不同
 
 ---
-
-对象与类
---
  
 ### 类
 * 什么是类
