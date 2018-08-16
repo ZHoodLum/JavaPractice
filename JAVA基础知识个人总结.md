@@ -26,7 +26,7 @@
 
 [实现二维数组的转置](#实现二维数组的转置)
 
-[String类](#String类)
+[String类](#STRING类)
 
 
 ## 对象与类
@@ -672,7 +672,7 @@ public class ArrayDemo{
 
 ---
 
-### String类
+### STRING类
 
 ### String类的特点
 #### 两种实例化的方式
