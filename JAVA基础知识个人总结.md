@@ -26,8 +26,7 @@
 
 [实现二维数组的转置](#实现二维数组的转置)
 
-
-[String类对象的两种实例化方式](#String类对象的两种实例化方式)
+[String类](#String类)
 
 
 ## 对象与类
@@ -673,7 +672,8 @@ public class ArrayDemo{
 
 ---
 
-### String类对象的两种实例化方式
+### String类
+
 ### String类的特点
 #### 两种实例化的方式
 ```
