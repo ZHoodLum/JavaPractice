@@ -26,7 +26,7 @@
 
 [实现二维数组的转置](#实现二维数组的转置)
 
-[STRING类](#STRING类)
+[类String](#类String)
 
 
 ## 对象与类
@@ -240,7 +240,7 @@ java的引用类型转换分为两种：
 >>* 逻辑运算符  || 或  一真则真; && 与  一假则假;  ! 非  颠倒是非
 >>* | 暗位或   需要两个或多个条件都为真 才可以通过
 >>* != 不等于  ==等于   =赋值
->* 条件运算符   三目运算符
+>* 条件运算符   三目运算符 
 
 	boolean n = (4 < 2) ? true :false;
 	System.out.println(n);
@@ -672,7 +672,7 @@ public class ArrayDemo{
 
 ---
 
-### STRING类
+### 类String
 
 ### String类的特点
 #### 两种实例化的方式
@@ -745,6 +745,125 @@ String stra = "hello";----假设这个内容由用户输入的
 if("hello".equals(stra)){
 	syso("Hello World!!!");
 }
+```
+
+#### 字符串的替换
+字符串的替换后，依然是字符串，例如：替换手机号
+```
+replaceFirst 替换首个符合条件的内容
+replaceAll 新的内容替换掉全部旧的内容
+
+范例：
+String str = "helloworld";
+String resultA = str.replaceAll("1","_");
+String resultB = str.repalceFirst("1","_");
+syso(resultA);------------- he__owor_d
+syso(resultB);--------------he_loworld
+```
+
+#### 字符串的截取
+用于截取部分字符串
+```
+public String `substring(int beginIndex)`
+substring(int beginIndex)---->从指定索引截取到结尾
+
+public String `substring(int beginIndex,int endIndex)`
+substring(int beginIndex,int endIndex)---->从指定索引截取到结束索引，截取部分字符
+
+范例：
+String str = "helloworld";
+String resultA = str.substring(5);
+String resultB = str.substring(0,5);
+syso(resultA);------------- world
+syso(resultB);--------------hello
+```
+
+#### 字符串的拆分
+将一个完整的字符串，按照指定的内容拆分为字符串数组(对象数组，String对象)。
+```
+public String[] split(String regex)--------------->按照指定字符串进行全部拆分
+
+String str = "hello world nihao mldn";
+String result[] = str.split(" ");
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+--------hello
+	world 
+	nihao
+	mldn
+	
+但是如果在拆分的时候写了一个空的字符串，就会按照每一个字符进行拆分
+
+
+public String[] split(String regex int limit)----------->按照指定字符串进行部分拆分，由limit决定的(如果拆分的结果很多)，即前面拆，后面不拆。
+
+String str = "hello world nihao mldn";
+String result[] = str.split(" "，2);
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+limit=2的时候----->hello
+     		   world nihao mldn
+limit=3的时候----->hello
+     		   world
+		   nihao mldn
+		   
+如果String str = "helloworldnihaomldn";
+那么输出的结果是：limit=3的时候----->helloworldnihaomldn，字符串没有进行拆分，不够拆分的资格。
+```
+
+那么下面我们来拆分ip4v的地址，根据`.`进行拆分
+```
+String str = "192.168.5.36";
+String result[] = str.split(" ");
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+输出结果：啥都没有，无法进行拆分
+```
+
+因为`.`无法进行拆分，那么我们在想一想Java中的通配符
+```
+String str = "192.168.5.36";
+String result[] = str.split("\\.");
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+输出结果：
+192
+168
+5
+36
+```
+##### 如果是一些敏感的字符，无法进行拆分的，正则标记，如果遇见无法拆分的字符串，那么我们就是用`\\`通配符进行拆分。
+
+
+根据`|`进行拆分
+```
+String str = "张三：20|李四：30|王五：22";
+String result[] = str.split("\\|");
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+输出：
+张三：20
+李四：30
+王五：22
+```
+
+根据`|`进行拆分后，再根据`:`进行拆分
+```
+String str = "张三：20|李四：30|王五：22";
+String result[] = str.split("\\|");
+for(int x=0;x<result.length;x++){
+	String temp[] = result[x].split(":");
+	syso("姓名："+temp[0]+",年龄："temp[1]+);
+}
+输出：
+姓名：张三 年龄：20
+姓名：李四 年龄：30
+姓名：王五 年龄：22
 ```
 
 
