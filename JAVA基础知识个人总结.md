@@ -1248,9 +1248,11 @@ public class JiCheng {
 
 **构造器（构造方法/构造器，Constructor）特点：**
 ```
-构造方法名必须与类相同的名称
-不含返回值类型，也没有void
-不能在方法中用return语句返回一个值
+* 构造方法在对象实例化之后只调用一次，而普通方法再对象实例化之后可以多次调用
+* 构造方法没有返回值声明
+* 构造方法名必须与类相同的名称
+* 不含返回值类型，也没有void
+* 不能在方法中用return语句返回一个值
 ```
 
 * 2、构造方法作用：
@@ -1301,7 +1303,7 @@ public class Employee{
 >> 只能写在构造器的第一行
 >> 在同一个构造器中super()和this()不能同时出现
 
-##### 接下来用程序说话
+**接下来用程序说话**
 ```
 //Book类
 class Book{
@@ -1326,7 +1328,8 @@ public class TestDemo{
 }
 输出：书名：java开发，价格：89
 ```
-##### 接下来我们研究一下这个方法
+
+**接下来我们研究一下这个方法**
 下面这个使用的是一个构造方法，而这个构造方法主要功能为title,price两个属性所使用，但是方法中的参数名称不好，而构造方法中的参数目的是为了类中的属性初始化，那么我们最好的做法就是将参数设置为属性名称 ，这样做事最好的。
 ```
 那么我们将参数名称更改为对应的属性名，看一下结果
@@ -1347,13 +1350,124 @@ public Book(String title,double price){
 输出：书名：java开发，价格：89
 ```
 这样一来，this.title和this.price就会取类中的参数变量了。
-##### 以后的程序开发中，只要访问类中的属性，前面最好加上“this”关键字。
+**以后的程序开发中，只要访问类中的属性，前面最好加上“this”关键字。**
 
 ---
 
-#### 在构造方法中，可以使用this或super调用其他的构造方法
+**在构造方法中，也可以使用this或super调用其他的构造方法**
+**一个类里面方法除了普通方法之外还会包含构造方法，这个时候表示多个构造方法之间要进行互相调用，而使用的形式` this(参数，参数) `**
+**代码说话，为什么需要构造方法间的互相调用**
+```
+定义一个book类里面三个构造方法，要求不管调用哪一个构造方法都需要输出一行提示信息“新的Book类对象产生”
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter setter
+	public Book(){
+		syso("新的Book类对象产生");//把这句话想象成多行代码
+	}
+	public Book(String title){
+		this.title = title;
+		syso("新的Book类对象产生");
+	}
+	public Book(String title,double price){
+		syso("新的Book类对象产生");
+		this.title = title;
+		this.price = price;
+	}
+	public String getInfo(){
+		 "书名：" +this.title+",价格："+price;
+	}
+}
+
+//测试
+public class TestDemo{
+	public static void main(String args[]){
+		Book book = new Boook("java开发",89);
+		syso(book.getInfo());
+	}
+}
+```
+
+此时的代码出现大量重复代码，怎么消除消除重复代码呢？
+
+检查方法中有哪些重复，并且可以替换的代码。
+
+修改代码：两个有参构造方法中使用this(),来调用无参、无参构造方法。
+```
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter setter
+	public Book(){
+		syso("新的Book类对象产生");//把这句话想象成多行代码
+	}
+	public Book(String title){
+		this.();//调用本类的无参构造方法
+		this.title = title;
+	}
+	public Book(String title,double price){
+		this.(title);//调用本类的单参构造
+		this.price = price;
+	}
+	public String getInfo(){
+		 "书名：" +this.title+",价格："+price;
+	}
+}
+
+//测试
+public class TestDemo{
+	public static void main(String args[]){
+		Book book = new Boook("java开发",89);
+		syso(book.getInfo());
+	}
+}
+```
+**上面实现了构造方法间的互相调用，但是依然会存在一些限制**
+* 使用this()调用构造方法形式的代码只能放在构造方法的首行，放在构造方法的第一行。
+* 构造方法能调用普通方法，但是普通方法无法调用构造方法。
+* 进行构造方法互相调用的时候，一定要保留调用的出口。
+**下面观察一下错误代码：**
+```
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter setter
+	public Book(){
+		this.("HELLO",1.1);//调用双参构造
+		syso("新的Book类对象产生");//把这句话想象成多行代码
+	}
+	public Book(String title){
+		this.();//调用本类的无参构造方法
+		this.title = title;
+	}
+	public Book(String title,double price){
+		this.(title);//调用本类的单参构造
+		this.price = price;
+	}
+	public String getInfo(){
+		 "书名：" +this.title+",价格："+price;
+	}
+}
+
+//测试
+public class TestDemo{
+	public static void main(String args[]){
+		Book book = new Boook("java开发",89);
+		syso(book.getInfo());
+	}
+}
+```
+此时调用语句的确是放在了构造方法首行。但是编译之后，依然还会报错**提示错误：递归构造器调用**。所以说要保诚有一个出口！！
+
+也就是说再使用`this()`**互相调用构造的时候请至少保留一个构造没有被使用this()调用其他构造的情况。**
 
 
+
+---
 
 ### 静态static关键字
 * static关键字可以修饰的元素
