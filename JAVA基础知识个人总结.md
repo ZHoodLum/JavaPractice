@@ -2065,6 +2065,32 @@ int   indexOf/lastIndexOf(char,int)|从指定的索引开始搜索，返回在�
 int   indexOf/lastIndexOf(String)|返回第一次出现的指定子字符串在此字符串中的索引
 int   indexOf/lastIndexOf(String,int)|从指定的索引开始搜索，返回在此字符串中第一次/最后一次出现指定字符串处的索引
 
+* 数组length属性：array.length;-------------------->没有括号
+* String对象length属性：string.length();------------->有括号
+* 判断字符串是否为空：
+```
+String str = "hello";
+syso(str.isEmpty());-----------false
+syso("".isEmpty());----------->true
+```
+如果觉得`isEmpty()`使用不方便，可以使用`"".equals(str)`来进行判断。
+
+String类虽然提供了大量的支持方法，但是却少了一个重要的方法，initcap()方法，首字母大写，而这样的功能只能自己实现。
+```
+public static void main(String args[]){
+	String str = "HELLO";
+	syso(initcap(str));
+}
+public static String initcap(String temp){
+	//return temp.substring(0,1).toUpperCase()+temp.substring(1).toLowerCase();
+	return temp.substring(0,1).toUpperCase()+temp.substring(1);
+}
+输出：Hello
+```
+##### 虽然Java中没有这样的功能，但是一些第三方的组件包会提供，例如：apache的commons会提供，他会封装好供我们使用。
+
+---
+
 #### StringBuffer类
 
 * 1、StringBuffer类用于内容可以改变的字符串
