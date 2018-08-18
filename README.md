@@ -3208,12 +3208,87 @@ BufferedWriter(Writer out,int size) |创建一个使用size大小输入缓冲区
 >* 继承Thread类 —— java.lang.Thread
 >* 实现Runnable接口 —— java.lang.Runnable
   
+---
+
+### 引用传递
+引用传递的核心意义：同一块堆内存空间可以被不同的栈内存所指向，不同栈内存可以对统一堆内存的内容进行修改。想想栈堆内存分配图
+#### 范例一：
+```
+class Message{
+	private int num = 10;
+	public Message(int num){
+		this.num = num;
+	}
+	public void setNum(int num){
+		this.num = num;
+	}
+	public int getNum{
+		return this.num;
+	}
+}
+public static TestDemo{
+	public static void main(String agrs[]){
+		Message msg = new Message(30);
+		fun(msg);//引用传递
+		syso(msg.getNum());
+		
+	}
+	public static void fun(Message temp){
+		temp.setNum(100);
+	}
+}
+输出：100
+```
+
+#### 范例二：
+```
+public static TestDemo{
+	public static void main(String agrs[]){
+		String msg = "Hello";
+		fun(msg);
+		syso(msg.getNum());
+		
+	}
+	public static void fun(String temp){
+		temp = "World";
+	}
+}
+输出：Hello
+```
+**解决思路：String类对象的内容一旦声明就不可改变，对象内容的改变依靠的是引用地址的改变。**
+
     
-    
-    
-    
-    
-    
-    
-    
+#### 范例三：
+```
+class Message{
+	private String info = "nihao";
+	public Message(String info){
+		this.info = info;
+	}
+	public void setInfo(String info){
+		this.info = info;
+	}
+	public String getInfo(){
+		return this.info;
+	}
+}
+public static TestDemo{
+	public static void main(String agrs[]){
+		Message msg = new Message("Hello");
+		fun(msg);
+		syso(msg.getInfo());
+	}
+	public static void fun(Message temp){
+		temp.setInfo("World");
+	}
+}
+输出：HWorld
+
+此范例可以想象成为：
+int x = 19;
+iny y = x;
+y = 12;
+```
+总结：虽然String属于类，属于引用类型，但是由于内容不可改变的特点，很多的时候，就把String当成基本数据类型使用，也就是说：每一个String变量只能保存一个数据（改变了就会把之前的数据替换掉了。）
+
     
