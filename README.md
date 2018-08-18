@@ -1466,7 +1466,85 @@ public class TestDemo{
 
 也就是说再使用`this()`**互相调用构造的时候请至少保留一个构造没有被使用this()调用其他构造的情况。**
 
+#### 表示当前对象
+所谓的当前对象就是当前正在调用类中的方法的对象。
+```
+public static void main(String args[]){
+	Book booka = new Book();
+	syso("booka"+booka);
+	
+	Book bookb = new Book();
+	syso("bookb"+bookb);
+}
+输出：
+booka = Book@659e0bfd
+-----------------------------
+bookb = Book@2a139a55
+两个关键字，表示开辟了两块对内存空间，存储地址也不同，输出的是存储地址。
+```
 
+接下来使用this:
+```
+class Book{
+	public void print(){
+		syso("this"+this);
+	}
+}
+public static void main(String args[]){
+	Book booka = new Book();
+	syso("booka"+booka);
+	syso(this.booka);
+	
+	Book bookb = new Book();
+	syso("bookb"+bookb);
+	syso(this.bookb);
+}
+输出：
+booka = Book@659e0bfd
+this = Book@659e0bfd
+-------------------------------------
+bookb = Book@2a139a55
+this = Book@2a139a55
+
+此时的this，那个对象调用了print方法，this就自动于此对象指向同一块内存地址，this就是调用当前方法的对象。
+```
+之前this属性，实际上就是当前对象中的属性，一定是堆内存保存的内容。
+
+**思考题**
+```
+//类A
+class A{
+	private B b;
+	public A(){	//2、执行A类的构造
+		//3、为B类对象b进行实例化
+		this.b = new B(this); 	//4、这里的this就是temp
+		
+		this.b.get(); 	//7、调用B类的get方法
+	}
+	public void print(){	 // 10、调用print输出
+		syso("Hello World!!");
+	}
+}
+//类B
+class B{
+	private A a;
+	public B(A a){	//5、参数A就是temp
+		this.a = a;	//6、保存A对象 ，实际上就是保存temp
+	}
+	public void get(){ 	//8、调用此方法
+		this.a.print(); 	// 9、this.a = temp
+	}
+}
+//测试类
+public class TestDemo{
+	public static void main(String agrs[]){
+		//1、实例化A类对象，要调用A类的无参构造，下面的代码应该从右到左执行的
+		A temp = new A();
+	}
+}
+输出：
+Hello World!!
+```
 
 ---
 
