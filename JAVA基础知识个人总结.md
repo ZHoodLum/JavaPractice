@@ -1316,7 +1316,7 @@ class Book{
 		price = p;
 	}
 	public String getInfo(){
-		 "书名：" +this.title+",价格："+price;
+		 syso("书名：" +this.title+",价格："+price);
 	}
 }
 
@@ -1378,7 +1378,7 @@ class Book{
 		this.price = price;
 	}
 	public String getInfo(){
-		 "书名：" +this.title+",价格："+price;
+		syso("书名：" +this.title+",价格："+price);
 	}
 }
 
@@ -1414,7 +1414,7 @@ class Book{
 		this.price = price;
 	}
 	public String getInfo(){
-		 "书名：" +this.title+",价格："+price;
+		 syso("书名：" +this.title+",价格："+price);
 	}
 }
 
@@ -1450,7 +1450,7 @@ class Book{
 		this.price = price;
 	}
 	public String getInfo(){
-		 "书名：" +this.title+",价格："+price;
+		syso("书名：" +this.title+",价格："+price);
 	}
 }
 
