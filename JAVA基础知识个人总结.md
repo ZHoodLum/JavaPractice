@@ -1561,6 +1561,42 @@ Hello World!!
 > 不需要实例化，可以直接访问，称为静态方法或类方法
 * static修饰语句块：
 > 类中由static关键字修饰的，不包含在任何方法体中的代码块，称为静态代码块
+
+```
+class Book{
+	private String title;
+	private double price;
+	
+	String pub="清华大学出版社";
+	public Book(String title,double price){
+		this.title = title;
+		this.price = price;
+	}
+	public String getInfo(){
+		return this.title+","+this.price+","+this.pub;
+	}
+}
+
+public class TestDemo{
+	public static void main(String agrs[]){
+		Book ba = new Book("java",10.2);
+		Book bb = new Book("cc",11.2);
+		Book bc = new Book("aa",12.2);
+		//修改了一个属性内容
+		ba.pub = "北京大学";
+		syso(ba.getInfo());
+		syso(bb.getInfo());
+		syso(bc.getInfo());
+	}
+}
+输出：
+java,10.2,清华大学出版社
+cc,10.2,清华大学出版社
+aa,10.2,清华大学出版社
+```
+上面的这个程序：如果现在出现了100W个Book对象，但是要求所有的对象名称更换。那么就要修改100W个对象内容，所以如果将属性定义为普通属性，最终结果就是每一块对内存空间都将要保存各自的信息，这种的结果是不方便的。
+进一步将，既然所有的pub内容都应该是一样的，那么就应该将其定义一个共有的同一pub属性，那么这种情况下，就可以使用static来定义属性。
+
 ####  静态变量
 * 用static关键字定义的变量，与局部变量相比, static局部变量有三点不同：
 > 1. 存储空间分配不同
