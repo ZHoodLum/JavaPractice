@@ -1562,6 +1562,14 @@ Hello World!!
 * static修饰语句块：
 > 类中由static关键字修饰的，不包含在任何方法体中的代码块，称为静态代码块
 
+
+### 静态属性
+* 用static修饰的属性，它们在类被载入时创建，只要类存在，static变量就存在。
+> 静态变量和非静态变量的区别是：静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。而非静态变量是对象所拥有的，在创建对象的时候被初始化，存在多个副本，各个对象拥有的副本互不影响。
+
+* 两种方式访问：
+> 直接访问：类名.属性；
+> 实例化后访问：对象名.属性 （不建议使用）
 ```
 class Book{
 	private String title;
@@ -1590,12 +1598,178 @@ public class TestDemo{
 	}
 }
 输出：
-java,10.2,清华大学出版社
+java,10.2,北京大学
 cc,10.2,清华大学出版社
 aa,10.2,清华大学出版社
 ```
 上面的这个程序：如果现在出现了100W个Book对象，但是要求所有的对象名称更换。那么就要修改100W个对象内容，所以如果将属性定义为普通属性，最终结果就是每一块对内存空间都将要保存各自的信息，这种的结果是不方便的。
 进一步将，既然所有的pub内容都应该是一样的，那么就应该将其定义一个共有的同一pub属性，那么这种情况下，就可以使用static来定义属性。
+
+```
+class Book{
+	private String title;
+	private double price;
+	
+	//这里使用static修饰属性
+	static String pub="清华大学出版社";
+	public Book(String title,double price){
+		this.title = title;
+		this.price = price;
+	}
+	public String getInfo(){
+		return this.title+","+this.price+","+this.pub;
+	}
+}
+
+public class TestDemo{
+	public static void main(String agrs[]){
+		Book ba = new Book("java",10.2);
+		Book bb = new Book("cc",11.2);
+		Book bc = new Book("aa",12.2);
+		//修改了一个属性内容
+		ba.pub = "北京大学";
+		syso(ba.getInfo());
+		syso(bb.getInfo());
+		syso(bc.getInfo());
+	}
+}
+输出：
+java,10.2,北京大学
+cc,10.2,北京大学
+aa,10.2,北京大学
+```
+一旦再属性定义上，只要有一个对象修改了属性内容之后，所有的对象属性都会修改。
+既然static是一个公共的概念，但是由一个对象可以修改所有对象的属性不太合适，所以正确的做法就是所有对象的公共的代表来进行访问，那么就是类，所以利用static定义的属性可以由类直接调用属性的。
+```
+//修改代码
+Book.pub = "北京大学";
+```
+
+**Static与非Static区别：**
+```
+所有非Static属性必须产生实例化对象之后才可以访问，但是Static不受实例化的控制，也就是说，在没有产生实例化对象的情况下，依然可以使用Static属性。
+```
+
+**Static特征：**
+```
+虽然定义在类结构里面，但是并不受对象的控制，是独立于类存在的。
+```
+
+**那么我们什么时候使用Static属性，什么时候不使用Static属性呢？**
+```
+在编写类的过程中，你所选择首要的修饰符一定不是Static(95%情况下不写)。如果需要描述共享信息的情况下，使用Static(可以方便集体修改，可以不重复开辟内存空间的)。
+```
+
+---
+
+### 静态方法
+* 静态方法不需要实例化，可以直接访问，访问方式：
+> 直接访问：类名.方法名()
+> 实例化后访问：对象名.方法名() （不建议使用）
+
+```
+class Book{
+	private String title;
+	private double price;
+	
+	//这里使用static修饰属性
+	private static String pub="清华大学出版社";
+	public Book(String title,double price){
+		this.title = title;
+		this.price = price;
+	}
+	public static void setPub(String p){
+		pub = p;
+	}
+	public String getInfo(){
+		return this.title+","+this.price+","+this.pub;
+	}
+}
+
+public class TestDemo{
+	public static void main(String agrs[]){
+		//在没有对象产生的时候进行调用操作
+		Book.setPub("北京大学");
+		Book ba = new Book("java",10.2);
+		Book bb = new Book("cc",11.2);
+		Book bc = new Book("aa",12.2);
+
+		syso(ba.getInfo());
+		syso(bb.getInfo());
+		syso(bc.getInfo());
+	}
+}
+输出：
+java,10.2,北京大学
+cc,10.2,北京大学
+aa,10.2,北京大学
+```
+发现Static定义的属性和方法都不受实例化对象控制，也就说属于独立的类属性。
+
+但是这个时候就会出现一个麻烦的问题：此时的类中的方法变成了两组：Static方法、非Static方法，两组方法间的访问也将受到限制：
+* **static方法不能够直接访问属性或者方法，只能够调用static属性或方法。**
+* 为什么会存在限制问题呢？
+>* 所有的非static定义结构，必须在类已经明确的产生了实例化对象才会分配空间，才可以使用。
+>* 所有的static定义的结构，不受实例化对象的控制，即：可以在没有实例化对象的时候访问。
+
+* **非static方法可以访问static的属性或方法，不说任何的限制。**
+
+**解决问题**
+如果一个方法定义在主类中，并且由主方法调用
+```
+public static 返回值类型 方法名称(参数类型 参数，...){
+	[return[返回值];]
+}
+```
+
+接下来编写类的时候，发现方法定义的格式改变了（方法由对象调用）
+```
+public 返回值类型 方法名称(参数类型 参数，...){
+	[return[返回值];]
+}
+```
+
+观察如下代码解决问题：
+```
+public class TestDemo{
+	pubblic static void main(String args[]){
+		fun();
+	}
+	public static void fun(){
+		syso("Hello world!!");
+	}
+}
+输出：Hello world!!
+```
+如果此时fun()方法取消了static修饰符 ，那么就成为了非static方法。所有的非static方法必须由对象调用，此时static方法如果想要使用非static操作，必须产生对象才能进行调用。
+
+所以代码改变成：
+```
+public class TestDemo{
+	pubblic static void main(String args[]){
+		new TestDemo.fun();
+	}
+	public static void fun(){
+		syso("Hello world!!");
+	}
+}
+输出：Hello world!!
+```
+* **与定义属性的规则一样，定义一个类的时候首先考虑非static方法，因为所有的类如果保存的信息多（属性多），那么每一一个对象执行同一个方法的时候，就可以利用static方法执行**
+* 比如说一个类没有属性，产生对象就完全没有意义，所以就会使用static方法。
+* 对象保存的是属性！！！
+
+**static属性保存在全局数据区**
+```
+内存区一共有四个：栈内存、堆内存、全局数据区、全局代码区：
+
+栈内存：存放地址；
+堆内存：存放普通属性；
+全局数据区：存放static数据；
+全局代码区：存放方法；
+```
+
+---
 
 ####  静态变量
 * 用static关键字定义的变量，与局部变量相比, static局部变量有三点不同：
@@ -1610,19 +1784,6 @@ auto类型分配在栈上，属于动态存储类别，占动态存储区空间�
 
 > 只`允许本源文件中`所有函数使用的全局变量，则该变量需要使用的存储类型是static。
 
-### 静态属性
-* 用static修饰的属性，它们在类被载入时创建，只要类存在，static变量就存在。
-> 静态变量和非静态变量的区别是：静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。而非静态变量是对象所拥有的，在创建对象的时候被初始化，存在多个副本，各个对象拥有的副本互不影响。
-
-* 两种方式访问：
-> 直接访问：类名.属性；
-
-> 实例化后访问：对象名.属性 （不建议使用）
-### 静态方法
-* 静态方法不需要实例化，可以直接访问，访问方式：
-> 直接访问：类名.方法名()
-
-> 实例化后访问：对象名.方法名() （不建议使用）
 ### 静态语句块
 * 一个类中由static关键字修饰的，不包含在任何方法体中的代码块
 > 当类被载入时，静态代码块被执行，且只被执行一次
@@ -1689,6 +1850,8 @@ public class Test2{
 > （1）有抽象方法的类一定是抽象类。但是抽象类中不一定都是抽象方法，也可以全是具体方法。abstract修饰符在修饰类时必须放在类名前。 abstract修饰方法就是要求其子类覆盖（实现）这个方法。调用时可以以多态方式调用子类覆盖（实现）后的方法， 即抽象方法必须在其子类中实现，除非子类本身也是抽象类。
 > （2）父类是抽象类，其中有抽象方法，那么子类继承父类，并把父类中的所有抽象方法都实现（覆盖）了，子类才有创建对象的实例的能 力，否则子类也必须是抽象类。抽象类中可以有构造方法，是子类在构造子类对象时需要调用的父类（抽象类）的构造方法。
 > （3）不能放在一起的修饰符：final和abstract，private和abstract，static和abstract，因为abstract修饰的方法是必须在其子类中实现（覆盖），才能以多态方式调用，以上修饰符在修饰方法时期子类都覆盖不了这个方法，final是不可以覆盖，private是不能够继承到子类，所以也就不能覆盖，static是可以覆盖的，但是在调用时会调用编译时类型的方法，因为调用的是父类的方法，而父类的方法又是抽象的方法，又不能够调用，所以上的修饰符不能放在一起。
+
+---
 
 ### 单例模式
 #### 这个模式主要注重懒汉模式（饿汉模式，任选其一），注册登记式单例。（熟记）
