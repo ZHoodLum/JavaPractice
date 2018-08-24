@@ -2,6 +2,7 @@
 
 [Servlet简介](#Servlet简介)
 
+
 [HttpServlet简介doPost和doGet请求原理](#HttpServlet简介)
 
 
@@ -10,6 +11,7 @@
 ---
 
 ### Servlet简介
+
 博主地址：https://www.cnblogs.com/libingbin/p/5960456.html
 ### servlet设置编码格式
 ```
@@ -374,7 +376,9 @@ get请求：
 ---
  
 
+
 ### HttpServlet简介
+
 博主源地址 https://blog.csdn.net/m0_38039437/article/details/75264012
 * HttpServlet是GenericServlet的子类，又是在GenericServlet的基础上做了增强。
 * HttpServlet方法
