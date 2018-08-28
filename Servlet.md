@@ -5,6 +5,7 @@
 
 [HttpServlet简介doPost和doGet请求原理](#HttpServlet简介)
 
+[三种缓存](#三种缓存)
 
 ---
 
@@ -604,6 +605,8 @@ public void service(ServletRequest req, ServletResponse res)
 3、如果继承了HttpServlet没有实现任何的doXxx方法则会抛出一个异常
 ```
 
+---
+
 ### 三种缓存区别
 **session cookie cache缓存区别：**
 一、Session缓存Session的生存周期 = 用户持续请求时间+超时时间(一般为20分钟)
@@ -629,7 +632,33 @@ Cache用于在Http请求期间保存页面或者数据，主要用来保存大�
   Cache是应用程序级的，主要用来缓存计算或查询结果，减轻服务器负担，并加快响应速度。它允许将频繁访问的服务器资源存储在内存中，当用户发出相同的请求后,服务器不是再次处理而是将Cache中保存的数据直接返回给用户。可以看出Cache节省的是时间—服务器处理时间。
 ```
 
+---
 
+### java中设置session过期时间
+
+session个人认为在不同的服务器端，存活的时间也会不同
+session的取值范围是1-1440（就是24小时 ）
+```
+1. 在web容器中设置（以tomcat为例,Tomcat默认session超时时间为30分钟）
+在tomcat-8.0.26\conf\web.xml中设置，以下是tomcat 8.0中的默认配置：
+<session-config>  
+<!-- 时间单位为分钟   -->  
+    <session-timeout>30</session-timeout>  
+</session-config> 
+
+2. 在web.xml中设置
+ 
+<session-config>
+<!-- 时间单位为分钟   -->  
+      <session-timeout>15</session-timeout>
+</session-config>
+
+3. 通过Java代码设置
+//以秒为单位
+session.setMaxInactiveInterval（30*60）;
+
+他们的优先级是：1 < 2 <3
+```
 
 
 
