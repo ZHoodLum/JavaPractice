@@ -4,12 +4,16 @@
 
 [为什么使用抽象类？有什么好处？](#为什么使用抽象类有什么好处)
 
+[Interface口extends口implement的区别](#Interface口extends口implement的区别)
 
+[引用类型的强制类型转换](#引用类型的强制类型转换)
+
+[序列化与反序列化](#序列化与反序列化)
 
 
 ---
-Java的四种引用方式
---
+### Java的四种引用方式
+
 [来源于博客园:] http://www.cnblogs.com/a986771570/p/8592660.html
 
 java内存管理分为内存分配和内存回收，都不需要程序员负责，垃圾回收的机制主要是看对象是否有引用指向该对象。
@@ -264,8 +268,11 @@ public SoftReference(T referent, ReferenceQueue<? super T> q) {
 
 * 3．使用软引用构建敏感数据的缓存
 > 3.1 为什么需要使用软引用
+```
    首先，我们看一个雇员信息查询系统的实例。我们将使用一个Java语言实现的雇员信息查询系统查询存储在磁盘文件或者数据库中的雇员人事档案信息。作为一个用户，我们完全有可能需要回头去查看几分钟甚至几秒钟前查看过的雇员档案信息(同样，我们在浏览WEB页面的时候也经常会使用“后退”按钮)。这时我们通常会有两种程序实现方式:一种是把过去查看过的雇员信息保存在内存中，每一个存储了雇员档案信息的Java对象的生命周期贯穿整个应用程序始终;另一种是当用户开始查看其他雇员的档案信息的时候，把存储了当前所查看的雇员档案信息的Java对象结束引用，使得垃圾收集线程可以回收其所占用的内存空间，当用户再次需要浏览该雇员的档案信息的时候，重新构建该雇员的信息。很显然，第一种实现方法将造成大量的内存浪费，而第二种实现的缺陷在于即使垃圾收集线程还没有进行垃圾收集，包含雇员档案信息的对象仍然完好地保存在内存中，应用程序也要重新构建一个对象。我们知道，访问磁盘文件、访问网络资源、查询数据库等操作都是影响应用程序执行性能的重要因素，如果能重新获取那些尚未被回收的Java对象的引用，必将减少不必要的访问，大大提高程序的运行速度。
+   ```
 > 3.2 如果使用软引用
+```
 SoftReference的特点是它的一个实例保存对一个Java对象的软引用，该软引用的存在不妨碍垃圾收集线程对该Java对象的回收。也就是说，一旦SoftReference保存了对一个Java对象的软引用后，在垃圾线程对这个Java对象回收前，SoftReference类所提供的get()方法返回Java对象的强引用。另外，一旦垃圾线程回收该Java对象之后，get()方法将返回null。
 看下面代码:
 MyObject aRef = new  MyObject();
@@ -276,7 +283,9 @@ aRef = null;
 此后，这个MyObject对象成为了软可及对象。如果垃圾收集线程进行内存垃圾收集，并不会因为有一个SoftReference对该对象的引用而始终保留该对象。Java虚拟机的垃圾收集线程对软可及对象和其他一般Java对象进行了区别对待:软可及对象的清理是由垃圾收集线程根据其特定算法按照内存需求决定的。也就是说，垃圾收集线程会在虚拟机抛出OutOfMemoryError之前回收软可及对象，而且虚拟机会尽可能优先回收长时间闲置不用的软可及对象，对那些刚刚构建的或刚刚使用过的“新”软可反对象会被虚拟机尽可能保留。在回收这些对象之前，我们可以通过:
 MyObject anotherRef=(MyObject)aSoftRef.get();
     重新获得对该实例的强引用。而回收之后，调用get()方法就只能得到null了。
+    ```
 > 3.3 使用ReferenceQueue清除失去了软引用对象的SoftReference
+```
 作为一个Java对象，SoftReference对象除了具有保存软引用的特殊性之外，也具有Java对象的一般性。所以，当软可及对象被回收之后，虽然这个SoftReference对象的get()方法返回null,但这个SoftReference对象已经不再具有存在的价值，需要一个适当的清除机制，避免大量SoftReference对象带来的内存泄漏。在java.lang.ref包里还提供了ReferenceQueue。如果在创建SoftReference对象的时候，使用了一个ReferenceQueue对象作为参数提供给SoftReference的构造方法，如:
 ReferenceQueue queue = new  ReferenceQueue();
 SoftReference  ref=new  SoftReference(aMyObject, queue);
@@ -287,8 +296,9 @@ while ((ref = (EmployeeRef) q.poll()) != null) {
     // 清除ref
 }
 理解了ReferenceQueue的工作机制之后，我们就可以开始构造一个Java对象的高速缓存器了。
-
+```
 > 3.4通过软可及对象重获方法实现Java对象的高速缓存
+```
     利用Java2平台垃圾收集机制的特性以及前述的垃圾对象重获方法，我们通过一个雇员信息查询系统的小例子来说明如何构建一种高速缓存器来避免重复构建同一个对象带来的性能损失。我们将一个雇员的档案信息定义为一个Employee类:
 publicclass Employee {
     private String id;// 雇员的标识号码
@@ -310,8 +320,10 @@ publicclass Employee {
        // 给name，department，plone，salary等变量
        // 同时将origin赋值为"From DataBase"
     }
-……
+```
 这个Employee类的构造方法中我们可以预见，如果每次需要查询一个雇员的信息。哪怕是几秒中之前刚刚查询过的，都要重新构建一个实例，这是需要消耗很多时间的。下面是一个对Employee对象进行缓存的缓存器的定义:
+```
+
 ```
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
@@ -391,6 +403,7 @@ publicclass EmployeeCache {
 * 4．使用弱引用构建非敏感数据的缓存
 4.1全局 Map 造成的内存泄漏
 无意识对象保留最常见的原因是使用Map将元数据与临时对象（transient object）相关联。假定一个对象具有中等生命周期，比分配它的那个方法调用的生命周期长，但是比应用程序的生命周期短，如客户机的套接字连接。需要将一些元数据与这个套接字关联，如生成连接的用户的标识。在创建Socket时是不知道这些信息的，并且不能将数据添加到Socket对象上，因为不能控制 Socket 类或者它的子类。这时，典型的方法就是在一个全局 Map 中存储这些信息，如下面的 SocketManager 类所示：使用一个全局 Map 将元数据关联到一个对象。
+```
 publicclass SocketManager {
     private Map<Socket, User> m = new HashMap<Socket, User>();
  
@@ -406,6 +419,7 @@ publicclass SocketManager {
        m.remove(s);
     }
 }
+```
 这种方法的问题是元数据的生命周期需要与套接字的生命周期挂钩，但是除非准确地知道什么时候程序不再需要这个套接字，并记住从 Map 中删除相应的映射，否则，Socket 和 User 对象将会永远留在 Map 中，远远超过响应了请求和关闭套接字的时间。这会阻止 Socket 和 User 对象被垃圾收集，即使应用程序不会再使用它们。这些对象留下来不受控制，很容易造成程序在长时间运行后内存爆满。除了最简单的情况，在几乎所有情况下找出什么时候 Socket 不再被程序使用是一件很烦人和容易出错的任务，需要人工对内存进行管理。
  
 4.2如何使用WeakHashMap
@@ -491,8 +505,8 @@ WeakHashMap 有一个名为 expungeStaleEntries() 的私有方法，大多数 Ma
 
 也可以如下的构造型方式。
 
-为什么使用抽象类？有什么好处？
-----
+### 为什么使用抽象类？有什么好处？
+
 [来源于博客园:]https://www.cnblogs.com/heyonggang/p/3142338.html
 
 最简单的说法也是最重要的理由：接口和实现分离
@@ -540,10 +554,232 @@ WeakHashMap 有一个名为 expungeStaleEntries() 的私有方法，大多数 Ma
 
 记住一点，面向对象不是来自于Java，面向对象就在你的生活中。而Java的面向对象是方便你解决复杂的问题。这不是说面向对象很简单，虽然面向对象很复杂，但Java知道，你很了解面向对象，因为它就在你身边。
 
+---
+
+### Interface口extends口implement的区别
+
+* interface是定义接口的关键字。
+* implement是实现接口的关键字。
+* extends是子类继承父类的关键字。
+>* 1、interface接口定义不能包含任何属性（如：public、private等），但是在实现接口的类定义中，可以包含必须标记为public。
+```
+例如： （1）、interface interfaceName [extends interfaceName] {}
+
+       （2）、有一类东西，都具有同样的行为，而这个共有的行为实现方式不一样。
+
+如：笔这类东西，都有共同的行为“写”，铅笔、毛笔、圆珠笔、钢笔都有“写”的功能，但实现起来不一样。那么我们就可以抽象出一个接口“笔”
+
+interface 笔{ //定义一个接口“笔”
+
+void 写(); //定义一个“写”的方法
+
+}
+
+implement的意思是指在铅笔、毛笔、圆珠笔要有”写“的这个功能，就需要实现接口”笔“的”写“功能。而这个关键字implement就是实现的意思，如：
+
+class 铅笔 implement 笔{ //用“铅笔”这个类实现“笔”的功能
+
+void 写(){
+
+用铅芯画
+
+}
+
+}
+
+class 钢笔 implement 笔{ //用“钢笔”这个类实现“笔”的功能
+
+void 写(){
+
+用墨水画
+
+}
+
+}
+```
+ 
+
+>* 2、extends语句可以使用一个接口继承多个接口，通过implement语句可以使用一个类继承多个接口。
+
+extends是继承父类，继承只能继承一个类。
+
+extends是继承某个类之后可以使用父类的方法，也可以重写父类的方法。
+
+```
+例如： （1）、class A extends B implement C,D,E; //类A继承了类B，实  现了C,D,E三个接口
+
+       （2）、extends是指一个继承关系，子类继承父类的功能：父类”灯“具有”发光“的功能，而子类"台灯"，只需要extends（继承）父类”灯“就拥有了发光的共功能。
+```
+
+>* 3、implement是实现interface定义的类的具体方法功能。
+```
+      Implement可以实现多个接口，接口中的方法为空的，必须重写才能使用。
+```
+
+版权声明：本文为博主原创文章，未经博主允许不得转载。	https://blog.csdn.net/Warpar/article/details/72859529
+
+### 引用类型的强制类型转换
+
+（内容略有改动，作者出处：：https://blog.csdn.net/IBLiplus/article/details/81159710）
+
+正如有时候需要将浮点型的数值转换为整型数值一样，有时候也可能需要将某个类的对象引用转换成两外一个类的对象引用。进行强制类型转换的唯一原因是：在暂时忽视对象的实际类型之后，使用对象的全部功能。
+```
+  编写Java程序时，引用类型只能调用声明该变量的类型的方法，也就是编译时类型的方法，不允许调用运行时类型所定义的方法，即使它实际所引用的对象包含该方法。解释一下就是我们说的，父类对象不能调用子类中新定义的方法，即使new 实例化的是子类类型。如果想要让这个父类类型的变量能够调用子类中新添的方法，就必须对该变量进行强制类型转换，将其转换成自类类型。强制转换类型的方式和基本类型的转换方式之一致的。
+```
+结合基本类型的强制转换，我们要注意一下：
+
+* 基本类型的强制类型转化是在数值类型之间进行，这里值得是Java中8种基本类型。但是数值类型和布尔类型之间不能转换。
+* 引用类型之间的转化只能是两个类型具有继承关系，就是说一个类型是另一个类型的子类类型。不具备继承关系的两个引用类型变量是不能进行强制类型转换的。否则程序会引发ClassCastException异常。
+```
+public class Cast {
+ 
+	public static void main(String[] args) {
+		double d = 1.23;
+		long l = (long) (d);
+		System.out.println(l);
+		int i = 3;
+		//boolean bl = (boolean)i;
+		//布尔类型的变量不能和数值类型的变量之间进行转换
+		Object obj = "hello";
+		//Java中String类继承于Object类
+		String objStr = (String)obj;
+		System.out.println(objStr);
+		Object obj1 = new Integer(20);
+		String str = (String)obj1;
+		//obj1 的编译时类型是Objext 运行时类型是Integer
+		// Object与Integer存在继承关系   
+		//可以强制类型转换 而obj1的实际类型是Integer
+		//所以下面的代码运行时会引发类型转换的异常 因为String类和integer类不存在继承关系
+		System.out.println(str);
+	}
+	
+}
+结果：
 
 
 
+因此 考虑到强制类型转换可能会引发程序异常，所以在进行引用类型的强制类型转换之前要先使用instanceof关键字进行判断。关键字是用来判断类类型的。
+
+String strr = "";
+if(  strr instanceof Object) {
+			
+    System.out.println("Yes");
+}
+if(strr instanceof String) {
+	System.out.println("Yes");
+}
+结果都是输出Yes.
+```
+* instanceof运算符的前一个操作数通常是一个引用类型的变量，后一个操作数通常是一个类，也可以是接口，可以把接口理解成为一种特殊的类，它用于判断前面的对象是否是后面的类，或者子类，实现类的实例。
+* 在使用instanceof关键字的时候要注意，instanceof运算符前面的操作数的编译时类型要么与后面的类相同，要么与后面的类具有父子继承关系，否则会引起编译错误。
 
 
+### 序列化与反序列化
+（对象流）(作者出处，内容略有改动)
+File 类的介绍：http://www.cnblogs.com/ysocean/p/6851878.html
+
+Java IO 流的分类介绍：http://www.cnblogs.com/ysocean/p/6854098.html
+
+Java IO 字节输入输出流：http://www.cnblogs.com/ysocean/p/6854541.html
+
+Java IO 字符输入输出流：https://i.cnblogs.com/EditPosts.aspx?postid=6859242
+
+Java IO 包装流：http://www.cnblogs.com/ysocean/p/6864080.html
+
+* 1、什么是序列化与反序列化？
+
+　　1) 序列化：指把堆内存中的 Java 对象数据，通过某种方式把对象存储到磁盘文件中或者传递给其他网络节点（在网络上传输）。这个过程称为序列化。通俗来说就是将数据结构或对象转换成二进制串的过程
+
+　　2) 反序列化：把磁盘文件中的对象数据或者把网络节点上的对象数据，恢复成Java对象模型的过程。也就是将在序列化过程中所生成的二进制串转换成数据结构或者对象的过程
 
  
+
+* 2、为什么要做序列化？
+
+　　1)在分布式系统中，此时需要把对象在网络上传输，就得把对象数据转换为二进制形式，需要共享的数据的 JavaBean 对象，都得做序列化。
+
+　　②、服务器钝化：如果服务器发现某些对象好久没活动了，那么服务器就会把这些内存中的对象持久化在本地磁盘文件中（Java对象转换为二进制文件）；如果服务器发现某些对象需要活动时，先去内存中寻找，找不到再去磁盘文件中反序列化我们的对象数据，恢复成 Java 对象。这样能节省服务器内存。
+
+ 
+
+* 3、Java 怎么进行序列化？
+
+　　1)需要做序列化的对象的类，必须实现序列化接口：Java.lang.Serializable 接口（这是一个标志接口，没有任何抽象方法），Java 中大多数类都实现了该接口，比如：String，Integer
+
+　　2)底层会判断，如果当前对象是 Serializable 的实例，才允许做序列化，Java对象 instanceof Serializable 来判断。
+
+　　3)在 Java 中使用对象流来完成序列化和反序列化
+```
+　　　　ObjectOutputStream:通过 writeObject()方法做序列化操作
+
+　　　　ObjectInputStream:通过 readObject() 方法做反序列化操作
+```
+* 第一步：创建一个 JavaBean 对象
+```
+public class Person implements Serializable{
+    private String name;
+    private int age;
+     
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    @Override
+    public String toString() {
+        return "Person [name=" + name + ", age=" + age + "]";
+    }
+    public Person(String name, int age) {
+        super();
+        this.name = name;
+        this.age = age;
+    }
+}　　
+ 
+```
+* 第二步：使用 ObjectOutputStream 对象实现序列化
+```
+在根目录下新建一个 io 的文件夹
+        OutputStream op = new FileOutputStream("io"+File.separator+"a.txt");
+        ObjectOutputStream ops = new ObjectOutputStream(op);
+        ops.writeObject(new Person("vae",1));
+        ops.close();
+　　我们打开 a.txt 文件，发现里面的内容乱码，注意这不需要我们来看懂，这是二进制文件，计算机能读懂就行了。
+```
+错误一：如果新建的 Person 对象没有实现 Serializable 接口，那么上面的操作会报错：
+
+　　　　
+
+* 第三步：使用ObjectInputStream 对象实现反序列化,反序列化的对象必须要提供该对象的字节码文件.class
+```
+    InputStream in = new FileInputStream("io"+File.separator+"a.txt");
+    ObjectInputStream os = new ObjectInputStream(in);
+    byte[] buffer = new byte[10];
+    int len = -1;
+    Person p = (Person) os.readObject();
+    System.out.println(p);  //Person [name=vae, age=1]
+    os.close();
+　　
+```
+* 问题1：如果某些数据不需要做序列化，比如密码，比如上面的年龄？
+
+> 解决办法：在字段面前加上 transient
+```
+  private String name;//需要序列化
+    transient private int age;//不需要序列化
+　　那么我们在反序列化的时候，打印出来的就是Person [name=vae, age=0]，整型数据默认值为 0 
+```
+
+* 问题2：序列化版本问题，在完成序列化操作后，由于项目的升级或修改，可能我们会对序列化对象进行修改，比如增加某个字段，那么我们在进行反序列化就会报错：
+
+> 解决办法：在 JavaBean 对象中增加一个 serialVersionUID 字段，用来固定这个版本，无论我们怎么修改，版本都是一致的，就能进行反序列化了
+```
+private static final long serialVersionUID = 8656128222714547171L;
+```

@@ -45,7 +45,12 @@
 ---
 [对象与方法练习题](#对象与方法练习题)
 
->[使用封装方法对三角形进行判断](#使用封装方法对三角形进行判断)
+> [使用封装方法对三角形进行判断](#使用封装方法对三角形进行判断)
+
+[文件管理类的使用方法](#文件管理类的使用方法)
+
+[查找文件夹及文件名](#查找文件夹及文件名)
+ 
 
 ---
 ---
@@ -930,7 +935,226 @@ public class SJXTest {
 	}
 }
 ```
+### 文件管理类的使用方法
 
+#### 构造函数
+```
+public class FileDemo {
+     public static void main(String[] args){
+         //构造函数File(String pathname)
+         File f1 =new File("c:\\abc\\1.txt");
+         //File(String parent,String child)
+         File f2 =new File("c:\\abc","2.txt");
+         //File(File parent,String child)
+         File f3 =new File("c:"+File.separator+"abc");//separator 跨平台分隔符
+         File f4 =new File(f3,"3.txt");
+         System.out.println(f1);//c:\abc\1.txt
+ 
+     }
+ 
+ }
+```
+#### 创建方法
 
+* 1.boolean createNewFile() 不存在返回true 存在返回false
+* 2.boolean mkdir() 创建目录
+* 3.boolean mkdirs() 创建多级目录
 
-	
+#### 删除方法
+
+* 1.boolean delete()
+* 2.boolean deleteOnExit() 文件使用完成后删除
+```
+import java.io.File;
+import java.io.IOException;
+ 
+public class FileDemo2 {
+    public static void main(String[] args){
+        File f =new File("d:\\1.txt");
+        try {
+            System.out.println(f.createNewFile());//当文件存在时返回false
+            System.out.println(f.delete());//当文件不存在时返回false
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### 判断方法
+* 1.boolean canExecute()判断文件是否可执行
+* 2.boolean canRead()判断文件是否可读
+* 3.boolean canWrite() 判断文件是否可写
+* 4.boolean exists() 判断文件是否存在
+* 5.boolean isDirectory() 
+* 6.boolean isFile()
+* 7.boolean isHidden()
+* 8.boolean isAbsolute()判断是否是绝对路径 文件不存在也能判断
+
+#### 获取方法
+
+* 1.String getName()
+* 2.String getPath()
+* 3.String getAbsolutePath()
+* 4.String getParent()//如果没有父目录返回null
+* 5.long lastModified()//获取最后一次修改的时间
+* 6.long length()
+* 7.boolean renameTo(File f)
+* 8.File[] liseRoots()//获取机器盘符
+* 9.String[] list() 
+* 10.String[] list(FilenameFilter filter)
+
+#### 列出磁盘下的文件和文件夹
+```
+public class FileDemo3 {
+     public static void main(String[] args){
+         File[] files =File.listRoots();
+         for(File file:files){
+             System.out.println(file);
+             if(file.length()>0){
+                 String[] filenames =file.list();
+                 for(String filename:filenames){
+                     System.out.println(filename);
+                 }
+             }
+         }
+     }
+ 
+ }
+```
+
+#### 文件过滤
+
+```
+import java.io.File;
+ import java.io.FilenameFilter;
+ public class FileDemo4 {
+     public static void main(String[] args){
+         File[] files =File.listRoots();
+         for(File file:files){
+             System.out.println(file);
+             if(file.length()>0){
+                 String[] filenames =file.list(new FilenameFilter(){
+                     //file 过滤目录 name 文件名
+                     public boolean accept(File file,String filename){
+                         return filename.endsWith(".mp3");
+                     }
+                 });
+                 for(String filename:filenames){
+                     System.out.println(filename);
+                 }
+             }
+         }
+     }
+ 
+ }
+
+File[]  listFiles()
+File[] listFiles(FilenameFilter filter)
+```
+
+#### 利用递归列出全部文件
+
+```
+代码如下:
+public class FileDemo5 {
+    public static void main(String[] args){
+        File f =new File("e:\\音樂");
+        showDir(f);
+    }
+    public static void showDir(File dir){
+        System.out.println(dir);
+        File[] files =dir.listFiles();
+        for(File file:files){
+            if(file.isDirectory())
+                showDir(file);
+            else
+                System.out.println(file);
+        }
+    }
+ 
+}
+```
+
+#### 移动文件
+```
+找出d盘下所有的 .java 文件，拷贝至 c:\jad 目录下，并将所有文件的类型由.java 修改为.jad 。
+public class Test5 {
+    public static void main(String[] args){
+        File f1 = new File("d:\\");
+        moveFile(f1);
+    }public static void moveFile(File dir){
+    File[] files=dir.listFiles();
+    for(File file:files){
+        if(file.isDirectory())
+            moveFile(file);
+        else{
+            if(file.getName().endsWith(".java"))
+                file.renameTo(new File("c:\\jad\\"+
+            file.getName().substring(0,file.getName().lastIndexOf('.'))+".jad"));
+            }
+        }
+    }
+}
+```
+### 查找文件夹及文件名
+```
+在本机的磁盘系统中，找一个文件夹，利用 File类的提供方法，列出该文件夹中的所有文件的 文件名和文件的路径，执行效果如下：[必做题] • 路径是xxx的文件夹内的文件有：   文件名：abc.txt  路径名：c:\temp\abc.txt   --------------------------------------------  文件名：def.txt  路径名：c:\temp\def.txt
+* 第一个版本
+public class getFile {
+	public static void main(String[] args) {
+		getFileListame("C:\\Users\\shuai\\Desktop\\作业");
+	}
+	public static void getFileListame(String strPath) {
+		File dir = new File(strPath);
+		File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				System.out.println(files[i].getName());
+				if (files[i].isDirectory()) { // 判断是文件还是文件夹
+					getFileListame(files[i].getAbsolutePath()); // 获取文件绝对路径
+					System.out.println(files[i].getAbsolutePath() + files[i].getName());
+				}
+			}
+		}
+	}
+}
+
+* 第二个 完善版
+public class Test22 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in); 
+		System.out.println("请输入要打印出的文件夹：(windows下分隔符请使用“\\”)"); 
+		String ML = sc.next();
+		File file = new File(ML);
+		getFile(file);
+	}
+	public static void getFile(File file) {
+		//listFiles() 返回一个抽象路径名数组这些路径名表示此抽象路径名表示的目录中的文件
+		// 该文件目录文件放入数组
+		File[] files = file.listFiles(); 
+		if(file.exists()){
+			if (files != null) {
+				for (int i = 0; i < files.length; i++) {
+				
+				System.out.println("文件名= " + files[i].getName());
+				//获取文件名
+				/*File tempFile =new File( files[i].getAbsolutePath().trim());
+			        String fileName = tempFile.getName();
+			        System.out.println("文件名= " + fileName);*/
+				
+			        // 获取文件绝对路径
+			        System.out.println("文件的绝对路径= " + files[i].getAbsolutePath());
+			        System.out.println("---------------------");	 
+				}
+			}
+		}else{
+			System.out.println("输入有误！");
+		}
+ 
+	}
+
+}
+```

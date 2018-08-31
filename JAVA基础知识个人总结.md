@@ -1,4 +1,5 @@
-#关于java一些的日常练习sss
+#关于java一些的日常练习
+
 
 ## java环境变量的配置
 
@@ -6,11 +7,13 @@
 
 ## Java对象与类
 
-[对象与类](#对象与类)
+[对象与类区别](#对象与类区别)
 
 ## Java数据类型
 
 [primitive主数据类型](#primitive主数据类型)
+
+[类型转换](#类型转换)
 
 [运算符号](#运算符号)
 
@@ -20,9 +23,17 @@
 
 [数组](#数组)
 
-[方法](#方法)
+[实现一维数组的转置](#实现一维数组的转置)
+
+[实现二维数组的转置](#实现二维数组的转置)
+
+[字符串类](#字符串类)
+#### 在工具类中还会涉及到String类
+
 
 ## 对象与类
+
+[方法](#方法)
 
 [类](#类)
 
@@ -64,6 +75,11 @@
 
 [集合类](#集合类)
 
+[文件管理](#文件管理)
+
+[多线程](#多线程)
+
+
 
 ---
 ---
@@ -86,8 +102,9 @@ C:\Program Files\Java\jdk1.8.0_73
 * (4)检查是否环境配置成功
  使用CMD查看环境是否配置成功：java      javac     java -version
 
+---
 
-### 对象与类
+### 对象与类区别
 
 * `对象:` 对象是类的实例，有状态和行为两种属性。状态影响行为，行为影响状态。
 
@@ -136,7 +153,77 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
 >* 引用变量如同遥控器，对引用变量使用圆点云算法可以如同按下遥控器按钮般的存取它的方法或实例变量
 >* 没有引用到任何对象的音乐变量的值为null值
 >* 数组一定是一个对象，不管所声明的元素是否为primitive主数据类型，并且没有primitive主数据类型的数组，只有装载primitive主数据类型的数组。
-	
+### 类型转换：
+
+#### 自动类型转换又称为：隐式类型转换
+* 有多种类型的数据混合运算时，系统首先自动的将所有数据转换成容量最大的那一种数据类型，然后进行计算
+>* 自动转换规则
+>> boolean类型不可以转换为其他的数据类型（既不能进行自动类型的提升，也不能强制类型转换）， 否则，将编译出错。
+>* 整型、字符型、浮点型的数据在混合运算中相互转换，转换时遵守以下原则：
+>> byte、short、char之间不会相互转换，他们三者在计算时首先会转换为int类型
+>>> char型其本身是unsigned型，同时具有两个字节，其数值范围是0 ~ 2^16-1，因为，这直接导致byte型不能自动类型提升到char，char和short直接也不会发生自动类型提升（因为负数的问题）
+>>> 在Java中，整数类型（byte/short/int/long）中，对于未声明数据类型的整形，其默认类型为int型。在浮点类型（float/double）中，对于未声明数据类型的浮点型，默认为double型。
+
+* 注意：
+> int 等基本数据类型是不能够`自动转换`成String类型的,更不能强制类型转换。可以通过`valueOf()`方法进行转换。
+
+#### 强制类型转换又称为：显示类型转换(基本数据类型中的数值类型强制转换)
+* 容量大的数据类型转换为容量小的数据类型时，需要使用强制类型转换，其格式如下： 
+> 变量=（目标类型）值；
+
+* 注意：
+> 在强制类型转换过程中，源类型的值可能大于目标类型，因此可能造成精度降低或溢出，使用时需注意
+
+#### 引用类型转换：
+java的引用类型转换分为两种：
+* 1、基本类型与对应包装类 ： 可以自动转换，来自 `自动装箱和自动拆箱原理`
+
+* 2、两个引用数据类型之间的转换：
+> 向上类型转换 ： 子类转换为父类
+> 向下类型转换 : 父类转换为子类`需要强制转换`（如果父类的引用实际指向的是子类对象，在运行时若不是对应的对象，会抛出ClassCastException运行时异常）
+
+>> 向下引用转换会存在风险，但是可以利用java的instanceof关键字去解决这个问题。instanceof运算符用法：判断是一个实例对象是否属于一个类，是返回true，否则返回false。这样我们可以优化上面的代码避免强制转换类型时出现的问题：
+
+##### 类型主要在赋值、方法调用、算术运算上，三种情况发生的：
+* 类型转换主要在在 赋值、方法调用、算术运算 三种情况下发生。
+
+　　a、赋值和方法调用 转换规则：从低位类型到高位类型自动转换；从高位类型到低位类型需要强制类型转换：
+  
+　　（1）布尔型和其它基本数据类型之间不能相互转换； 
+  
+　　（2）byte型可以转换为short、int、、long、float和double；
+  
+　　（3）short可转换为int、long、float和double； 
+  
+　　（4）char可转换为int、long、float和double； 
+  
+　　（5）int可转换为long、float和double；
+  
+　　（6）long可转换为float和double； 
+  
+　　（7）float可转换为double； 
+
+　　　另外还有是直接数的赋值：先通过直接数判断其类型，然后基本原则和上面谈到的赋值原则基本一致；只是直接数是整数时特殊一点，当在可表示范围内时，可以直接赋值给 byte short char三种类型；
+
+* 算术运算 中的类型转换：1 基本就是先转换为高位数据类型，再参加运算，结果也是最高位的数据类型；2 byte short char运算会转换为Int；
+
+（1）如操作数之一为double，则另一个操作数先被转化为double，再参与算术运算。 
+
+（2）如两操作数均不为double，当操作数之一为float，则另一操作数先被转换为float，再参与运算。 
+
+（3）如两操作数均不为double或float，当操作数之一为long，、则另一操作数先被转换为long，再参与算术运算。 
+
+（4）如两操作数均不为double、float或long，则两操作数先被转换为int，再参与运算。
+
+特殊： 
+
+（1）如采用+=、*=等缩略形式的运算符，系统会自动强制将运算结果转换为目标变量的类型。
+
+ (2)  当运算符为自动递增运算符（++）或自动递减运算符（--）时，如果操作数为byte，short或char类型不发生改变；
+
+
+---
+
 ### 运算符号
 * 1、运算符号：+ - * / %
 >* int整数类型祥运算时，结果也为整数。
@@ -159,7 +246,7 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
 >>* 逻辑运算符  || 或  一真则真; && 与  一假则假;  ! 非  颠倒是非
 >>* | 暗位或   需要两个或多个条件都为真 才可以通过
 >>* != 不等于  ==等于   =赋值
->* 条件运算符   三目运算符
+>* 条件运算符   三目运算符 
 
 	boolean n = (4 < 2) ? true :false;
 	System.out.println(n);
@@ -176,22 +263,33 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
   !|非
  ` *、/、% `|乘法、除法、求余运算
   +、-|二元加法乘法
-  < <+ > >+|比较操作符
-  == !=|相等操作符
+  < 、 <+ 、>、 >+|比较操作符
+  == 、!=|相等操作符
   ^|异或
   &&|条件与
   `||`|条件或
- ` = += -+ *+ /+ %=`|赋值操作符
+ ` = 、+=、 -+ 、*+ 、/+、 %=`|赋值操作符
+ 
 > 按操作数多少划分
+
 	一元操作符 > 二元操作符 > 三元操作符
+	
 > 按运算类型划分
+
 	算术运算符 > 关系运算符 > 逻辑运算符 > 赋值运算符
+	
 > 尽量多的使用括号
+
 	括号优先级别最高
+	
 > 一元运算符，如` -、++、- -和 ! `
+
 > 算术运算符，如` *、/、%、+ 和 -`
+
 > 关系运算符，如 `>、>=、<、<=、== 和 != `
+
 > 逻辑运算符，如` &、^、|、&&、|| `
+
 > 条件运算符和赋值运算符，如 `? ：、=、*=、/=、+= 和 -= `
 
 * 4、&和&&，|和||的用法区别:
@@ -220,7 +318,8 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
 	如（2）：逻辑表达式： a>b || c>d
 		假设a>b 为true，那么后半部分表达式将被“短路”;
 
- 
+
+--- 
   
 ### 避开关键字
 * 类、方法、变量命名规则：
@@ -234,6 +333,9 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
 ```
 >* pd:转义字符：\   例如：`\\` 输出一个 `\` ;   `\"` 输出一个 `"`
 
+
+---
+
 ### 引用数据类型
 除上述八种primitive主数据类型之外，其余类型都称之为引用数据类型；引用数据类型，顾名思义就是：`引用`，当一个对象赋值给一个引用变量时，那么，则表明这个引用变量是指向这个对象的；一个对象可以有多个引用；一个引用同一时刻，则只能指向一个对象；
 >* 事实上没有对象变量这样的东西存在
@@ -241,16 +343,554 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
 >* 对于引用变量保存的是存取对象的方法
 >* 它并不是对象的容器，而是类似指向对象的指针，或者可以说是地址，但在Java中文名不会也不该知道引用变量中实际装载的是什么，它只是用来代表单一的对象。只有Java虚拟机才会知道如何使用引用来取得该对象。
 
+
+---
+
 ### 数组
-* 定义：数组是一种数据结构，用来存储`同一类型`值的集合。在声明数组变量时，需要指出数组类型（数组元素类型紧跟[]和数组变量的名字。
-	eg:        int[] a = new int[100];）
+#### 一维数组
+* 定义：数组是一种数据结构，用来存储`同一类型`值的集合,一组变量的集合，属于引用数据类型。在声明数组变量时，需要指出数组类型（数组元素类型紧跟[]和数组变量的名字）。
+```
+1、声明并开辟数组：
+	数组类型 数组名称[] = new 数组类型[长度];
+	数组类型[] 数组名称  = new 数组类型[长度];
+在定义数组的同时进行赋值：
+	数组类型[] 数组名称  = new 数组类型[]{值，值，值.......};
+eg: 定义类型为Int长度为100的数组
+	int[] a = new int[100];
+当数组开辟空间之后，就可以采用`数组名称[下标|索引]`的方式进行访问,数组长度为`数组名称.length-1`。
+如果超出数组长度，就会报错：数组下标越界异常:ArrayIndexOutOfBoundsException。（一维数组一旦定义，长度固定。）
+
+以上给出的数组定义结构使用的是动态初始化的方式。
+	
+2、分步完成：
+	声明数组：数组类型 数组名称 [] = null;
+	开辟数组：数组名称 = new 数组类型[长度];
+```
+
+* 初始化
+其实在上面的案例中已经涉及到了数组的初始化，数组的初始化分为静态初始化、动态初始化以及默认初始化 
+注：个人比较喜欢简化方法
+
+* 动态初始化就是在创建过程中只是声明数组的大小，而由系统为数组分配值
+```
+int [] arrNum = new int[5];
+int [] arrNum = new int[5];//简化方式
+1
+2
+3
+```
+
+* 静态初始化　就是由程序员显式的指定每个数组元素的值
+```
+int [] arrNum1  = new int[]{1,2,3,4,5};
+int[] arrNum1 = {1,2,3,4,5};//简化方式
+```
+
+* 数组遍历：
+```
+for循环：
+	int[] a = {1,2,5,6,49};
+	for(int i=0;i<a.length;i++){
+		syso(a[i]);
+	}
+更多练习在[java练习题](#https://github.com/ZHoodLum/JavaPractice/blob/master/JAVA%E7%BB%83%E4%B9%A0%E9%A2%98.md)，二维数组排序等。
+```
+
+* 总结：
 >* 数组中每个元素都是变量,也可以说是8中primitive主数据类型变量中的一种，不然就是引用变量。
 >* 创建一个数字数组时，所有元素都初始化为0；一旦创建数组，就不能改变它的大小（尽管可以改变每一个数组元素）。
 >* boolean数组的元素会初始化为`flase`,对象数组的元素则初始化为一个特殊值`null`,这表示数组还未存放任何对象。
 >* java.lang.ArrayIndexOutOfBoundsException :异常而终止执行，报这种错误，我们称之为`数组下标越界`。
 >* 若想获得数组中的元素个数，可以使用array`.length`。
 
+
+#### 二维数组
+二维数组本质上是以数组作为数组元素的数组，即“数组的数组”，类型说明符 数组名[常量表达式][常量表达式]。二维数组又称为矩阵，行列数相等的矩阵称为方阵。对称矩阵a[i][j] = a[j][i]，对角矩阵：n阶方阵主对角线外都是零元素。
+```
+动态初始化：数组类型 数组名称[][] = new 数组类型[行的个数][列的个数];
+静态初始化：数组类型 数组名称[][] = new 数组类型[行的个数][列的个数]{
+								 {值，值，值...}，
+								 {值，值，值...}，
+								 {值，值，值...}.......
+							        };
+实际上就是多个一维数组组合而成的数组。
+```
+
+* 二维数组的遍历：
+```
+int data [][] = new int[][] {
+				{1,2,3},
+				{2,3,4,5},
+				{9,4,7,8}
+			    };
+//外层循环控制数组的数据行内容
+for(int x =0;x<data.length;x++){
+	for(int y=0;y<data[x].length;y++){
+		system.out.print(data[x][y]+"/t");
+	}
+	syso;
+}
+```
+
+#### 数组与方法参数的传递
+在之前的所有方法传递的数据几乎都是基本数据类型，那么除了基本数据类型之外，还可以传递数组，传递数组，一定要观察内存分配图。
+注：冒泡排序
+
+#### 实现一维数组的转置
+（首位交换）
+```
+范例：
+原始数组：1，2，3，4，5，6，7，8
+转置后的数组：8，7，6，5，4，3，2，1
+```
+
+实现转置思路：
+* 定义一个新的数组，将原始数组按照倒序的方式插入新的数组之中，虽有改变原始数组的引用。
+```
+public class ArrayDemo{
+	public static void main (String args[]){
+		int data[] = new int[]{1,2,3,4,5,6,7,8};
+		//定义一个新的数组,数组长度与原始数组相同
+		int temp[] = new int[data.length];
+		//对于新的数组按照索引由小到大的顺序循环输出
+		for(int x=0;x<temp.length;x++){
+			temp[x] = data[foot];
+			foot--;
+		}
+		//让data等于temp，而原始数据就会成为垃圾（被回收）
+		data = temp;
+		println(data);
+	}
+	
+	//专门定义一个输出的功能方法
+	public static void print(int temp[]){
+		for(int x=0;x<temp.length;x++){
+			System.out.print(temp[x]+'、');
+		}
+		System.out.println();
+	}
+}
+```
+上面的操作达到了转置要求，但是有垃圾。建议不采用。
+
+* 利用算法，在一个数组上完成转置操作
+```
+原始数组：1，2，3，4，5，6，7，8
+第一次转置：`8`，2，3，4，5，6，7，`1`
+第二次转置：8，`7`，3，4，5，6，`2`，1
+第三次转置：8，7，`6`，4，5，`3`，2，1
+第四次转置：8，7，6，`5`，`4`，3，2，1
+由此可以判断出，它是由索引控制的，一个向上加的索引，一个向下减的索引。与数组长度无关！！
+
+转换次数=数组长度/2
+
+实现方法：
+public class ArrayDemo{
+	public static void main (String args[]){
+		int data[] = new int[]{1,2,3,4,5,6,7,8};
+		reverse(data);
+		println(data);
+	}
+	//专门实现数组的转置操作
+	public static void reverse(int arr[]){
+		//转置次数
+		int len = arr.length/2;
+		//头部索引
+		int head = 0;
+		//尾部索引
+		int tail = arr.length-1;
+		for(int x=0;x<len;x++){
+			int temp = arr[head];
+			arr[head] = arr[tail];
+			arr[tail] = temp;
+			head++;
+			tail--;
+		}
+	}
+	//专门定义一个输出的功能方法
+	public static void print(int temp[]){
+		for(int x=0;x<temp.length;x++){
+			System.out.print(temp[x]+'、');
+		}
+		System.out.println();
+	}
+}
+```
+
+#### 实现二维数组的转置
+前提：行跟列完全相同得到数组
+```
+原始数组：
+1 2 3
+4 5 6
+7 8 9
+
+第一次转置：
+1 `4` 3
+`2` 5 6
+7 8 9
+第二次转置：
+1 4 `7` 
+2 5 6
+`9` 8 9
+第三次转置：
+1 4 7 
+2 5 `8` 
+3 `6` 9
+
+观察转置的数组，中间对角线没有变，而且变得数据行数和列数是相同的。
+
+实现方法：
+public class ArrayDemo{
+	public static void main (String args[]){
+		int data[][] = new int[][]{
+					{1,2,3},
+					{4,5,6},
+					{7,8,9}
+					  };
+		reverse(data);
+		println(data);
+	}
+	//专门实现数组的转置操作
+	public static void reverse(int arr[][]){
+		for(int x=0;x<arr.length;x++){
+			for(int y=x;y<arr[x].length;y++){
+				//行和列相同，进行交换
+				if(x != y ){
+					int temp = arr[x][y];
+					arr[x][y] = arr[y][x];
+					arr[y][x] = temp;
+				}
+			}
+		}
+	}
+	//专门定义一个输出的功能方法
+	public static void print(int temp[][]){
+		for(int x=0;x<temp.length;x++){
+			for(int y=0;y<temp[x].length;y++){
+				System.out.print(temp[x][y]+'、');
+			}
+		}
+		System.out.println();
+	}
+}
+```
+
+
+#### 匿名数组
+
+实现方法：
+```
+public class ArrayDemo{
+	public static void main (String args[]){
+		int data[] = init();
+		print(data);
+	}
+	//匿名数组
+	public staticint[] init(){
+		//重点关注方法的返回内容
+		return new int[]{1,2,3,4,5};
+	}
+	public static void print(int temp[]){
+		for(int x=0;x<temp.length;x++){
+			System.out.print(temp[x]+'、');
+		}
+		System.out.println();
+	}
+}
+```
+注：
+
+init()方法返回的是一个数组，数组可以直接使用length取值长度，返回值可以直接拿来进行操作。
+
+### 数组拷贝
+System.arraycopy(原数组名称，原数组拷贝开始，目标数组名称，目标数组拷贝开始索引，长度);
+```
+数组A：1，2，3，4，5，6，7，8，9
+数组B：11，22，33，44，55，66，77，88
+要求拷贝后的数组B：11，22，33，5，6，7，77，88
+```
+
+实现方法：
+```
+public class ArrayDemo{
+	public static void main (String args[]){
+		int A[] =  new int[]{1，2，3，4，5，6，7，8，9};
+		int B[] =  new int[]{11，22，33，44，55，66，77，88};
+		System.arraycopy(A,4,B,2,3);
+	}
+	public static void print(int temp[]){
+		for(int x=0;x<temp.length;x++){
+			System.out.print(temp[x]+'、');
+		}
+		System.out.println();
+	}
+}
+```
+
+### 数组的排序
+java.util.Arrays.sort(数组名称)------------>升序
+
+冒泡排序等等。
+
+
+
 ---
+
+### 对象数组的概念
+数组是引用类型，类也是引用类型，如果是对象数组的话就表示一个引用类型嵌套了其他的引用类型，之前使用的数组都属于基本数据类型的数组，但是所有引用数据类型也同样可以定义数组，这样的数组称之为对象数组。
+
+* 动态初始化：开辟对象数组的内容都是null值
+>* 声明并开辟对象数组： 类名称 对象数组名称[] = new 类名称[长度];
+>* 分布完成：
+>>* 声明对象数组： 类名称 对象数组名称[] = null;
+>>* 开辟对象数组： 对象数组名称  = new 类名称[长度];
+
+* 静态初始化：
+>* 类名称 对象数组名称[] = new 类名称[]{实例化对象，实例化对象.......};
+```
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter、setter、无参构造方法省略
+	public Book(String t,double p){
+		title = t;
+		price = p;
+	}
+	public String getInfo(0{
+		return "书名"+title+",价格"+price;
+	}
+}
+//实现
+public class ArrayDemo{
+	public static void main (String args[]){
+	//两种数组实例化的方式，使用一种即可。
+		//动态实例化数组
+		Book books[] = new Book[3];
+		book[0] = new Book("Java",79.2);
+		book[1] = new Book("PHP",59.2);
+		book[2] = new Book("Android",75.2);
+		//静态实例化数组
+		Book books[] = new Book[]{
+			new Book("Java",79.2);
+			new Book("PHP",59.2);
+			new Book("Android",75.2);
+		}
+		//输出数组
+		for(x=0;x<books.length;x++){
+			Ststem.out.println(books[x]);
+		}
+
+	}
+}
+```
+对象数组就是将多个对象交给数组进行统一管理，但是数组的长度一旦定义就是固定的，所以限制的在开发中的使用。
+
+---
+
+### 字符串类
+
+### String类的特点
+#### 两种实例化的方式
+```
+直接赋值：
+String 变量 = "字符串";
+
+以上的代码并没有使用关键字new对象
+构造方法：public String(String str); 在构造器中依然要接受一个本类对象。
+
+利用构造方法实例化：
+String str = new String("Hello world!");
+```
+String类有两种形式，建议采用第二种方式进行实例化。
+
+#### 字符串的比较
+两种比较方式 == 和equals
+```
+String stra = "hello";
+String strb = new String("hello");
+String strc = strb;
+syso(stra == strb); ----------->false
+syso(stra == strc); ----------->false
+syso(strb == strc); ----------->true
+```
+使用双等号，就要联系到内存关系，栈内存和堆内存。字符串的`==`确实进行的比较，但并不是比较字符串内容的比较，而是比较内存地址的数值。
+所以：==是属于数值比较，比较的是内存地址。
+
+
+那么，进行字符串内容比较要用到equals.
+```
+String stra = "hello";
+String strb = new String("hello");
+String strc = strb;
+syso(stra.equals(strb));----------->true
+syso(stra.equals(strc));----------->true
+syso(strb.equals(strc));----------->true
+```
+所以说，比较字符串内容的时候，千万不要使用==，要使用equals进行判断。
+
+
+#### 字符串常量就是String的匿名对象
+实际上任何语言没有提供字符串这一概念，很多语言里都是使用字符串数组来描述字符串的概念。在JAVA里也没有字符串的概念，所有开发都不可能离开字符串，在JAVA中字符串不属于基本数据类型，他将字符串作为String类的匿名对象的形式。匿名对象可以调用类中的定义方法的.
+```
+String stra = "hello";
+syso("hello".equals());--------->true
+匿名对象保存在堆内存当中
+所谓的直接赋值就是相当于将一个匿名对象设置了一个名字，匿名对象是由系统自动生成的，不再由用户自己直接创建。
+```
+
+为了避免空指向异常的出现，可以将字符串写在前面调用
+```
+String stra = "hello";----假设这个内容由用户输入的
+if(stra.equals("hello")){
+	syso("Hello World!!!");
+}
+--------------------->输出Hello World!!!
+
+但是如果由于用户输入错误，或者输入为空：
+String stra = null;----假设这个内容由用户输入的
+if(stra.equals("hello")){
+	syso("Hello World!!!");
+}
+--------------------->输出报错：java.lang.NullPointerException,空指向异常
+```
+
+##### 但是如果换一种方式输入：将输入的字符串放在equals的前面，即使用户输入错误，也不会报空指向异常的错误。这个euqals处理了null，永远不可嗯那个出现空指向异常。在开发的过程用，一定要使用这种方法！！！！！！！
+```
+String stra = "hello";----假设这个内容由用户输入的
+if("hello".equals(stra)){
+	syso("Hello World!!!");
+}
+```
+
+#### 字符串的替换
+字符串的替换后，依然是字符串，例如：替换手机号
+```
+replaceFirst 替换首个符合条件的内容
+replaceAll 新的内容替换掉全部旧的内容
+
+范例：
+String str = "helloworld";
+String resultA = str.replaceAll("1","_");
+String resultB = str.repalceFirst("1","_");
+syso(resultA);------------- he__owor_d
+syso(resultB);--------------he_loworld
+```
+
+#### 字符串的截取
+用于截取部分字符串
+```
+public String `substring(int beginIndex)`
+substring(int beginIndex)---->从指定索引截取到结尾
+
+public String `substring(int beginIndex,int endIndex)`
+substring(int beginIndex,int endIndex)---->从指定索引截取到结束索引，截取部分字符
+
+范例：
+String str = "helloworld";
+String resultA = str.substring(5);
+String resultB = str.substring(0,5);
+syso(resultA);------------- world
+syso(resultB);--------------hello
+```
+
+#### 字符串的拆分
+将一个完整的字符串，按照指定的内容拆分为字符串数组(对象数组，String对象)。
+```
+public String[] split(String regex)--------------->按照指定字符串进行全部拆分
+
+String str = "hello world nihao mldn";
+String result[] = str.split(" ");
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+--------hello
+	world 
+	nihao
+	mldn
+	
+但是如果在拆分的时候写了一个空的字符串，就会按照每一个字符进行拆分
+
+
+public String[] split(String regex int limit)----------->按照指定字符串进行部分拆分，由limit决定的(如果拆分的结果很多)，即前面拆，后面不拆。
+
+String str = "hello world nihao mldn";
+String result[] = str.split(" "，2);
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+limit=2的时候----->hello
+     		   world nihao mldn
+limit=3的时候----->hello
+     		   world
+		   nihao mldn
+		   
+如果String str = "helloworldnihaomldn";
+那么输出的结果是：limit=3的时候----->helloworldnihaomldn，字符串没有进行拆分，不够拆分的资格。
+```
+
+那么下面我们来拆分ip4v的地址，根据`.`进行拆分
+```
+String str = "192.168.5.36";
+String result[] = str.split(" ");
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+输出结果：啥都没有，无法进行拆分
+```
+
+因为`.`无法进行拆分，那么我们在想一想Java中的通配符
+```
+String str = "192.168.5.36";
+String result[] = str.split("\\.");
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+输出结果：
+192
+168
+5
+36
+```
+##### 如果是一些敏感的字符，无法进行拆分的，正则标记，如果遇见无法拆分的字符串，那么我们就是用`\\`通配符进行拆分。
+
+
+根据`|`进行拆分
+```
+String str = "张三：20|李四：30|王五：22";
+String result[] = str.split("\\|");
+for(int x=0;x<result.length;x++){
+	syso(result[x]);
+}
+输出：
+张三：20
+李四：30
+王五：22
+```
+
+根据`|`进行拆分后，再根据`:`进行拆分
+```
+String str = "张三：20|李四：30|王五：22";
+String result[] = str.split("\\|");
+for(int x=0;x<result.length;x++){
+	String temp[] = result[x].split(":");
+	syso("姓名："+temp[0]+",年龄："temp[1]+);
+}
+输出：
+姓名：张三 年龄：20
+姓名：李四 年龄：30
+姓名：王五 年龄：22
+```
+
+
+
+---
+---
+---
+
+对象与类
+--
 
 方法
 --
@@ -298,6 +938,7 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
 4、方法重载（overloading）指的是`方法名称相同`，`参数类型`及`个数`不同，同时尽量保证`返回值类型相同`。
 
 5、递归调用需要明确`设置一个结束条件`，否则就会出现死循环，如果处理数据量过大，就有可能出现`内存溢出`。
+
 ### 方法重载
 方法的重载（overload），方法的重载就是在同一个类中允许同时存在一个以上同名的方法
 > 方法重载的规则
@@ -306,9 +947,6 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
 >* 方法的返回值类型可以相同，也可以不同
 
 ---
-
-对象与类
---
  
 ### 类
 * 什么是类
@@ -347,6 +985,9 @@ primitive主数据类型(基本数据类型)包括八种：`boolean`,`char`, `by
 * 5、当使用没有实例化对象，在程序运行时，会出现“NullPointeException”空指针指向异常，此类异常只要是引用数据类型都有可能出现。
 >* 注：String 首字母大写的都是类名称，类名称都是引用类型，引用类型的默认值是空。
 >*     double是基本数据类型，默认值是0.0
+
+
+---
 
 Java面向对象的三大特征：
 --
@@ -452,6 +1093,9 @@ Java面向对象的三大特征：
 
 Java继承是面向对象的最显著的一个特征。继承是从已有的类中派生出新的类，新的类能吸收已有类的数据属性和行为，并能扩展新的能力。JAVA不支持多继承，单继承使JAVA的继承关系很简单，一个类只能有一个父类，易于管理程序，父类是子类的一般化，子类是父类的特化（具体化)继承所表达的就是一种对象类之间的相交关系，它使得某类对象可以继承另外一类对象的数据成员和成员方法。若类B继承类A，则属于B的对象便具有类A的全部或部分性质(数据属性)和功能(操作)，我们称被继承的类A为基类、父类或超类，而称继承类B为A的派生类或子类。继承避免了对一般类和特殊类之间共同特征进行的重复描述。同时，通过继承可以清晰地表达每一项共同特征所适应的概念范围在一般类中定义的属性和操作适应于这个类本身以及它以下的每一层特殊类的全部对象。运用继承原则使得系统模型比较简练也比较清晰。
 
+
+---
+
 #### 2、Java继承的特征：继承（inheritance）
 --
 > 也称泛化，继承性是子类自动共享父类属性和方法的机制，在定义和实现一个类的时候，可以在一个已经存在的类的基础之上来进行，把这个已经存在的类所定义的内容作为自己的内容，并加入自己若干新的内容
@@ -504,6 +1148,9 @@ public class JiCheng {
 }
 ```
 
+
+---
+
 ### 多态
 #### 特征：
 * 指同一个命名可具有不同的语义
@@ -532,6 +1179,8 @@ public class JiCheng {
 
 > 2）.Finalize() ：当某个对象被系统收集为无用信息的时候,finalize()将被自动调用,但是jvm不保证finalize()一定被调用,也就是说,finalize()的调用是不确定的,这也就是为什么sun不提倡使用finalize()的原因
 
+
+---
 
 ### 垃圾回收的两种机制详解：
 * 1、垃圾回收（Garbage Collection，GC），JDK7以后使用G1（Garbage First）机制：
@@ -593,15 +1242,19 @@ public class JiCheng {
 ### 构造方法
 * 1、构造方法（构造器，Constructor）
 > 没有返回值  与类名相同  有重载方法 this调用
-
 > 构造方法也是方法，但是它是特殊的方法而已
 > 所有的对象都是通过构造器来创建的
 
 * 创建对象：类名   对象名 = new   构造方法（）;
-* 构造器（构造方法/构造器，Constructor）特点：
-> 构造方法名必须与类相同的名称
-> 不含返回值类型，也没有void
-> 不能在方法中用return语句返回一个值
+
+**构造器（构造方法/构造器，Constructor）特点：**
+```
+* 构造方法在对象实例化之后只调用一次，而普通方法再对象实例化之后可以多次调用
+* 构造方法没有返回值声明
+* 构造方法名必须与类相同的名称
+* 不含返回值类型，也没有void
+* 不能在方法中用return语句返回一个值
+```
 
 * 2、构造方法作用：
 
@@ -634,10 +1287,10 @@ public class Employee{
 }
 
 ```
-* 4、在构造方法中，可以使用this或super调用其他的构造方法
+
+#### 在构造方法中，可以使用this或super调用变量，参数
 
 * this super只能出现在子类构造器中，且必须是第一行。若既没有this也没有super,则默认super();
-
 * 创建子类时，必须调用父类构造器。	
 
 >* super()
@@ -645,11 +1298,255 @@ public class Employee{
 >> 只能出现在子类的构造器中，且必须是第一行
 >> super()中的参数，决定了调用父类哪个构造器
 >> 如果子类构造器中没有出现super，那么编译器会默认加上super()，即调用父类的空构造器，如果父类没有空构造器，编译器提示错误。
+
 >* this()
 >> 作用：调用本类的构造器
 >> 只能写在构造器的第一行
 >> 在同一个构造器中super()和this()不能同时出现
 
+**接下来用程序说话**
+```
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter setter
+	public Book(String t,double p){
+		title = t;
+		price = p;
+	}
+	public String getInfo(){
+		 return "书名：" +this.title+",价格："+price;
+	}
+}
+
+//测试
+public class TestDemo{
+	public static void main(String args[]){
+		Book book = new Boook("java开发",89);
+		syso(book.getInfo());
+	}
+}
+输出：书名：java开发，价格：89
+```
+
+**接下来我们研究一下这个方法**
+下面这个使用的是一个构造方法，而这个构造方法主要功能为title,price两个属性所使用，但是方法中的参数名称不好，而构造方法中的参数目的是为了类中的属性初始化，那么我们最好的做法就是将参数设置为属性名称 ，这样做事最好的。
+```
+那么我们将参数名称更改为对应的属性名，看一下结果
+public Book(String title,double price){
+	title = title;
+	price = price;
+}
+输出：书名：null,价格：0.0
+```
+
+修改代码后，参数的作用是合理了，但是最终在构造方法传递的参数内容并没有传递到属性之中，在此构造方法中由局部变量，也有全部变量。如果现在属性名称与参数名称出现了重名的问题，没有加入任何限制，它都会取最近的“{ }”内的变量名称。所以在这种情况下，为了找到明确的变量，就要使用到`this`了。
+```
+修改代码，使用this
+public Book(String title,double price){
+	this.title = title;
+	this.price = price;
+}
+输出：书名：java开发，价格：89
+```
+这样一来，this.title和this.price就会取类中的参数变量了。
+**以后的程序开发中，只要访问类中的属性，前面最好加上“this”关键字。**
+
+---
+
+**在构造方法中，也可以使用this或super调用其他的构造方法**
+**一个类里面方法除了普通方法之外还会包含构造方法，这个时候表示多个构造方法之间要进行互相调用，而使用的形式` this(参数，参数) `**
+**代码说话，为什么需要构造方法间的互相调用**
+```
+定义一个book类里面三个构造方法，要求不管调用哪一个构造方法都需要输出一行提示信息“新的Book类对象产生”
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter setter
+	public Book(){
+		syso("新的Book类对象产生");//把这句话想象成多行代码
+	}
+	public Book(String title){
+		this.title = title;
+		syso("新的Book类对象产生");
+	}
+	public Book(String title,double price){
+		syso("新的Book类对象产生");
+		this.title = title;
+		this.price = price;
+	}
+	public String getInfo(){
+		return "书名：" +this.title+",价格："+price;
+	}
+}
+
+//测试
+public class TestDemo{
+	public static void main(String args[]){
+		Book book = new Boook("java开发",89);
+		syso(book.getInfo());
+	}
+}
+```
+
+此时的代码出现大量重复代码，怎么消除消除重复代码呢？
+
+检查方法中有哪些重复，并且可以替换的代码。
+
+修改代码：两个有参构造方法中使用this(),来调用无参、无参构造方法。
+```
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter setter
+	public Book(){
+		syso("新的Book类对象产生");//把这句话想象成多行代码
+	}
+	public Book(String title){
+		this.();//调用本类的无参构造方法
+		this.title = title;
+	}
+	public Book(String title,double price){
+		this.(title);//调用本类的单参构造
+		this.price = price;
+	}
+	public String getInfo(){
+		return "书名：" +this.title+",价格："+price;
+	}
+}
+
+//测试
+public class TestDemo{
+	public static void main(String args[]){
+		Book book = new Boook("java开发",89);
+		syso(book.getInfo());
+	}
+}
+```
+**上面实现了构造方法间的互相调用，但是依然会存在一些限制**
+* 使用this()调用构造方法形式的代码只能放在构造方法的首行，放在构造方法的第一行。
+* 构造方法能调用普通方法，但是普通方法无法调用构造方法。
+* 进行构造方法互相调用的时候，一定要保留调用的出口。
+**下面观察一下错误代码：**
+```
+//Book类
+class Book{
+	private String title;
+	private double price;
+	//getter setter
+	public Book(){
+		this.("HELLO",1.1);//调用双参构造
+		syso("新的Book类对象产生");//把这句话想象成多行代码
+	}
+	public Book(String title){
+		this.();//调用本类的无参构造方法
+		this.title = title;
+	}
+	public Book(String title,double price){
+		this.(title);//调用本类的单参构造
+		this.price = price;
+	}
+	public String getInfo(){
+		return "书名：" +this.title+",价格："+price;
+	}
+}
+
+//测试
+public class TestDemo{
+	public static void main(String args[]){
+		Book book = new Boook("java开发",89);
+		syso(book.getInfo());
+	}
+}
+```
+此时调用语句的确是放在了构造方法首行。但是编译之后，依然还会报错**提示错误：递归构造器调用**。所以说要保诚有一个出口！！
+
+也就是说再使用`this()`**互相调用构造的时候请至少保留一个构造没有被使用this()调用其他构造的情况。**
+
+#### 表示当前对象
+所谓的当前对象就是当前正在调用类中的方法的对象。
+```
+public static void main(String args[]){
+	Book booka = new Book();
+	syso("booka"+booka);
+	
+	Book bookb = new Book();
+	syso("bookb"+bookb);
+}
+输出：
+booka = Book@659e0bfd
+-----------------------------
+bookb = Book@2a139a55
+两个关键字，表示开辟了两块对内存空间，存储地址也不同，输出的是存储地址。
+```
+
+接下来使用this:
+```
+class Book{
+	public void print(){
+		syso("this"+this);
+	}
+}
+public static void main(String args[]){
+	Book booka = new Book();
+	syso("booka"+booka);
+	syso(this.booka);
+	
+	Book bookb = new Book();
+	syso("bookb"+bookb);
+	syso(this.bookb);
+}
+输出：
+booka = Book@659e0bfd
+this = Book@659e0bfd
+-------------------------------------
+bookb = Book@2a139a55
+this = Book@2a139a55
+
+此时的this，那个对象调用了print方法，this就自动于此对象指向同一块内存地址，this就是调用当前方法的对象。
+```
+之前this属性，实际上就是当前对象中的属性，一定是堆内存保存的内容。
+
+**思考题**
+```
+//类A
+class A{
+	private B b;
+	public A(){	//2、执行A类的构造
+		//3、为B类对象b进行实例化
+		this.b = new B(this); 	//4、这里的this就是temp
+		
+		this.b.get(); 	//7、调用B类的get方法
+	}
+	public void print(){	 // 10、调用print输出
+		syso("Hello World!!");
+	}
+}
+//类B
+class B{
+	private A a;
+	public B(A a){	//5、参数A就是temp
+		this.a = a;	//6、保存A对象 ，实际上就是保存temp
+	}
+	public void get(){ 	//8、调用此方法
+		this.a.print(); 	// 9、this.a = temp
+	}
+}
+//测试类
+public class TestDemo{
+	public static void main(String agrs[]){
+		//1、实例化A类对象，要调用A类的无参构造，下面的代码应该从右到左执行的
+		A temp = new A();
+	}
+}
+输出：
+Hello World!!
+```
+
+---
 
 ### 静态static关键字
 * static关键字可以修饰的元素
@@ -664,6 +1561,216 @@ public class Employee{
 > 不需要实例化，可以直接访问，称为静态方法或类方法
 * static修饰语句块：
 > 类中由static关键字修饰的，不包含在任何方法体中的代码块，称为静态代码块
+
+
+### 静态属性
+* 用static修饰的属性，它们在类被载入时创建，只要类存在，static变量就存在。
+> 静态变量和非静态变量的区别是：静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。而非静态变量是对象所拥有的，在创建对象的时候被初始化，存在多个副本，各个对象拥有的副本互不影响。
+
+* 两种方式访问：
+> 直接访问：类名.属性；
+> 实例化后访问：对象名.属性 （不建议使用）
+```
+class Book{
+	private String title;
+	private double price;
+	
+	String pub="清华大学出版社";
+	public Book(String title,double price){
+		this.title = title;
+		this.price = price;
+	}
+	public String getInfo(){
+		return this.title+","+this.price+","+this.pub;
+	}
+}
+
+public class TestDemo{
+	public static void main(String agrs[]){
+		Book ba = new Book("java",10.2);
+		Book bb = new Book("cc",11.2);
+		Book bc = new Book("aa",12.2);
+		//修改了一个属性内容
+		ba.pub = "北京大学";
+		syso(ba.getInfo());
+		syso(bb.getInfo());
+		syso(bc.getInfo());
+	}
+}
+输出：
+java,10.2,北京大学
+cc,10.2,清华大学出版社
+aa,10.2,清华大学出版社
+```
+上面的这个程序：如果现在出现了100W个Book对象，但是要求所有的对象名称更换。那么就要修改100W个对象内容，所以如果将属性定义为普通属性，最终结果就是每一块对内存空间都将要保存各自的信息，这种的结果是不方便的。
+进一步将，既然所有的pub内容都应该是一样的，那么就应该将其定义一个共有的同一pub属性，那么这种情况下，就可以使用static来定义属性。
+
+```
+class Book{
+	private String title;
+	private double price;
+	
+	//这里使用static修饰属性
+	static String pub="清华大学出版社";
+	public Book(String title,double price){
+		this.title = title;
+		this.price = price;
+	}
+	public String getInfo(){
+		return this.title+","+this.price+","+this.pub;
+	}
+}
+
+public class TestDemo{
+	public static void main(String agrs[]){
+		Book ba = new Book("java",10.2);
+		Book bb = new Book("cc",11.2);
+		Book bc = new Book("aa",12.2);
+		//修改了一个属性内容
+		ba.pub = "北京大学";
+		syso(ba.getInfo());
+		syso(bb.getInfo());
+		syso(bc.getInfo());
+	}
+}
+输出：
+java,10.2,北京大学
+cc,10.2,北京大学
+aa,10.2,北京大学
+```
+一旦再属性定义上，只要有一个对象修改了属性内容之后，所有的对象属性都会修改。
+既然static是一个公共的概念，但是由一个对象可以修改所有对象的属性不太合适，所以正确的做法就是所有对象的公共的代表来进行访问，那么就是类，所以利用static定义的属性可以由类直接调用属性的。
+```
+//修改代码
+Book.pub = "北京大学";
+```
+
+**Static与非Static区别：**
+```
+所有非Static属性必须产生实例化对象之后才可以访问，但是Static不受实例化的控制，也就是说，在没有产生实例化对象的情况下，依然可以使用Static属性。
+```
+
+**Static特征：**
+```
+虽然定义在类结构里面，但是并不受对象的控制，是独立于类存在的。
+```
+
+**那么我们什么时候使用Static属性，什么时候不使用Static属性呢？**
+```
+在编写类的过程中，你所选择首要的修饰符一定不是Static(95%情况下不写)。如果需要描述共享信息的情况下，使用Static(可以方便集体修改，可以不重复开辟内存空间的)。
+```
+
+---
+
+### 静态方法
+* 静态方法不需要实例化，可以直接访问，访问方式：
+> 直接访问：类名.方法名()
+> 实例化后访问：对象名.方法名() （不建议使用）
+
+```
+class Book{
+	private String title;
+	private double price;
+	
+	//这里使用static修饰属性
+	private static String pub="清华大学出版社";
+	public Book(String title,double price){
+		this.title = title;
+		this.price = price;
+	}
+	public static void setPub(String p){
+		pub = p;
+	}
+	public String getInfo(){
+		return this.title+","+this.price+","+this.pub;
+	}
+}
+
+public class TestDemo{
+	public static void main(String agrs[]){
+		//在没有对象产生的时候进行调用操作
+		Book.setPub("北京大学");
+		Book ba = new Book("java",10.2);
+		Book bb = new Book("cc",11.2);
+		Book bc = new Book("aa",12.2);
+
+		syso(ba.getInfo());
+		syso(bb.getInfo());
+		syso(bc.getInfo());
+	}
+}
+输出：
+java,10.2,北京大学
+cc,10.2,北京大学
+aa,10.2,北京大学
+```
+发现Static定义的属性和方法都不受实例化对象控制，也就说属于独立的类属性。
+
+但是这个时候就会出现一个麻烦的问题：此时的类中的方法变成了两组：Static方法、非Static方法，两组方法间的访问也将受到限制：
+* **static方法不能够直接访问属性或者方法，只能够调用static属性或方法。**
+* 为什么会存在限制问题呢？
+>* 所有的非static定义结构，必须在类已经明确的产生了实例化对象才会分配空间，才可以使用。
+>* 所有的static定义的结构，不受实例化对象的控制，即：可以在没有实例化对象的时候访问。
+
+* **非static方法可以访问static的属性或方法，不说任何的限制。**
+
+**解决问题**
+如果一个方法定义在主类中，并且由主方法调用
+```
+public static 返回值类型 方法名称(参数类型 参数，...){
+	[return[返回值];]
+}
+```
+
+接下来编写类的时候，发现方法定义的格式改变了（方法由对象调用）
+```
+public 返回值类型 方法名称(参数类型 参数，...){
+	[return[返回值];]
+}
+```
+
+观察如下代码解决问题：
+```
+public class TestDemo{
+	pubblic static void main(String args[]){
+		fun();
+	}
+	public static void fun(){
+		syso("Hello world!!");
+	}
+}
+输出：Hello world!!
+```
+如果此时fun()方法取消了static修饰符 ，那么就成为了非static方法。所有的非static方法必须由对象调用，此时static方法如果想要使用非static操作，必须产生对象才能进行调用。
+
+所以代码改变成：
+```
+public class TestDemo{
+	pubblic static void main(String args[]){
+		new TestDemo.fun();
+	}
+	public static void fun(){
+		syso("Hello world!!");
+	}
+}
+输出：Hello world!!
+```
+* **与定义属性的规则一样，定义一个类的时候首先考虑非static方法，因为所有的类如果保存的信息多（属性多），那么每一一个对象执行同一个方法的时候，就可以利用static方法执行**
+* 比如说一个类没有属性，产生对象就完全没有意义，所以就会使用static方法。
+* 对象保存的是属性！！！
+
+**static属性保存在全局数据区**
+```
+内存区一共有四个：栈内存、堆内存、全局数据区、全局代码区：
+
+栈内存：存放地址；
+堆内存：存放普通属性；
+全局数据区：存放static数据；
+全局代码区：存放方法；
+```
+
+---
+
 ####  静态变量
 * 用static关键字定义的变量，与局部变量相比, static局部变量有三点不同：
 > 1. 存储空间分配不同
@@ -677,19 +1784,6 @@ auto类型分配在栈上，属于动态存储类别，占动态存储区空间�
 
 > 只`允许本源文件中`所有函数使用的全局变量，则该变量需要使用的存储类型是static。
 
-### 静态属性
-* 用static修饰的属性，它们在类被载入时创建，只要类存在，static变量就存在。
-> 静态变量和非静态变量的区别是：静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。而非静态变量是对象所拥有的，在创建对象的时候被初始化，存在多个副本，各个对象拥有的副本互不影响。
-
-* 两种方式访问：
-> 直接访问：类名.属性；
-
-> 实例化后访问：对象名.属性 （不建议使用）
-### 静态方法
-* 静态方法不需要实例化，可以直接访问，访问方式：
-> 直接访问：类名.方法名()
-
-> 实例化后访问：对象名.方法名() （不建议使用）
 ### 静态语句块
 * 一个类中由static关键字修饰的，不包含在任何方法体中的代码块
 > 当类被载入时，静态代码块被执行，且只被执行一次
@@ -756,6 +1850,8 @@ public class Test2{
 > （1）有抽象方法的类一定是抽象类。但是抽象类中不一定都是抽象方法，也可以全是具体方法。abstract修饰符在修饰类时必须放在类名前。 abstract修饰方法就是要求其子类覆盖（实现）这个方法。调用时可以以多态方式调用子类覆盖（实现）后的方法， 即抽象方法必须在其子类中实现，除非子类本身也是抽象类。
 > （2）父类是抽象类，其中有抽象方法，那么子类继承父类，并把父类中的所有抽象方法都实现（覆盖）了，子类才有创建对象的实例的能 力，否则子类也必须是抽象类。抽象类中可以有构造方法，是子类在构造子类对象时需要调用的父类（抽象类）的构造方法。
 > （3）不能放在一起的修饰符：final和abstract，private和abstract，static和abstract，因为abstract修饰的方法是必须在其子类中实现（覆盖），才能以多态方式调用，以上修饰符在修饰方法时期子类都覆盖不了这个方法，final是不可以覆盖，private是不能够继承到子类，所以也就不能覆盖，static是可以覆盖的，但是在调用时会调用编译时类型的方法，因为调用的是父类的方法，而父类的方法又是抽象的方法，又不能够调用，所以上的修饰符不能放在一起。
+
+---
 
 ### 单例模式
 #### 这个模式主要注重懒汉模式（饿汉模式，任选其一），注册登记式单例。（熟记）
@@ -1444,6 +2540,32 @@ int   indexOf/lastIndexOf(char,int)|从指定的索引开始搜索，返回在�
 int   indexOf/lastIndexOf(String)|返回第一次出现的指定子字符串在此字符串中的索引
 int   indexOf/lastIndexOf(String,int)|从指定的索引开始搜索，返回在此字符串中第一次/最后一次出现指定字符串处的索引
 
+* 数组length属性：array.length;-------------------->没有括号
+* String对象length属性：string.length();------------->有括号
+* 判断字符串是否为空：
+```
+String str = "hello";
+syso(str.isEmpty());-----------false
+syso("".isEmpty());----------->true
+```
+如果觉得`isEmpty()`使用不方便，可以使用`"".equals(str)`来进行判断。
+
+String类虽然提供了大量的支持方法，但是却少了一个重要的方法，initcap()方法，首字母大写，而这样的功能只能自己实现。
+```
+public static void main(String args[]){
+	String str = "HELLO";
+	syso(initcap(str));
+}
+public static String initcap(String temp){
+	//return temp.substring(0,1).toUpperCase()+temp.substring(1).toLowerCase();
+	return temp.substring(0,1).toUpperCase()+temp.substring(1);
+}
+输出：Hello
+```
+##### 虽然Java中没有这样的功能，但是一些第三方的组件包会提供，例如：apache的commons会提供，他会封装好供我们使用。
+
+---
+
 #### StringBuffer类
 
 * 1、StringBuffer类用于内容可以改变的字符串
@@ -2018,48 +3140,354 @@ void fill(List list,Object o) |填充list集合，填充元素为o
 int binarySearch(List list,Object key) |对排序后的集合list进行查询元素操作
 void sort(List list) |对一种List做排序
 
-
-  
- 
-
-
-
-
-
-
-
-  
- 
-
-
 #### 链表
 * 每一个链表实际上就是由多个接待你组成的。开头节点为`root(根)`,结尾节点指向`null`
 > data----->保存数据。
 > next------>要保存的下一个节点。
 
+### 文件管理
+#### 概述
+* java中的对文件管理，通过java.io包中的`File`类实现
+* java中文件的管理，主要是针对文件或是目录路径名的管理
+> 文件的属性信息
+> 文件的检查
+> 文件的删除等
+> 不包括文件的访问
+#### File类
+* File类的构造方法：  
+* File  变量名 = new  File(String pathname) ; 
+> 通过将给定路径名字符串转换成抽象路径名来创建一个新 File 实例:  File f1 = new File (“d:/temp/abc.txt”); 
 
+* File  变量名 = new  File(URI uri) ; 
+> 通过将给定File的uri转换成抽象路径名来创建一个新 File 实例 :  File f2 = new File(“abc.txt”);  
+ 
+* File  变量名 = new  File(String parent,Stirng child) ;    
+> 根据 parent 路径名字符串和 child 路径名字符串创建一个新 File 实例 :  File f3 = new File(“d:/temp”,“abc.txt”);  
 
+* File  变量名 = new  File(File parent,Stirng child) ; 
+> 根据 parent 抽象路径名和 child 路径名字符串创建一个新 File 实例 :  File f = new File(“d:/temp”);File f4 = new File(f,“abc.txt”);
 
+方法|含义
+:--|:--
+boolean  createNewFile()  |当且仅当不存在具有此抽象路径名指定的名 称的文件时，原子地创建由此抽象路径名指 定的一个新的空文件。
+static File createTempFile(String prefix,String suffix)  |在默认临时文件目录中创建一个空文件，使 用给定前缀和后缀生成其名称 
+static File createTempFile(String prefix,Stirng suffix,File directory) |在指定目录中创建一个新的空文件，使用给 定的前缀和后缀字符串生成其名称
+boolean exists( )  | 测试此抽象路径名表示的文件或目录是否存在
+boolean delete( )  | 删除此抽象路径名表示的文件或目录
+boolean equals(Object obj) |测试此抽象路径名与给定对象是否相等  
+boolean canRead() | 测试应用程序是否可以读取此抽象路径名表示 的文件
+boolean canWrite()  |测试应用程序是否可以修改此抽象路径名表示 的文件
+String[] list( )  |返回由此抽象路径名所表示的目录中的文件和 目录的名称所组成字符串数
+String getAbsolutePath( )   |返回抽象路径名的绝对路径名字符串 
+String getName( )   |返回由此抽象路径名表示的文件或目录的名 称，不包括路径名称
+String getPath( )   |将此抽象路径名转换为一个路径名字符串
+File[] listFiles()   |返回一个抽象路径名数组，这些路径名表示 此抽象路径名所表示目录中的文件  
+boolean renameTo(File dest )   |重新命名此抽象路径名表示的文件 
+long length( )   |返回由此抽象路径名表示的文件的大小，以 byte为单位 
+boolean mkdir( )   |创建此抽象路径名指定的目录 
+boolean mkdirs( )   |创建此抽象路径名指定的目录，包括创建必 需但不存在的父目录。注意，如果此操作失 败，可能已成功创建了一些必需的父目录
 
+### 流的概念及API
 
+#### 1、流（Stream )的概念代表的是程序中数据的流通 
+* 数据流是一串连续不断的数据的集合
+* 在Java程序中，对于数据的输入/输出操作是以流(Stream)的方式进行的 
+> 输入流 — 流入程序的数据 
+> 输出流 — 流出程序的数据
+> 在java程序中，从输入流读取数据（读到内存中），而从输出 流输出数据（从内存存储到文件或显示到屏幕上） 
 
-
-
-
-
-
-
-
+####  2、流的分类
+>* 按流的方向不同
+>> 输入流、输出流
+>* 按处理数据的单位不同
+>> 字节流、字符流 
+>* 按功能不同
+>> 节点流、处理流 
+* Java语言中，控制数据流的 类都放在java.io包中 
+字节流 字符流 输入流 InputStream Reader 输出流 OutputStream Writer 。java.io包中有两大继承体系：以byte处理为主的Stream类， 他们的命名方式是XXXStream：以字符处理为主的Reader / Writer类，他们的命名方式 XXXReader或XXXWriter：InputStream、OutputStream、Reader、 Writer这四个类，是这两大继承体系的父类 
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+&nbsp;|字节流|字符流
+:--|:--|:--
+输入流|InputStream|Reader
+输出流|OutputStream|Writer
 
+####  3、字节输入流的主要方法
+> 此抽象类是表示输入字节流的所有类的超类
+> `InputStream`常用的方法 
+方法|含义
+int  read( ) |一次读取一个byte的数据，并以int类型把数据返 回来，如果没有数据可以读了，会返回”-1” 
+int  read(byte[] buffer) |把所读取到的数据放在这个byte数组中，返回一 个int型的数据，这个int型数据存储了返回的真正 读取到的数据byte数
+int read(byte[] buffer,int offset,int length) |读取length个字节，并存储到一个字节数组buffer 中，并从offset位置开始返回实际读取的字节数
+void close( ) |关闭此输入流并释放与该流关联的所有系统资源
+  
+####  4、字节输出流的主要方法
+> 此抽象类是表示输出字节流的所有类的超类 
+> `OutputStream`常用的方法
+  
+ 方法|含义 
+ void write(byte[] buffer) |将要输出的数组先放在一个byte数组中，然后用 这个方法一次把一组数据输出出去 
+ void write(byte[] buffer,int off,int len) |将指定字节数组中从偏移量 off 开始的 len 个字节 写入此输出流 
+ abstract void write(int b) |将指定的字节写入此输出流 
+ void close( ) |关闭此输出流并释放与此流有关的所有系统资源  
+ void flush( ) |刷新此输出流并强制写出所有缓冲的输出字节 
 
+####  5、字符输入流的主要方法 
+> 用于输入字符流的抽象类 
+* `Reader`常用的方法 :
+> Reader是输入字符数据用的类，它所提供的方法和InputStream 类一样，差别在于InputStream类中用的是byte类型，而Reader 类中用的是char类型。
+> 注： Reader类中没有available方法，取而代之的是”ready” 方法，这个方法会去检查Reader对象是否已经准备好输 入数据了，如果是返回true，反之返回false。
+
+方法|含义 
+：--|：--
+int  read( )| 一次读取一个char的数据，并以int类型把数据返 回来，如果没有数据可以读了，会返回”-1” 
+int  read(char[] cbuffer) |把所读取到的数据放在这个char数组中，返回一 个int型的数据，这个int型数据存储了返回的真 正读取到的数据char数 
+int read(char[] cbuffer,int offset,int length) |读取length个字符，并存储到一个字节数组 cbuffer中，并从offset位置开始返回实际读取的 字符数
+void close( ) |关闭此Reader并释放与其关联的所有系统资源 
+
+####  6、字符输出流的主要方法
+> 输出字符流的抽象类
+* Writer常用的方法 
+> Writer类是输出字符数据的类，同样地，提供的方法和 OutputStream类中的方法类似，将OutputStream类中用到的 byte类型，换成char类型就可。
+> 注： Writer类另外提供了两个writer方法，所以Writer类有5 个writer方法，多出来的两个只是把char数据换成String 对象而已，方便输出字符的数据
+
+方法|含义 
+void write(char[] cbuffer)  |将要输出的数组先放在一个char数组中，然后用这 个方法一次把一组数据输出出去 
+void write(char[] cbuffer,int off,int len)  |将指定字符数组中从偏移量 off 开始的 len 个字符 写入此输出流 
+int write(int b)  |将指定的字符写入此输出流 void write(String str) 写入字符串
+void write(String str, int off,int len)  |将指定字符串中从偏移量 off 开始的 len 个字符写 入此输出流 
+void close( )  |关闭此输出流并释放与此流有关的所有系统资源 
+void flush( )  |刷新此输出流并强制写出所有缓冲的输出字节 
+
+####  7、节点流与处理流的使用 
+什么是节点流
+> 节点流：从一个特定的数据源（节点）读写数据（如：文件、内存） 的类叫做节点流类 
+> 这些节点类跟数据源或数据目的地做直接连接用的  在java.io包中，字节继承体系有三种节点类，而字符继承体系有四 种节点类 
+ 
+ 类型 |字节流  |字符流 
+ :--|:--
+ File | FileInputStream、FileOutputStream | FileReader、FileWriter
+ Memory Array  |ByteArrayInputStream ByteArrayOutputStream  |CharArrayReader CharArrayWriter 
+ Memory String | &nbsp: |StringReader、StringWriter
+ Piped  |PipedInputStream PipedOutputStream  |PipedReader PipedWriter 
+ 
+####  8、节点流的方法 
+> 节点流的方法  —  InputStream
+
+方法|含义 
+:--|:--
+int read( ) |这个方法没有参数，一次读取 一个byte的数据，并以int类型把 数据返回来，如果没有数据可 以读了，会返回”-1”。 
+int read(byte[] b) |这个方法有一个byte数据类型的 参数，这个方法会把所读取到 的数据放在这个byte数组中，返 回一个int型的数据，这个int型 数据存储了返回的真正读取到 的数据byte数。 
+int read(byte[] b,int off,int len) |将输入流中最多 len 个数据字节 读入字节,返回值同上
+void close( ) |关闭此输入流并释放与该流关 联的所有系统资源。 
+int available( ) |获取这个流中还有多少个byte 的数据可以读取。返回值告诉 我们还有多少个byte的数据可 以读取。 注：这个方法会产生 IOException异常，另外如果 InputStream对象调用这个方法 的话，它只会返回0，这个方 法必须由继承InputStream类的 子类对象调用才有作用。 
+long skip(long n) |跳过和放弃此输入流中的 n    个数据字节。返回值返回真 正跳过的字节数
+
+####  9、节点流的方法  —  OutputStream 
+* 注意： 
+> 使用write方法输出数据时，有些数据并不会马上输出到我们指 定的目的，通常会在内存中有个暂存区，有些输出的数据会暂 时存放在这里，如果我们想要立刻把数据输出到目的地，不要 放在暂存区中时，可以调用”flush”这个方法来对暂存区做清 除的动作。 
+
+> 同样，数据输出完后，记得把它”close”，在调用close这个方 法时，会先调用flush这个方法，以确保所有的数据都已经输出 到目的地了。
+方法|含义 
+:--|:--
+void write(byte[] b) |将要输出的数组先放在一个byte 数组中，然后用这个方法一次 把一组数据输出出去。 
+void write(byte[] b, int off, int len) |将指定字节数组中从偏移量 off 开始的 len 个字节写入此输出流。 
+void write(int b) |将要输出的byte数据传给这个方 法就可。 
+void close() |关闭此输出流并释放与此流有 关的所有系统资源 
+void flush() |刷新此输出流并强制写出所有 缓冲的输出字节
+
+#### 处理流
+* 只用字节或是字符为单位来对数据做输入输出是不够的，有时候 我们需要一行一行的读数据，有时我们需要读取特定格式的数据， 因此Java提供了这样的机制，能把数据流作连接(chain)，让原本没 有特殊访问方法的流，通过连接到特殊的流后，变成可以用特定 的方法来访问数据 
+* “连接”在已存在的流（节点流或处理流）之上，通过对数据的 处理为程序提供更为强大的读写功能
+* 处理流类的构造函数中，都必须接收另外一个流对象作为参数 
+
+#### 常见的处理流类
+
+种类\继承体系|字节 |字符 
+:--|:--
+缓冲(Buffered) |BufferedInputStream, BuueredOutputStream | BufferedReader, BufferedWriter 
+字符和字节转换 |&nbsp;|InputStreamReader, OutputStreamWriter 
+对象序列化| ObjectInputStream, ObjectOutputStream | &nbsp;
+特定数据类型访问| DataInputStream,  DataOutputStream | &nbsp;
+计数| LineNumberInputStream | &nbsp;
+重复 |PushbackInputStream | &nbsp;
+打印 |PrintStream | PrintWriter
+
+##### 缓冲流（Buffered）
+* 缓冲流对读写的数据提供了缓冲的功能，提高了读写的效率，同 时增加了一些新的方
+
+构造方法|含义 
+:--|:--
+BufferedInputStream(InputStream in) |创建了一个带有32字节缓冲区的缓冲输 入流 
+BufferedInputStream(InputStream in,  int size) |创建了一个带有size大小缓冲区的缓冲 输入流 
+BufferedOutputStream(OutputStream out) |创建了一个带有32字节缓冲区的缓冲输 出流 
+BufferedOutputStream(OutputStream out，int size) |创建了一个带有size大小缓冲区的缓冲 输出流 
+
+* Java提供了四种缓冲流，其构造方法
+
+构造方法|含义 
+:--|:--
+BufferedReader(Reader in) |创建一个使用默认大小输入缓冲区的 缓冲字符输入流  
+BufferedReader(Reader in,int size) |创建一个使用size大小输入缓冲区的 缓冲字符输入流  
+BufferedWriter(Writer out) |创建一个使用默认大小输入缓冲区的 缓冲字符输出流  
+BufferedWriter(Writer out,int size) |创建一个使用size大小输入缓冲区的 缓冲字符输出流  
+
+*  缓冲流中的方法
+
+> BufferedInputStream支持其父类的mark和reset方法
+
+> BufferedWriter提供了readLine方法用于读取一行字符串(以\r或 \n分隔) 
+
+> BufferedWriter提供了newLine方法用于写入一个行分隔符
+对于BufferedOutputStream和BufferdWriter，写出的数据会先在 内存中缓存，使用flush()方法将使内存中的数据立刻写出 
+
+### 对象序列化
+#### 对象序列化概述 
+
+* 通过使用ObjectInputStream和ObjectOutputStream类保存和读取对 象的机制叫做序列化机制 
+* 对象(Object)序列化是指将对象转换为字节序列的过程  反序列化则是根据字节序列恢复对象的过程 
+* 序列化一般用于以下场景：
+> 永久性保存对象，保存对象的字节序列到本地文件中
+> 通过序列化对象在网络中传递对象 
+> 通过序列化在进程间传递对象
+
+#### 支持序列化的接口和类 
+
+* 序列化的过程，是将任何实现了Serializable接口或Externalizable接 口的对象通过ObjectOutputStream类提供的相应方法转换为连续的 字节数据，这些数据以后仍可通过ObjectInputStream类提供的相应 方法被还原为原来的对象状态，这样就可以将对象完成的保存在本 地文件中，或在网络和进程间传递 
+* 支持序列化的接口和类 
+> Serializable接口
+>>* 只有一个实现Serializable接口的对象可以被序列化工具存储和恢复
+>>* Serializable接口没有定义任何属性或方法。它只用来表示一个类可以被序列化。如果一个类可以序列化，它的所有子类都可 以序列化 
+
+> Externalizable接口 
+>>* 可以让需要序列化的类实现Serializable接口的子接口 Externalizable
+>>* Externalizable接口表示实现该接口的类在序列化中由该类本身 来控制信息的写出和读入
+
+> ObjectInputStream 
+>>* ObjectOutputStream类继承OutputStream类，并实现了 ObjectOutput接口。它负责向流写入对象 
+>>* 构造方法 :   ObjectOutputStream(OutputStream out
+>>* 主要方法 :   writeObject(Object obj)  向指定的OutputStream中写入对象obj
+ 
+> ObjectOutputStream
+>>* ObjectInputStream类继承InputStream类，并实现了ObjectInput 接口。它负责从流中读取对象 
+>>* 构造方法 :  ObjectInputStream(InputStream in) 
+>>* 主要方法 :  readObject(Object obj)  从指定的InputStream中读取对象
+
+#### 对象序列化的条件
+
+* 该对象类必须实现Serializable接口 
+* 如果该类有直接或者间接的不可序列化的基类，那么该基类必须 有一个默认的构造器。该派生类需要负责将其基类中的数据写入 流中。
+* 建议所有可序列化类都显式声明 serialVersionUID 值。
+> serialVersionUID在反序列化过程中用于验证序列化对象的发 送者和接收者是否为该对象加载了与序列化兼容的类。 
+> 如果接收者加载的该对象的类的 serialVersionUID 与对应的发 送者的类的版本号不同，则反序列化将会导致 InvalidClassException
+    
+#### transient关键字 
+* transient修饰的属性不进行序列化的操作，起到一定消息屏蔽的效果
+* 被transient修饰的属性可以正确的创建，但被系统赋为默认值。 即int类型为0，String类型为null 
+> 注：ObjectInputStream和ObjectOutputStream类不会保存和读 写对象中的transient和static类型的成员变量    
+    
+    
+### 多线程
+#### 线程与进程概念、区别
+* 概念：
+> 进程 计算机在执行的程序 的实体
+> 线程 一个程序内部 的顺序控制流
+* 注：   一个进程中可以包含 一个或多个线程，一个 线程就是一个程序内部 的一条执行线
+ 
+* 区别：
+> 每个进程都有独立的代码和数据空间，进程的切换 会有很大的开销
+> 同一类线程共享代码和数据空间，每个线程有独立 运行的栈和程序计数器，线程切换的开销
+    
+>* 多进程 ：在操作系统中能同时运行多个任务（程序）
+>* 多线程 ：在同一应用程序中有多个顺序流同时进行
+```
+进程包含线程 有一个进程至少有一个线程。
+```
+#### 多线程实现方式
+* 创建线程的两种方式 — 线程类
+>* 继承Thread类 —— java.lang.Thread
+>* 实现Runnable接口 —— java.lang.Runnable
+  
+---
+
+### 引用传递
+引用传递的核心意义：同一块堆内存空间可以被不同的栈内存所指向，不同栈内存可以对统一堆内存的内容进行修改。想想栈堆内存分配图
+#### 范例一：
+```
+class Message{
+	private int num = 10;
+	public Message(int num){
+		this.num = num;
+	}
+	public void setNum(int num){
+		this.num = num;
+	}
+	public int getNum{
+		return this.num;
+	}
+}
+public static TestDemo{
+	public static void main(String agrs[]){
+		Message msg = new Message(30);
+		fun(msg);//引用传递
+		syso(msg.getNum());
+		
+	}
+	public static void fun(Message temp){
+		temp.setNum(100);
+	}
+}
+输出：100
+```
+
+#### 范例二：
+```
+public static TestDemo{
+	public static void main(String agrs[]){
+		String msg = "Hello";
+		fun(msg);
+		syso(msg.getNum());
+		
+	}
+	public static void fun(String temp){
+		temp = "World";
+	}
+}
+输出：Hello
+```
+**解决思路：String类对象的内容一旦声明就不可改变，对象内容的改变依靠的是引用地址的改变。**
+
+    
+#### 范例三：
+```
+class Message{
+	private String info = "nihao";
+	public Message(String info){
+		this.info = info;
+	}
+	public void setInfo(String info){
+		this.info = info;
+	}
+	public String getInfo(){
+		return this.info;
+	}
+}
+public static TestDemo{
+	public static void main(String agrs[]){
+		Message msg = new Message("Hello");
+		fun(msg);
+		syso(msg.getInfo());
+	}
+	public static void fun(Message temp){
+		temp.setInfo("World");
+	}
+}
+输出：HWorld
+
+此范例可以想象成为：
+int x = 19;
+iny y = x;
+y = 12;
+```
+总结：虽然String属于类，属于引用类型，但是由于内容不可改变的特点，很多的时候，就把String当成基本数据类型使用，也就是说：每一个String变量只能保存一个数据（改变了就会把之前的数据替换掉了。）
+
+    
