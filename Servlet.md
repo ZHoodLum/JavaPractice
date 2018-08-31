@@ -613,25 +613,42 @@ public void service(ServletRequest req, ServletResponse res)
 ### 三种缓存区别
 **session cookie cache缓存区别：**
 一、Session缓存Session的生存周期 = 用户持续请求时间+超时时间(一般为20分钟)
+
 ```
-Session在用户第一次访问服务器的时候自动创建。Session生成后，用户每访问服务器一次，服务器就会更新Session的最后访问时间，并认为该用户的session"活跃"。由于会有越来越多的用户访问服务器，因此Session也会越来越多。为了防止内存溢出，服务器会把长时间没有活跃的session删除掉，这个时间就是Session的超时时间。如果超过了超时时间没有访问服务器，Session就自动失效了。
+Session在用户第一次访问服务器时自动创建。Session生成后，用户每访问服务器一次服务器就会更新Session的最后访问时间并认为该用户的session活跃
+
+由于会有越来越多的用户访问服务器，因此Session也会越来越多。为了防止内存溢出，服务器会把长时间没有活跃的session删除掉，
+
+这个时间就是Session的超时时间。如果超过了超时时间没有访问服务器，Session就自动失效了。
+
   Session在下面两种情况下会失效：1.超时。 2. 调用Session的invalidate方法。
+  
   关闭浏览器≠Session立刻消失，用户关闭浏览器后标志着：1.Session将不再发送请求到服务器。2.该Session将不会有人调用他的invalidate()方法。所以，此时只能等待Session自己超时死亡。
+  
 从session的生命周期看，session缓存信息保存在web服务器当中，并且session缓存容易丢失，导致数据的不确定性。而且session不适宜放大量信息，否则会导致服务器性能降低。
+
   session是针对单个连接（会话）来使用的，主要存储和连接相关的上下文信息，比如登录信息等等。通常用户登录之后，就会把用户信息放进session中，比如id字段，以后要检查用户是否有登录，就只需检查session中是否存在userId。
 ```
 
 二、Cookie缓存
+
 ```
-当你在浏览网站的时候，WEB 服务器会先送一小小资料放在你的计算机上，Cookie 会帮你在网站上所打的文字或是一些选择都纪录下来。当下次你再光临同一个网站，WEB 服务器会先看看有没有它上次留下的 Cookie 资料，有的话，就会依据 Cookie里的内容来判断使用者，送出特定的网页内容给你。
+当你在浏览网站的时候，WEB 服务器会先送一小小资料放在你的计算机上，Cookie 会帮你在网站上所打的文字或是一些选择都纪录下来。当下次你再光临同一个网站，
+
+WEB 服务器会先看看有没有它上次留下的 Cookie 资料，有的话，就会依据 Cookie里的内容来判断使用者，送出特定的网页内容给你。
+
   具体来说cookie机制采用的是在客户端保持状态的方案(保存客户浏览器请求服务器页面的请求信息)，而session机制采用的是在服务器端保持状态的方案。
+  
   Cookie存储的数据量受限制，大多数的浏览器为4K因此不要存放大数据。由于并非所有的浏览器都支持Cookie，数据将以明文的形式保存在客户端。
+  
   Cookie是用来保存就是被人盗取也无关紧要的信息，例如用户的喜好、用户搜索过的关键字等，用户信息、id字段不建议保存在Cookie中，因为别人可以分析存放在本地的Cookie进行Cookie欺骗。
 ```
 
 三、Cache缓存
+
 ```
 Cache用于在Http请求期间保存页面或者数据，主要用来保存大容量信息，如数据库中的多个表。即使应用程序终止，只要Cache方法中定义的缓存时间未过期，下次开启应用程序时，缓存的数据依然存在。
+
   Cache是应用程序级的，主要用来缓存计算或查询结果，减轻服务器负担，并加快响应速度。它允许将频繁访问的服务器资源存储在内存中，当用户发出相同的请求后,服务器不是再次处理而是将Cache中保存的数据直接返回给用户。可以看出Cache节省的是时间—服务器处理时间。
 ```
 
@@ -679,13 +696,27 @@ session.setMaxInactiveInterval（30*60）;
 
 ### Jsp中pageContext的作用
 ```
-pageContext 隐含物件对应於javax.servlet.jsp.PageContext型态之物件，隐含物件都自动的被加入至pageContext中，您可以藉由它来取得与JSP相关的隐含物件对应之Servlet物件，像是getRequest()可以取得ServletRequest， getServletConfig()可以取得ServletConfig，getSession()可以取得HttpSession等等。提供取得隐含物件对应之Servlet物件并不是pageContext的主要作用，它的主要功能在提供一个单一个介面，以管理各种的公开物件（像是HttpSession、ServletContext、ServletConfig、ServletRequest、ServletResponse等等），提供一个单一的API来管理属性作用范围等等。 
+pageContext 隐含物件对应於javax.servlet.jsp.PageContext型态之物件，隐含物件都自动的被加入至pageContext中，
+
+您可以藉由它来取得与JSP相关的隐含物件对应之Servlet物件，像是getRequest()可以取得ServletRequest， getServletConfig()可以取得ServletConfig，
+
+getSession()可以取得HttpSession等等。提供取得隐含物件对应之Servlet物件并不是pageContext的主要作用，它的主要功能在提供一个单一个介面，
+
+以管理各种的公开物件（像是HttpSession、ServletContext、ServletConfig、ServletRequest、ServletResponse等等），提供一个单一的API来管理属性作用范围等等。 
 ```
 ```
-我们之前曾经使用过session的setAttribute()等方法设定一个进程可以共用的属性物件，使用session设定的属性在同一个进程中可以共用，除了session之外，还有pageContext、 request、application也都可以使用setAttribute()之类的方法（详请查阅API文件）来设定可以共用的属性物件，只不过这四个物件所设定的属性其共用范围各不相同。 
+我们之前曾经使用过session的setAttribute()等方法设定一个进程可以共用的属性物件，使用session设定的属性在同一个进程中可以共用，
+
+除了session之外，还有pageContext、 request、application也都可以使用setAttribute()之类的方法（详请查阅API文件）来设定可以共用的属性物件，只不过这
+
+四个物件所设定的属性其共用范围各不相同。 
 ```
 ```
-使用pageContext所设定的属性物件，其共用范围限於同一个 JSP页面，使用request所设定的属性物件，其在同一个request处理期间可以共用（包括forward给其它JSP页面），session物件所设定的属性物件则限於同一个进程作用期间可以共用，而application物件所设定的属性，则在整个Web应用程式中的JSP页面都可以共用。 
+使用pageContext所设定的属性物件，其共用范围限於同一个 JSP页面，使用request所设定的属性物件，
+
+其在同一个request处理期间可以共用（包括forward给其它JSP页面），session物件所设定的属性物件则限於同一个进程作用期间可以共用，
+
+而application物件所设定的属性，则在整个Web应用程式中的JSP页面都可以共用。 
 ```
 以下举application为例，您可以将一些物件当作属性设定给application，则另一个JSP页面就可以在适当的时候取得这个属性物件，例如： 
 ```
