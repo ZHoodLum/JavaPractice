@@ -660,5 +660,64 @@ session.setMaxInactiveInterval（30*60）;
 他们的优先级是：1 < 2 <3
 ```
 
+---
+
+### JSP共有九大内置对象：
+
+* (1) HttpSession类的session对象作用：主要用于来分别保存每个用户信息，与请求关联的会话；会话状态维持是Web应用开发者必须面对的问题。
+* (2) HttpServletRequest类的request对象作用：代表请求对象，主要用于接受客户端通过HTTP协议连接传输到服务器端的数据。
+* (3) HttpServletResponse类的respone对象作用：代表响应对象，主要用于向客户端发送数据
+* (4) JspWriter类的out对象作用：主要用于向客户端输出数据;Out的基类是JspWriter
+* (5) ServletContex类的application对象作用：主要用于保存用户信息，代码片段的运行环境；它是一个共享的内置对象，即一个容器中的多个用户共享一个application对象，故其保存的信息被所有用户所共享.
+* (6) PageContext类的pageContext对象作用：管理网页属性,为JSP页面包装页面的上下文，管理对属于JSP中特殊可见部分中已命名对象的访问，它的创建和初始化都是由容器来完成的。
+* (7) ServletConfig类的config对象作用：代码片段配置对象，表示Servlet的配置。
+* (8) Object类的page（相当于this）对象作用：处理JSP网页，是Object类的一个实例，指的是JSP实现类的实例，即它也是JSP本身，只有在JSP页面范围之内才是合法的。
+* (9)Exception作用：处理JSP文件执行时发生的错误和异常
+
+### Jsp中pageContext的作用
+```
+pageContext 隐含物件对应於javax.servlet.jsp.PageContext型态之物件，隐含物件都自动的被加入至pageContext中，您可以藉由它来取得与JSP相关的隐含物件对应之Servlet物件，像是getRequest()可以取得ServletRequest， getServletConfig()可以取得ServletConfig，getSession()可以取得HttpSession等等。提供取得隐含物件对应之Servlet物件并不是pageContext的主要作用，它的主要功能在提供一个单一个介面，以管理各种的公开物件（像是HttpSession、ServletContext、ServletConfig、ServletRequest、ServletResponse等等），提供一个单一的API来管理属性作用范围等等。 
+
+我们之前曾经使用过session的setAttribute()等方法设定一个进程可以共用的属性物件，使用session设定的属性在同一个进程中可以共用，除了session之外，还有pageContext、 request、application也都可以使用setAttribute()之类的方法（详请查阅API文件）来设定可以共用的属性物件，只不过这四个物件所设定的属性其共用范围各不相同。 
+
+使用pageContext所设定的属性物件，其共用范围限於同一个 JSP页面，使用request所设定的属性物件，其在同一个request处理期间可以共用（包括forward给其它JSP页面），session物件所设定的属性物件则限於同一个进程作用期间可以共用，而application物件所设定的属性，则在整个Web应用程式中的JSP页面都可以共用。 
+```
+以下举application为例，您可以将一些物件当作属性设定给application，则另一个JSP页面就可以在适当的时候取得这个属性物件，例如： 
+```
+<% 
+String attr = "字串物件"; 
+out.println("设定属性给application：" + attr); 
+application.setAttribute("str", attr); 
+%> 
+```
+我们先连上这个JSP网页以执行属性设定，然后我们再连上这个JSP网页： 
+```
+<% 
+String attr = (String) application.getAttribute("str"); 
+out.println("取得application属性：" + attr); 
+%> 
+```
+由于我们之前已经将字串物件设定在application中作为属性，所以我们可以在上面这个页面中取得之前设定的物件，同样的道理，您也可以用相同的方式设定属性给pageContext、request、session等物件，只要在允许的作用范围中，就可以取得所设定的属性物件。 
+
+您可以使用pageContext物件来设定属性，并指定属性的作用范围，而不用使用个别的pageContext、request、session、 application来进行设定，这就是之前所提的，以pageContext提供一个单一的API来管理属性作用范围，您可以使用以下的方法来进行设定： 
+```
+getAttribute(String name, int scope) 
+setAttribute(String name, Object value, int scope) 
+removeAttribute(String name, int scope) 
+```
+其中的scope可以使用以下的常数来进行指定：pageContext.PAGE_SCOPE、pageContext.REQUEST_SCOPE、pageContext.SESSION_SCOPE、pageContext.APPLICATION_SCOPE，常数的名称已经直接指明属性范围，我们可以将上面的两个JSP页面改为以下的形式： 
+```
+<% 
+String attr = "字串物件"; 
+out.println("设定属性给application：" + attr); 
+pageContext.setAttribute("str", attr, pageContext.APPLICATION_SCOPE); 
+%> 
+
+<% 
+String attr = (String) pageContext.getAttribute("str", pageContext.APPLICATION_SCOPE); 
+out.println("取得application属性：" + attr); 
+%>
+```
+
 
 
