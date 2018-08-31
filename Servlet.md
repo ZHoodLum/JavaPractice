@@ -7,6 +7,9 @@
 
 [三种缓存](#三种缓存)
 
+[JSP共有九大内置对象](#JSP共有九大内置对象)
+
+
 ---
 
 ---
@@ -662,7 +665,7 @@ session.setMaxInactiveInterval（30*60）;
 
 ---
 
-### JSP共有九大内置对象：
+### JSP共有九大内置对象
 
 * (1) HttpSession类的session对象作用：主要用于来分别保存每个用户信息，与请求关联的会话；会话状态维持是Web应用开发者必须面对的问题。
 * (2) HttpServletRequest类的request对象作用：代表请求对象，主要用于接受客户端通过HTTP协议连接传输到服务器端的数据。
@@ -677,9 +680,11 @@ session.setMaxInactiveInterval（30*60）;
 ### Jsp中pageContext的作用
 ```
 pageContext 隐含物件对应於javax.servlet.jsp.PageContext型态之物件，隐含物件都自动的被加入至pageContext中，您可以藉由它来取得与JSP相关的隐含物件对应之Servlet物件，像是getRequest()可以取得ServletRequest， getServletConfig()可以取得ServletConfig，getSession()可以取得HttpSession等等。提供取得隐含物件对应之Servlet物件并不是pageContext的主要作用，它的主要功能在提供一个单一个介面，以管理各种的公开物件（像是HttpSession、ServletContext、ServletConfig、ServletRequest、ServletResponse等等），提供一个单一的API来管理属性作用范围等等。 
-
+```
+```
 我们之前曾经使用过session的setAttribute()等方法设定一个进程可以共用的属性物件，使用session设定的属性在同一个进程中可以共用，除了session之外，还有pageContext、 request、application也都可以使用setAttribute()之类的方法（详请查阅API文件）来设定可以共用的属性物件，只不过这四个物件所设定的属性其共用范围各不相同。 
-
+```
+```
 使用pageContext所设定的属性物件，其共用范围限於同一个 JSP页面，使用request所设定的属性物件，其在同一个request处理期间可以共用（包括forward给其它JSP页面），session物件所设定的属性物件则限於同一个进程作用期间可以共用，而application物件所设定的属性，则在整个Web应用程式中的JSP页面都可以共用。 
 ```
 以下举application为例，您可以将一些物件当作属性设定给application，则另一个JSP页面就可以在适当的时候取得这个属性物件，例如： 
