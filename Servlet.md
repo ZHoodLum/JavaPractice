@@ -2,13 +2,11 @@
 
 [Servlet简介](#Servlet简介)
 
-
 [HttpServlet简介doPost和doGet请求原理](#HttpServlet简介)
 
 [三种缓存](#三种缓存)
 
 [JSP共有九大内置对象](#JSP共有九大内置对象)
-
 
 ---
 
