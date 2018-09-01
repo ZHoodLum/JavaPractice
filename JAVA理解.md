@@ -783,3 +783,240 @@ public class Person implements Serializable{
 ```
 private static final long serialVersionUID = 8656128222714547171L;
 ```
+
+---
+
+### 接口和抽象类该什么时候用？
+
+以操作数据库为例：
+既然是操作数据库就必须会用到 Insert Update Select ，所以Insert Update Select 做成接口
+但是，每个功能操作的内容又不一样，所以，做一个抽象类继承接口然后抽象类的派生类去实现抽象类的具体方法
+
+面向对象,就是要把一些代码上的东西当成实体来理解.实体有本身的属性和行为.比如你这个对数据库的操作,你就要把数据库当做一个对象,其行为可以是增删改查.所以你应该声明一个类去进行这些操作.
+当然,考虑到各种业务的特性,你还可以将这些类抽象出来,声明一个接口类,为数据库接口类.其实现类为各业务的具体操作..
+
+* 1、接口是一组规则的集合，它规定了实现本接口的类或接口必须拥有的一组规则
+* 2、抽象类和接口的区别在于使用动机。使用抽象类是为了代码的复用，而使用接口的动机是为了实现多态性。
+假设有2个类，一个类是主力球员，一个类是替补球员。
+```
+1 public class NormalPlayer
+2 {
+3 　　public int ID
+4 　　{
+5 　　　　get;
+6 　　　　set;
+7 　　}
+8 　　public string FirstName
+9 　　{
+10 　　　　get;
+11 　　　　set;
+12 　　}
+13 　　public string LastName
+14 　　{
+15 　　　　get;
+16 　　　　set;
+17 　　}
+18 　　public decimal WeekSalary
+19 　　{
+20 　　　　get;
+21 　　　　set;
+22 　　}
+23 　　public string GetFullName()
+24 　　{
+25 　　　　return this.FirstName + “ “ + this.LastName;
+26 　　}
+27 　　public decimal GetDaySalary()
+28 　　{
+29 　　　　return WeekSalary / 7;
+30 　　}
+31 }
+32 public class SubPlayer
+33 {
+34 　　public int ID
+35 　　{
+36 　　　　get;
+37 　　　　set;
+38 　　}
+39 　　public string FirstName
+40 　　{
+41 　　　　get;
+42 　　　　set;
+43 　　}
+44　　 public string LastName
+45 　　{
+46 　　　　get;
+47 　　　　set;
+48 　　}
+49 　　public decimal MonthSalary
+50 　　{
+51 　　　　get;
+52 　　　　set;
+53 　　}
+54 　　public string GetFullName()
+55 　　{
+56 　　　　return this.FirstName + “ “ + this.LastName;
+57 　　}
+58 　　public decimal GetWeekSalary()
+59 　　{
+60 　　　　return MonthSalary / 4;
+61 　　}
+62 }
+```
+
+
+我们发现，NormalPlayer和SubPlayer有共同的属性和方法，当然也有不同的属性和方法。把2个类的共同部分抽象出一个基类。
+```
+1 public class BasePlayer
+2 {
+3 　　public int ID
+4 　　{
+5 　　　　get;
+6 　　　　set;
+7 　　}
+8 　　public string FirstName
+9 　　{
+10 　　　　get;
+11 　　　　set;
+12 　　}
+13 　　public string LastName
+14 　　{
+15 　　　　get;
+16 　　　　set;
+17 　　}
+18
+19 　　public string GetFullName()
+20 　　{
+21 　　　　return this.FirstName + “ “ + this.LastName;
+22 　　}
+23 }
+```
+
+
+然后让先前的2个类派生于这个基类。
+```
+1 public class NormalPlayer: BasePlayer
+2 {
+3 　　public decimal WeekSalary
+4 　　{
+5 　　　　get;
+6 　　　　set;
+7 　　}
+8 　　public decimal GetDaySalary()
+9 　　{
+10 　　　　return WeekSalary / 7;
+11 　　}
+12 }
+13 public class SubPlayer : BasePlayer
+14 {
+15 　　public decimal MonthSalary
+16 　　{
+17 　　　　get;
+18 　　　　set;
+19 　　}
+20 　　public decimal GetWeekSalary()
+21　　 {
+22 　　　　return MonthSalary / 4;
+23 　　}
+24 }
+```
+
+
+接着，我们发现NormalPlayer和SubPlayer计算日薪和周薪的方法也可以抽象出来，作为虚方法放到基类中
+```
+public class BasePlayer
+{
+　　public int ID
+　　{
+　　　　get;
+　　　　set;
+　　}
+　　public string FirstName
+　　{
+　　　　get;
+　　　　set;
+　　}
+　　public string LastName
+　　{
+　　　　get;
+　　　　set;
+　　}
+　　public string GetFullName()
+　　{
+　　　　return this.FirstName + “ “ + this.LastName;
+　　}
+　　public virtual decimal GetSalary()
+　　{
+　　　　throw new NotImplementedException();
+　　}
+}
+```
+
+
+在NormalPlayer和SubPlayer这2个派生类中，需要重写基类的虚方法
+```
+public class NormalPlayer: BasePlayer
+{
+　　public decimal WeekSalary
+　　{
+　　　　get;
+　　　　set;
+　　}
+　　//获取日薪
+　　public override decimal GetSalary()
+　　{
+　　　　return WeekSalary / 7;
+　　}
+}
+public class SubPlayer : BasePlayer
+{
+　　public decimal MonthSalary
+　　{
+　　　　get;
+　　　　set;
+　　}
+　　//获取周薪
+　　public override decimal GetSalary()
+　　{
+　　　　return MonthSalary / 4;
+　　}
+}
+```
+
+
+但在实际情况中，BasePlayer只是一个抽象出来的类，我们并不希望实例化这个类。这时候，就可以把BasePlayer设计为abstract抽象类。同时，在抽象类中，提供一个计算薪水的抽象方法。一旦在基类中声明了没有方法体的抽象方法，所有派生于这个抽象类的类必须实现或重写基类中的抽象方法。
+查看源代码打印帮助
+```
+public abstract class BasePlayer
+{
+　　public int ID
+　　{
+　　　　get;
+　　　　set;
+　　}
+　　public string FirstName
+　　{
+　　　　get;
+　　　　set;
+　　}
+　　public string LastName
+　　{
+　　　　get;
+　　　　set;
+　　}
+　　public string GetFullName()
+　　{
+　　　　return this.FirstName + “ “ + this.LastName;
+　　}
+　　public abstract decimal GetSalary();
+}
+```
+
+
+由此可见，当2个或多个类中有重复部分的时候，我们可以抽象出来一个基类，如果希望这个基类不能被实例化，就可以把这个基类设计成抽象类
+理解：
+* 1、抽象类里面可以有非抽象方法但接口里只能有抽象方法 声明方法的存在而不去实现它的类被叫做抽像类（abstract class），它用于要创建一个体现某些基本行为的类，并为该类声明方法，但不能在该类中实现该类的情况。…
+* 2、抽象类不能直接new对象，它只能被继承，而且单一继承。也就是说它把公共的东西抽象出来，子类可以调用父类的方法，也可以拓展自己的功能，就像子承父业一样。接口可以被多次继承，这是和抽象类的最大区别。也就是说接口是一个公共用品谁都可以拿来用的，不想抽象类，不是他的子类是不能调用的。希望对你有帮助
+* 3、当描述一组方法的时候使用接口 当描述一个虚拟的物体的时候使用抽象类
+
+
+
