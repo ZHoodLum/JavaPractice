@@ -10,6 +10,7 @@
 
 [序列化与反序列化](#序列化与反序列化)
 
+[接口和抽象类该什么时候用](#接口和抽象类该什么时候用)
 
 ---
 ### Java的四种引用方式
@@ -786,7 +787,7 @@ private static final long serialVersionUID = 8656128222714547171L;
 
 ---
 
-### 接口和抽象类该什么时候用？
+### 接口和抽象类该什么时候用
 
 以操作数据库为例：
 既然是操作数据库就必须会用到 Insert Update Select ，所以Insert Update Select 做成接口
