@@ -2085,7 +2085,6 @@ public class CoditionA implements Condition{
 * 检查性异常（checked exception）
 
 > 若系统运行时可能产生该类异常，则必须写出相应的处理代码，否则无法通过编译
-
 > 非RuntimeException异常
 
 ~~注：     需要进行异常处理，否则无法进行编译~~
@@ -2102,7 +2101,6 @@ InterruptedException|线程中断
 * 非检查性异常（unchecked exception）
 
 > 若系统运行时可能产生该类异常，则不必在程序中声明对该类异常的处理，就可以编译执行
-
 > RuntimeException：运行时异常
 
 非检查异常|说明
@@ -2113,14 +2111,41 @@ IllegalArgumentException|方法收到非法参数
 ArrayIndexOutOfBoundsException|数组下标越界
 NullPointerException|试图访问null对象引用
 
-
-
-
-
 * 规则：
 > 有程序错误导致的异常属于RuntimeException；而程序本身没有问题，但由于I/O错误这类问题导致的异常属于其他异常。
 
 > 如果出现RunTimeException异常，那么就一定是你的问题。很有道理的定理。
+
+**编译时异常和运行时异常的区别**
+最简单的说法：
+
+* javac出来的异常就是编译时异常，就是说把源代码编译成字节码（class）文件时报的异常，一般如果用Eclispe,你敲完代码保存的时候就是编译的时候。
+* java出来的异常就是运行时异常
+
+Java异常可分为3种：
+
+* (1)编译时异常:Java.lang.Exception
+
+* (2)运行期异常:Java.lang.RuntimeException
+
+* (3)错误:Java.lang.Error
+
+>* Java.lang.Exception和Java.lang.Error继承自Java.lang.Throwable;
+
+>* Java.lang.RuntimeException继承自Java.lang.Exception.
+
+**编译时异常：** 程序正确，但因为外在的环境条件不满足引发。例如：用户错误及I/O问题----程序试图打开一个并不存在的远程Socket端口。这不是程序本身的逻辑错误，而很可能是远程机器名字错误(用户拼写错误)。对商用软件系统，程序开发者必须考虑并处理这个问题。Java编译器强制要求处理这类异常，如果不捕获这类异常，程序将不能被编译。
+
+**运行期异常：** 这意味着程序存在bug，如数组越界，0被除，入参不满足规范.....这类异常需要更改程序来避免，Java编译器强制要求处理这类异常。运行时异常是java,lang.RuntimeException,出现这种异常，那么就一定是你的错误。
+
+**系统错误：** 一般很少见，也很难通过程序解决。它可能源于程序的bug，但一般更可能源于环境问题，如内存耗尽或者内部错误。错误在程序中无须处理，而有运行环境处理。
+
+* 顺便说一下：编译期和运行期的区别：
+
+编译期和运行期进行的操作是不相同的，编译器只是进行语法的分析，分析出来的错误也只是语法上的错误，而运行期在真正在分配内存··
+
+比如说你写一个while循环，一直往栈里写，编译器是不会出错的，可是运行期就会出现栈满的错误··
+
 
 #### 声明异常
 为了在方法中声明异常，就要在方法头中使用关键字throws, 若是多个异常，异常间用逗号隔开。
