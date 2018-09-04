@@ -753,5 +753,76 @@ out.println("取得application属性：" + attr);
 %>
 ```
 
+---
+
+### EL表达式的11个内置对象
+
+* pageScope：获取pageContext域属性，相当于pageContext.getAttribute("xxx")
+* requestScope：获取request域属性，相当于request.getAttribute("xxx")
+* sessionScope：获取session域属性，相当于session.getAttribute("xxx")
+* applicationScope：获取application域属性，相当于application.getAttribute("xxx")
+* param：对应参数，它是一个Map，其中key是参数，value是参数值，适用于单值的参数，相当于request.getParameter("xxx")
+* paramValues：对应参数，她是一个Map，其中key是参数，value是多个参数值，适用于多值的参数，相当于request.getParameterValues("xxx")
+* header：对应请求头，它是一个Map，其中key表示头名称，value是单个头值，适用于单值的请求头，相当于request.getHeader("xxx")
+* headerValues：对应请求头，它是一个Map，其中key表示头名称，value是多个头值，适用于多值的请求头，相当于request.getHeaders("xxx")
+* initParam：获取web.xml中<context-param>内的参数，${ initParam.xxx}，xxx就是<param-name>标签内的值，进而得到<param-value>中的值
+* cookie：用于获取cookie，Map<String,Cookie>，其中key是cookie的name，value是cookie对象，例如${cookie.JSESSIONID.value }就是获取sessionId
+* pageContext：可以获取JSP九大内置对象，相当于使用该对象调用getxxx()方法，例如pageContext.getRequest()可以写为${pageContext.request)
+
+EL表达式在获取Map的值或Bean的属性值是，可以使用“点”的方法，也可以使用“下标”的方法。
+${initParam.a}与${initParam['a']}，它们是完成的东西相同的。但是，如果Map的键或Bean的属性名中包含下划线或横岗时，那么就必须使用“下标”方法，例如：${initParam['a_a']}
+
+### EL表达式语言中定义了11个隐含对象详解
+
+使用这些隐含对象可以很方便地获取web开发中的一些常见对象，并读取这些对象的数据。
+
+语法：${隐式对象名称} ：获得对象的引用
+
+
+隐含对象名称|描 述
+pageContext|对应于JSP页面中的pageContext对象（注意：取的是pageContext对象。）
+pageScope|代表page域中用于保存属性的Map对象
+requestScope|代表request域中用于保存属性的Map对象
+sessionScope|代表session域中用于保存属性的Map对象
+applicationScope|代表application域中用于保存属性的Map对象
+param|表示一个保存了所有请求参数的Map对象
+paramValues|表示一个保存了所有请求参数的Map对象，它对于某个请求参数，返回的是一个string[]
+header|表示一个保存了所有http请求头字段的Map对象
+headerValues|同上，返回string[]数组。注意：如果头里面有“-” ，例Accept-Encoding，则要headerValues[“Accept-Encoding”]
+cookie|表示一个保存了所有cookie的Map对象
+initParam|表示一个保存了所有web应用初始化参数的map对象
+
+```
+例子
+1.1 pageContext
+ <%
+    pageContext.setAttribute("name", "aaaa");
+%>
+${name} <!--取出pageContext里面的name属性-->
+1.2 sessionScope
+  <%
+    session.setAttribute("user", "");
+  %>
+  <!--获取session里面的值，与pageContext有点区别-->
+   ${sessionScope.user==null ?"您没有登录":"欢迎您," }${user }
+1.3 requestScope
+ <%
+    request.setAttribute("age", "20");
+  %>
+  <!--获取reqeust里面的值，与pageContext有点区别-->
+  ${requestScope.age}
+1.4 param 和paramValues 取地址栏参数
+http://127.0.0.1:8080/day10/04param.jsp?name=junjiex&age=10&age=20
+<!--获取name-->
+${param.name }
+<!--获取age数组-->
+${paramValues.age[0] }<!--得到10-->
+${paramValues.age[1] }<!--得到20-->
+
+```
+
+
+
+
 
 
