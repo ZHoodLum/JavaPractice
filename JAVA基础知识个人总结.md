@@ -2939,6 +2939,9 @@ public static void main(String[] args) {
 	}	
 }
 ```
+
+---
+
 ##### Set接口
 * 1、Collection的子接口
 * 2、用来包含一组 无序无重复 的对象
@@ -3003,6 +3006,8 @@ public static void main(String[] args) {
 * 4、使用foreach方式遍历Set集合
 
 ##### List接口
+有序 可重复，存入的顺序与取出的顺序相同
+
 * 1、List接口
 > Collection的子接口
 > 用来包含一组 `有序有重复 `的对象
@@ -3172,10 +3177,38 @@ void fill(List list,Object o) |填充list集合，填充元素为o
 int binarySearch(List list,Object key) |对排序后的集合list进行查询元素操作
 void sort(List list) |对一种List做排序
 
+### Vector类
+使用elements进行遍历、Iterator也可以。
+```
+		Vector<String> v = new Vector<String>();
+		v.addElement("aaa");
+		v.addElement("bbb");
+		v.addElement("vvv");
+		//返回此向量的组件的枚举
+		Enumeration<String> e =  v.elements();
+		while(e.hasMoreElements()){//是否有更多的元素，指针不动
+			String s = e.nextElement();//指针移动，跟ListIterator一样
+			System.out.println(s);
+		}
+		Iterator<String> i = v.iterator();
+		while(i.hasNext()) {
+			String a = i.next();
+			System.out.println(a);
+		}
+		Iterator<String> i2 = v.listIterator();
+		while(i2.hasNext()) {
+			String a2 = i2.next();
+			System.out.println(a2);
+		}
+
+```
+
 #### 链表
 * 每一个链表实际上就是由多个接待你组成的。开头节点为`root(根)`,结尾节点指向`null`
 > data----->保存数据。
 > next------>要保存的下一个节点。
+
+---
 
 ### 文件管理
 #### 概述
