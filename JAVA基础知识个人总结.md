@@ -3126,11 +3126,11 @@ ObjectremoveLast() |移除并返回此列表的最后一个元素
 * List接口的实现类
 > ArrayList与LinkedList的比较
 >>* 1、存储结构
->> ArrayList是线性顺序存储 
->> LinkedList对象间彼此串连起来的一个链表
+>> ArrayList是线性顺序存储 -------------- 数组结构
+>> LinkedList对象间彼此串连起来的一个链表----------链表结构
 >>* 2、操作性能
->> ArrayList适合随机查询的场合
->> LinkedList元素的插入和删除操作性高
+>> ArrayList适合随机查询的场合，查找快，增删慢
+>> LinkedList元素的插入和删除操作性高，查找慢，增删块
 >>* 3、从功能上，LinkedList要多一些
 
 ##### Iterator接口
@@ -3140,6 +3140,7 @@ ObjectremoveLast() |移除并返回此列表的最后一个元素
 * 4、Iterator是为遍历而设计，能够从集合中取出元素和删除元素，但是没有添加元素的功能
 * 5、Iterator的功能上比较简单，
 * 6、使用中，只能单向移动
+* 可以遍历所有的集合
 
 ##### Iterator接口方法
 
@@ -3148,6 +3149,12 @@ ObjectremoveLast() |移除并返回此列表的最后一个元素
 Object  next() |返回游标右边的元素并将游标移动到下一个位置
 boolean hasNext() |判断游标右边是否有元素
 void remove() |删除游标左边的元素，在执行完next之后，该操作只能执行一次
+
+#### ListIterator迭代器
+* ListIterator迭代器只能遍历List或其子类的集合。
+* 有添加删除的方法
+* 有hastNext()方法和next(）方法，实现顺序向后遍历
+* hasPrevious()和previous(）方法,可以实现逆序向前遍历。previous返回表中前一个元素
 
 #### Collections类
 * Collections类是类似于Arrays类的公用工具类 ,它提供了一些static方法供集合类使用或操作集合类 。
