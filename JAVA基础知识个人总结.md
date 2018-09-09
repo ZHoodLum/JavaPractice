@@ -2885,6 +2885,8 @@ public static void main(String[] args) throws ParseException {
 * 4、是否有特定的顺序以及是否允许重复，取决于它的实现
 > Set － 无序的集合；不允许重复
 >* HashSet
+>* TreeSet
+
 > List － 有序的集合；允许重复
 >* ArrayList
 >* LinkedList
@@ -2947,11 +2949,17 @@ public static void main(String[] args) {
 * 2、用来包含一组 无序无重复 的对象
 > 无序 — 是指元素存入顺序和集合内存储的顺序不同；
 > 无重复 — 两个对象e1和e2，如果e1.equals(e2)返回true，则认为e1和e2重复，在set中只保留一个。
+
 * 3、Set接口的实现类
-> HashSet — HashSet的特性在于其内部对象的散列存取，即采用哈希技术
->* 无序 不可重复   输出时数据无序  允许使用main值
+**HashSet — HashSet的特性在于其内部对象的散列存取，即采用哈希技术**
+>* 无序 不可重复   输出时数据无序，此类允许使用 null 元素。 
 >* 如果equles值相等  那么Hashcode值一定相等
 >* 注：    凡是Hash  都是无序的
+
+* 此类实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持。它不保证 set 的迭代顺序；特别是它不保证该顺序恒久不变。
+* 此类为基本操作提供了稳定性能，这些基本操作包括 add、remove、contains 和 size，假定哈希函数将这些元素正确地分布在桶中。
+* 底层 HashMap 实例的默认初始容量是 16，加载因子是 0.75。
+
 ```
 public static void main(String[] args) {
 	// TODO Auto-generated method stub
@@ -2973,12 +2981,13 @@ public static void main(String[] args) {
 	}
 }
 ```
-> TreeSet — TreeSet存入的顺序跟存储的顺序不同，但是存储是按照排序存储的
+* TreeSet — TreeSet存入的顺序跟存储的顺序不同，但是存储是按照排序存储的，所以说它是无序的。输出的时候，是已经排序好的。
+* 不可重复
+*  是根据二叉树的结构进行自然顺序排序
 ```
 public static void main(String[] args) {
 	/**
 	 * 无序  输入顺序与输出顺序不同  所以无序  不可重复
-	 * 
 	 *  树状结构  
 	 */
 
@@ -3008,6 +3017,9 @@ public static void main(String[] args) {
 ##### List接口
 有序 可重复，存入的顺序与取出的顺序相同
 
+* list  有序可重复  初始值10   每次扩容1.5倍   被称为是序列
+* list接口是java.util.collection接口下的一个子接口，可以通过new实现类来使用list集合。
+
 * 1、List接口
 > Collection的子接口
 > 用来包含一组 `有序有重复 `的对象
@@ -3015,6 +3027,7 @@ public static void main(String[] args) {
 > List有两种主要的集合实现类：
 >> ArrayList
 >> LinkedList
+
 * 2、两个实现类的区别：
 > ArrayList
 >> ArrayList是线性顺序存储的，是一种线性表
@@ -3207,6 +3220,20 @@ void sort(List list) |对一种List做排序
 * 每一个链表实际上就是由多个接待你组成的。开头节点为`root(根)`,结尾节点指向`null`
 > data----->保存数据。
 > next------>要保存的下一个节点。
+
+
+### Map集合
+* HashMap 的实例有两个参数影响其性能：初始容量 和加载因子。
+>* 容量 是哈希表中桶的数量，初始容量只是哈希表在创建时的容量。
+>* 加载因子 是哈希表在其容量自动增加之前可以达到多满的一种尺度。
+>* 默认加载因子：0.75
+
+* 当哈希表中的条目数超出了加载因子与当前容量的乘积时，则要对该哈希表进行 rehash 操作（即重建内部数据结构），从而哈希表将具有大约两倍的桶数。
+
+* 基于哈希表的 Map 接口的实现。此实现提供所有可选的映射操作，并允许使用 null 值和 null 键。
+* （除了非同步和允许使用 null 之外，HashMap 类与 Hashtable 大致相同。）此类不保证映射的顺序，特别是它不保证该顺序恒久不变。 
+
+* 此实现假定哈希函数将元素适当地分布在各桶之间，可为基本操作（get 和 put）提供稳定的性能。迭代 collection 视图所需的时间与 HashMap 实例的“容量”（桶的数量）及其大小（键-值映射关系数）成比例。所以，如果迭代性能很重要，则不要将初始容量设置得太高（或将加载因子设置得太低）。
 
 ---
 
