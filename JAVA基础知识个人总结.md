@@ -2942,6 +2942,26 @@ public static void main(String[] args) {
 }
 ```
 
+#### Collections类
+* Collections类是类似于Arrays类的公用工具类 ,它提供了一些static方法供集合类使用或操作集合类 。
+* Collections类中的方法
+
+##### Collections类中的方法
+
+方法含义
+Object max(Collection c,Comparator comp) |max算法采用Comparator比较算法
+Object max(collection c) |返回集合中的最大元素，需要考虑比较接口的实现
+Object min(Collection c) |返回集合中的最小元素
+void reverse(Collection c) |把集合中的元素顺序反转
+void copy(List dest,List src) |src集合中元素复制到dest集合
+void fill(List list,Object o) |填充list集合，填充元素为o
+int binarySearch(List list,Object key) |对排序后的集合list进行查询元素操作
+void sort(List list) |对一种List做排序
+
+#### 总结：collection与collections区别：
+* collection是集合； 
+* collections是操作集合的工具类
+
 ---
 
 ##### Set接口
@@ -3011,6 +3031,20 @@ public static void main(String[] args) {
 }
 ```
 * 4、使用foreach方式遍历Set集合
+
+#### 注：扩展：：：：：：
+**为甚麽可以遍历Object类型的数组？**
+* 在syso当中输出一个类相当于自动调用toString方法
+* 因为有了，父类引用指向子类对象的形式，Object o = new Integer(10);
+* 所以  调用toString方法是发生重写，实际调用的是Integer当中的toString方法  即输出数字10。
+
+**Object是所有类的超类**
+* 也是包装数据类型的超类
+* 因为 基本数据类型，性质：自动装箱：
+* 所以int 类型的10   转换为integer类型的10   int 10  -----> integer  10
+* 因为包装数据类型的超类，所以integer 10  相当于变为Object类型 的父类引用指向子类对象的引用  形式
+* 所以10  可以放到方法的参数当中
+	     
 
 ##### List接口
 有序 可重复，存入的顺序与取出的顺序相同
@@ -3149,45 +3183,6 @@ ObjectremoveLast() |移除并返回此列表的最后一个元素
 >> LinkedList元素的插入和删除操作性高，查找慢，增删块
 >>* 3、从功能上，LinkedList要多一些
 
-##### Iterator接口
-* 1、Iterator对象称作迭代器，用来方便的实现对容器内的元素进行遍历操作
-* 2、所有实现了Collection接口的集合类都有一个iterator( )方法，返回一个实现了Iterator接口的对象
-* 3、Iterator对象实现了统一的一个用来遍历Collection中对象的方法
-* 4、Iterator是为遍历而设计，能够从集合中取出元素和删除元素，但是没有添加元素的功能
-* 5、Iterator的功能上比较简单，
-* 6、使用中，只能单向移动
-* 可以遍历所有的集合
-
-##### Iterator接口方法
-
-方法|含义
-:--|:--
-Object  next() |返回游标右边的元素并将游标移动到下一个位置
-boolean hasNext() |判断游标右边是否有元素
-void remove() |删除游标左边的元素，在执行完next之后，该操作只能执行一次
-
-#### ListIterator迭代器
-* ListIterator迭代器只能遍历List或其子类的集合。
-* 有添加删除的方法
-* 有hastNext()方法和next(）方法，实现顺序向后遍历
-* hasPrevious()和previous(）方法,可以实现逆序向前遍历。previous返回表中前一个元素
-
-#### Collections类
-* Collections类是类似于Arrays类的公用工具类 ,它提供了一些static方法供集合类使用或操作集合类 。
-* Collections类中的方法
-
-##### Collections类中的方法
-
-方法含义
-Object max(Collection c,Comparator comp) |max算法采用Comparator比较算法
-Object max(collection c) |返回集合中的最大元素，需要考虑比较接口的实现
-Object min(Collection c) |返回集合中的最小元素
-void reverse(Collection c) |把集合中的元素顺序反转
-void copy(List dest,List src) |src集合中元素复制到dest集合
-void fill(List list,Object o) |填充list集合，填充元素为o
-int binarySearch(List list,Object key) |对排序后的集合list进行查询元素操作
-void sort(List list) |对一种List做排序
-
 ### Vector类
 使用elements进行遍历、Iterator也可以。
 ```
@@ -3233,6 +3228,21 @@ void sort(List list) |对一种List做排序
 
 * 此实现假定哈希函数将元素适当地分布在各桶之间，可为基本操作（get 和 put）提供稳定的性能。迭代 collection 视图所需的时间与 HashMap 实例的“容量”（桶的数量）及其大小（键-值映射关系数）成比例。所以，如果迭代性能很重要，则不要将初始容量设置得太高（或将加载因子设置得太低）。
 
+#### 特点：
+* 使用put属性添加元素
+* 使用get属性获取元素
+* key作为键，不可以重复的，若出现重复后者代替前者；比如说，谢霆锋女友张柏芝分手，王菲后来居上与峰哥领证，柏芝不哭(只支持一个人只能有一张结婚证)
+* value作为值，是可以重复的
+
+**Map两个实现类：**
+* HashMap  可以存放空值
+* TreeMap  不可以存放空值
+* HashSet与TreeSet是一个道理。
+
+**总结：**
+* Map 主要用于存储键(key)值(value)对，根据键得到值，因此键不允许键重复,但允许值重复。
+* Map是不允许key重复的，所以如果有key重复的话，那么前面的value会被后面的覆盖了 （后者会覆盖前者）
+
 * **map映射表用来存放键值对的**
 * 创建集合时，与前两个集合一样，父类引用执行子类对象。
 
@@ -3256,11 +3266,97 @@ public static void main(String[] args) {
 	}
 ```
 
-**Map两个实现类：**
-* hashmep
-* treemap
+**那么我们如何去遍历Map集合呢？
+```
+public static void main(String[] args) {
+	HashMap h1=new HashMap();
+	h1.put(1111, "11111111111");
+	h1.put(2222, "11111111112");
+	h1.put(3333, "11111111113");
+	h1.put(4444, "11111111114");
+	h1.put(5555, "11111111115");
+	h1.put(6666, "11111111116");
+//遍历map集合思路 有两大类 
+//	思路1 ：把key 装到set集合当中，再利用set几何的iterator 进行遍历
+		Set<Integer> s1=h1.keySet();	
+		Iterator i1=s1.iterator();
+		while(i1.hasNext()){
+			int key=(int) i1.next();
+			System.out.println(h1.get(key));
+		}
+		
+//   	思路2  把key，value 看成一个整体   Map.Entry
+		Set<Map.Entry<Integer,String>> s2=   h1.entrySet();
+		terator<Entry<Integer, String>> i2=s2.iterator();
+		while(i2.hasNext()){
+			Map.Entry<Integer,String> me=i2.next();
+			System.out.println(me.getKey()+":"+me.getValue());
+		}
+				
+        //思路3 只拿value值
+		Collection s3=   h1.values();
+		terator<String>i3=  s3.iterator();
+		while(i3.hasNext()){
+			    	 System.out.println( i3.next());
+		}
+			      
+	}
+```
+
+#### 总结：
+**通过使用set集合进行遍历，先转换为set集合，再对set集合进行遍历**
+* 1）k值当作set集合进行遍历
+* 2）获得value当作set集合进行遍历
+* 3）k,value当作set集合进行遍历，Map.Entry
 
 
+
+    Map.Entry<K,V>
+    public static interface Map.Entry<K,V>
+    映射项（键-值对）。Map.entrySet 方法返回映射的 collection 视图，其中的元素属于此类。获得映射项引用的唯一 方法是通过此 collection 视图的迭代器来实现。这些 Map.Entry 对象仅 在迭代期间有效；更确切地讲，如果在迭代器返回项之后修改了底层映射，则某些映射项的行为是不确定的，除了通过 setValue 在映射项上执行操作之外。
+   
+---
+
+##### Iterator接口
+* 1、Iterator对象称作迭代器，用来方便的实现对容器内的元素进行遍历操作
+* 2、所有实现了Collection接口的集合类都有一个iterator( )方法，返回一个实现了Iterator接口的对象
+* 3、Iterator对象实现了统一的一个用来遍历Collection中对象的方法
+* 4、Iterator是为遍历而设计，能够从集合中取出元素和删除元素，但是没有添加元素的功能
+* 5、Iterator的功能上比较简单，
+* 6、使用中，只能单向移动
+* 可以遍历所有的集合
+
+##### Iterator接口方法
+
+方法|含义
+:--|:--
+Object  next() |返回游标右边的元素并将游标移动到下一个位置
+boolean hasNext() |判断游标右边是否有元素
+void remove() |删除游标左边的元素，在执行完next之后，该操作只能执行一次
+
+#### ListIterator迭代器
+* ListIterator迭代器只能遍历List或其子类的集合。
+* 有添加删除的方法
+* 有hastNext()方法和next(）方法，实现顺序向后遍历
+* hasPrevious()和previous(）方法,可以实现逆序向前遍历。previous返回表中前一个元素
+#### foreach和iterator区别：
+* for循环一般用来处理比较简单的有序的，可预知大小的集合或数组
+* foreach可用于遍历任何集合或数组，而且操作简单易懂，但是需要了解集合内部类型。
+* iterator是最强大的，他可以随时修改或者删除集合内部的元素，并且是在不需要知道元素和集合的类型的情况下进行的，当你需要对不同的容器实现同样的遍历方式时，迭代器是最好的选择！
+
+#### 总结：迭代器有哪些特点：
+* Java中的Iterator功能比较简单，并且只能单向移动：
+* (1) 使用方法iterator()要求容器返回一个Iterator。第一次调用Iterator的next()方法时，它返回序列的第一个元素。
+>* 注意：iterator()方法是java.lang.Iterable接口,被Collection继承。
+* (2) 使用next()获得序列中的下一个元素。 Iterator中的next()方法采用的是顺序访问方法
+* (3) 使用hasNext()检查序列中是否还有元素。
+* (4) 使用remove()将迭代器新返回的元素删除。
+>* 提供一种方法对一个容器对象中的各个元素进行访问，把访问逻辑从不同类型的集合类中抽取出来，从而避免向外部暴露集合的内部结构。
+
+**注：**
+* Java集合框架的集合类，我们有时候称之为容器。容器的种类有很多种，比如ArrayList、LinkedList、HashSet...，每种容器都有自己的特点，ArrayList底层维护的是一个数组；LinkedList是链表结构的；HashSet依赖的是哈希表，每种容器都有自己特有的数据结构。
+    
+    
 ---
 
 ### 文件管理
