@@ -2536,6 +2536,14 @@ public static void main(String[] args) {
 > 使用concat方法连接两个字符串。`String s3 = s1.concat(s2);`
 > 使用(+)号连接两个或者多个字符串。 `String s3 = s1 + s2;`
 
+**分割符号**
+```
+Scanner sc = new Scanner(System.in);
+syso("请输入数字用,分割")
+String s = sc.next();//控制台输入
+String[] sarray = s.split(",");
+```
+
 * 5、字符串比较
 
 > 任何一个String对象在创建之后都不能对它的内容作出任何改变（immutable）
