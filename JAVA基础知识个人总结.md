@@ -2072,6 +2072,301 @@ public class CoditionA implements Condition{
 
 ---
 
+### 内部类
+
+* 定义：是定义在另一个类中的类
+
+### **那么我们为什么使用内部类呢？**
+* 内部类方法可以访问该类定义所有的作用域中的数据，包括私有的数据。也可以访问创建它的外围类对象的数据域。
+* 内部类可以对同一个包中的其他类隐藏起来。
+* 当想要定义一个回调函数且不想编写大量代码时，使用匿名内部类比较便捷。
+### 特点：
+* 内部类可以与外部类之间方便的进行私有属性的访问
+
+* 内部类可以使用private声明，声明之后无法在外部类实例化内部类对象。
+>* 语法：**内部类对象的实例化：外部类.内部类 对象 = new 外部类().new 内部类();**
+
+*  使用static定义内部类就相当于是一个内部类：
+>* 语法：**内部类对象的实例化：外部类.内部类 对象 = new 外部类().内部类();**
+
+* 内部类可以在方法中定义（用的情况最多）
+
+
+```
+//外部类
+public class Outer {
+	private String msg = "Hello World";
+	//内部类
+	class Inner{
+		public void print() {
+			System.out.println(msg);
+		}
+	}
+	public void fun() {
+		new Inner().print();
+	}
+	 
+}
+//测试类
+public class Test {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Outer Out = new Outer ();
+		Out.fun();
+	}
+
+}
+输出：Hello World
+```
+上面的这个代码没问题，但是结构有问题。虽然牺牲了一个程序的结构，但是达到了相应的目的。
+
+**内部类的外部类的属性能够相互调用、访问吗？**
+
+```
+//外部类
+public class Outer {
+	private String msg = "Hello World";
+	//内部类
+	class Inner{
+		//为内部类添加属性
+		private String info = "你好！";
+		public void print() {
+			System.out.println(msg);
+		}
+	}
+	public void fun() {
+		Inner in = new Inner();
+		in.print();
+		System.out.println(in.info);	
+	}
+}
+//测试类
+public class Test {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Outer Out = new Outer ();
+		Out.fun();
+	}
+
+}
+```
+一旦使用了内部类，是的私有属性的访问变得非常的方便,但是有一点，访问属性不能够加上this.属性名。编译出错。
+**可以使用外部类。this。属性名，这样使用**
+
+**添加使用this关键字**
+```
+//外部类
+public class Outer {
+	private String msg = "Hello World";
+	//内部类
+	class Inner{
+		public void print() {
+			//添加使用this关键字*
+			System.out.println(Outer.this.msg);
+		}
+	}
+	public void fun() {
+		Inner in = new Inner();
+		in.print();
+	}	
+}
+//测试类
+public class Test {
+	public static void main(String[] args) {
+		Outer Out = new Outer ();
+		Out.fun();
+	}
+
+}
+```
+上面的代码有一个特点：通过外部类的fun()方法访问内部类的操作，那么内部类能不能像普通对象那样直接在外部产生实例化对象调用呢？
+
+### 特点：
+
+**这种情况需要观察.class文件**
+* 内部类的class文件形式时：Outer$Inner.class。
+* 所有的$ 是在文件中的命名；如果在程序中就会变成“ . ” 符号，也就是内部类的名称就是：外部类.内部类。
+
+
+* **内部类对象的实例化：外部类.内部类 对象 = new 外部类().new 内部类();**
+* 如果我想得到内部类的实例化对象之前，应该先实例化外部类实例化对象。
+```
+//外部类
+public class Outer {
+	private String msg = "Hello World";
+	//内部类
+	class Inner{
+		public void print() {
+			//添加使用this关键字*
+			System.out.println(Outer.this.msg);
+		}
+	}
+	
+}
+//测试类
+public class Test {
+	public static void main(String[] args) {
+	//修改获取实例化对象的语法
+		Outer.Inner  Out = new Outer().new Inner();
+		Out.print();
+	}
+
+}
+```
+
+---
+
+### 使用static修饰内部类
+使用static定义的属性或者方法是不受类实例化对象控制的，所以如果使用static定义了一个内部类。它不会受到外部类的实例化对象控制。
+
+如果内部类被static修饰了，那么这个内部类就会变为一个外部类，并且只能访问外部类中定义的static操作。static只能访问static修饰的。
+
+```
+//外部类
+public class Outer {
+	private String msg = "Hello World";
+	//内部类
+	static class Inner{
+		public void print() {
+			//添加使用this关键字*
+			System.out.println(Outer.this.msg);
+		}
+	}
+	
+}
+```
+此时的这个类是无法通过编译的，如果此时想要取得内部类的实例化对象，那么应该怎么修改代码呢？
+
+之前语法形式是：
+* **内部类对象的实例化：外部类.内部类 对象 = new 外部类().new 内部类();**
+更改后的语法形式是：
+* **内部类对象的实例化：外部类.内部类 对象 = new 外部类().内部类();**
+```
+//外部类
+public class Outer {
+	//修改属性为staitc
+	private static String msg = "Hello World";
+	//内部类
+	//修改属性为staitc
+	static class Inner{
+		public void print() {
+			//添加使用this关键字*
+			System.out.println(Outer.this.msg);
+		}
+	}
+	
+}
+//测试类
+public class Test {
+	public static void main(String[] args) {
+	//修改获取实例化对象的语法
+		Outer.Inner  Out = new Outer.Inner();
+		Out.print();
+	}
+
+}
+```
+
+### 在方法中定义内部类（常用，重点）
+* 内部类可以在任意位置上定义：类中，代码块，方法里面；其中方法中定义内部类是比较常见的。
+
+```
+//外部类
+public class Outer {
+	private String msg = "Hello World";
+	//方法
+	public void fun() {
+		//方法啊中定义内部类
+		class Inner{
+			public void print() {
+				System.out.println(Outer.this.msg);
+			}
+		}
+		new Inner().print();
+		
+	}
+	
+}
+//测试类
+public class Test {
+	public static void main(String[] args) {
+		new Outer().fun();
+	}
+}
+```
+但是方法中会接受参数，定义变量。
+
+* **访问方法中定义的参数及变量**
+
+```
+//外部类
+public class Outer {
+	private String msg = "Hello World";
+	//方法
+	public void fun(int num) {
+		//变量
+		double score = 99.6;
+		//方法啊中定义内部类
+		class Inner{
+			public void print() {
+				System.out.println("属性"+Outer.this.msg);
+				System.out.println("方法参数"+num;
+				System.out.println("方法变量"+score);
+			}
+		}
+		new Inner().print();
+		
+	}
+	
+}
+//测试类
+public class Test {
+	public static void main(String[] args) {
+		new Outer().fun(100);
+	}
+}
+```
+
+## 注意 **此时没有加入任何的修饰，方法中的内部类可以访问方法的参数以继定义的变量，但是这个只适用于JDK1.8之后的版本！！！**
+
+**那么之前的版本呢？  需要使用final修饰**
+
+```
+//外部类
+public class Outer {
+	private String msg = "Hello World";
+	//方法
+	// 添加final修饰
+	public void fun(final int num) {
+		//变量
+		final double score = 99.6;
+		//方法啊中定义内部类
+		class Inner{
+			public void print() {
+				System.out.println("属性"+Outer.this.msg);
+				System.out.println("方法参数"+num;
+				System.out.println("方法变量"+score);
+			}
+		}
+		new Inner().print();
+		
+	}
+	
+}
+//测试类
+public class Test {
+	public static void main(String[] args) {
+		new Outer().fun(100);
+	}
+}
+```
+
+
+
+---
+
 ###  异常及异常处理
 * 引言：在Java中，运行时错误会作为异常抛出（而不是编译时的语法错误）。异常是一种对象，表示组织正常进行程序执行的错误或者情况。如果异常没有被处理，南无程序将会非正常终止。
   
