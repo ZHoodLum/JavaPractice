@@ -256,7 +256,7 @@ java的引用类型转换分为两种：
 > 优先级由高到低
 
  元素符号|说明|
-  |-|:-:|
+  |:--:|:--:|
   `var++、var--`|后置操作符
   `+、- ``++var、--var`|(后置操作符);(后置操作符)
   type|类型转换
@@ -2425,6 +2425,51 @@ long|Long.MAX_VALUE  &nbsp;&nbsp;&nbsp;  0x7fffffffffffffffL|Long.MIN_VALUE  &nb
 > * `基本数据类型`---------String类的valueOf方法，用连字符"+"-------->`字符串类型(String)`
 > * `基本数据类型`---------包装类通过构造器.valueOf()-------->`包装类Wrapper`
 > * `字符串类型(String)`---------包装类的parsexxx(方法)------->`基本数据类型`
+
+### 数值-字符串转换（String转Double）
+```
+String ss = "3.141592653";
+double value = Double.valueOf(ss.toString());
+```
+
+### Double.parseDouble()与Double.valueOf()区别
+* Double.parseDouble方法是把数字类型的字符串，转换成double类型
+* Double.valueOf方法是把数字类型的字符串，转换成Double类型
+```
+        double a = 0.009;
+        String b = "1993";
+
+        double parseDouble = Double.parseDouble(b);
+        System.out.println(parseDouble);
+        Double valueOf = Double.valueOf(a); //1993.0
+        Double valueOf2 = Double.valueOf(b);
+        System.out.println(valueOf);//0.009
+        System.out.println(valueOf2);//1993.0
+结果是：
+1993.0
+0.009
+1993.0
+```
+
+可以看出大体是没有任何区别，就是返回值的类型区别！
+
+* Double.parseDouble()方法的源码：
+```
+public static double parseDouble(String s) throws NumberFormatException {
+        return FloatingDecimal.readJavaFormatString(s).doubleValue();
+}
+```
+
+* Double.valueOf()方法的源码：
+```
+  public static Double valueOf(String s) throws NumberFormatException {
+          return new Double(FloatingDecimal.readJavaFormatString(s).doubleValue());
+  }
+```
+
+* valueOf方法在返回的时候new Double()，所以返回的是Double。
+
+---
 
 ```
 public static void main(String[] args) {
