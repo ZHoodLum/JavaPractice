@@ -1,5 +1,7 @@
 #### 此处的java理解来源于各个网站的博客
 
+[分页功能的实现](分页功能的实现)
+
 [JDK1.8中](JDK1.8中)
 
 [Java的四种引用方式](Java的四种引用方式)
@@ -19,6 +21,276 @@
 [继承](#继承)
 
 ---
+### 分页功能的实现
+
+### 一、分页的思路
+
+首先我们得知道写分页代码时的思路，保持思路清晰，有步骤的进行，才能行云如水。先来看看分页的效果　　　　　　　　　　　　　　　　　　　　　　
+
+**这就是一个分页导航，其中能得到的数据有**
+
+* totalRecord：总共员工数，数据库中总的记录数，这里有55条
+
+* totalPage：总页数，11页
+
+* pageSize：每页显示的记录数，这里可以看到每页显示5条
+
+* pageNum：当前页为第几页，比如图中就为第9页，因为9是没有超链接的，
+
+* start:总共能显示5页，让用户进行点击，7为起始页
+
+* end：11为能显示的尾页，也就是，如果用户点击第8页，那么start就为6，end就为10，每次都只有5页共点击查询。
+
+**每次能够得到对应页数所需要的5条数据，等等这些数据都要在jsp中显示出来，也就是说，每次都要从后台拿那么多数据过来进行显示，所以我们就想办法把这些数据封装在一个javabean当中，每次后台都将查询到的数据放入javabean对象中，我们只需要将该对象存入request作用域，然后在jsp页面中从域中获取需要的数据即可。**
+
+　　　　　　　　
+
+ 
+
+### 二、创建PageBean存放数据
+
+* PageBean.java
+
+* 总共需要8个属性pageNum、pageSize、totalRecord、totalPage、startIndex、list、start、end，
+
+* pageNum、pageSize、totalRecord：通过构造方法就能得到。pageNum请求页面提交过来的参数，pageSize是自己设置的，totalRecord是查询数据库得到的
+
+* totalPage、startIndex、start、end是通过内部算法得出，
+
+* list需要通过查询数据库在通过set方式得到。
+
+* **注意：该类使用泛型是为了不仅仅在这个项目中使用，在别的项目中也同样可以使用**
+
+　　　　　　　　
+
+　　　　　　　　
+
+代码如下
+```
+
+package com.jxpx.myums.domain;
+
+import java.util.List;
+
+public class PageBean<T> {
+    //已知数据
+    private int pageNum;    //当前页,从请求那边传过来。
+    private int pageSize;    //每页显示的数据条数。
+    private int totalRecord;    //总的记录条数。查询数据库得到的数据
+    
+    //需要计算得来
+    private int totalPage;    //总页数，通过totalRecord和pageSize计算可以得来
+    //开始索引，也就是我们在数据库中要从第几行数据开始拿，有了startIndex和pageSize，
+    //就知道了limit语句的两个数据，就能获得每页需要显示的数据了
+    private int startIndex;        
+        
+    
+    //将每页要显示的数据放在list集合中
+    private List<T> list;
+    
+    //分页显示的页数,比如在页面上显示1，2，3，4，5页，start就为1，end就为5，这个也是算过来的
+    private int start;
+    private int end;
+    
+    //通过pageNum，pageSize，totalRecord计算得来tatalPage和startIndex
+    //构造方法中将pageNum，pageSize，totalRecord获得
+    public PageBean(int pageNum,int pageSize,int totalRecord) {
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        this.totalRecord = totalRecord;
+        
+        //totalPage 总页数
+        if(totalRecord%pageSize==0){
+            //说明整除，正好每页显示pageSize条数据，没有多余一页要显示少于pageSize条数据的
+            this.totalPage = totalRecord / pageSize;
+        }else{
+            //不整除，就要在加一页，来显示多余的数据。
+            this.totalPage = totalRecord / pageSize +1;
+        }
+        //开始索引
+        this.startIndex = (pageNum-1)*pageSize ;
+        //显示5页，这里自己可以设置，想显示几页就自己通过下面算法修改
+        this.start = 1;
+        this.end = 5;
+        //显示页数的算法
+
+        if(totalPage <=5){
+            //总页数都小于5，那么end就为总页数的值了。
+            this.end = this.totalPage;
+        }else{
+            //总页数大于5，那么就要根据当前是第几页，来判断start和end为多少了，
+            this.start = pageNum - 2;
+            this.end = pageNum + 2;
+            
+            if(start < 0){
+                //比如当前页是第1页，或者第2页，那么就不如和这个规则，
+                this.start = 1;
+                this.end = 5;
+            }
+            if(end > this.totalPage){
+                //比如当前页是倒数第2页或者最后一页，也同样不符合上面这个规则
+                this.end = totalPage;
+                this.start = end - 5;
+            }
+        }
+    }
+//get、set方法。
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getTotalRecord() {
+        return totalRecord;
+    }
+
+    public void setTotalRecord(int totalRecord) {
+        this.totalRecord = totalRecord;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
+    }
+
+    public int getStartIndex() {
+        return startIndex;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    public List<T> getList() {
+        return list;
+    }
+
+    public void setList(List<T> list) {
+        this.list = list;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
+    public void setEnd(int end) {
+        this.end = end;
+    }
+    
+
+}
+```
+
+ 
+
+### 三、在service层编写业务逻辑代码
+
+* 其实就是在该层将我们所需要的PageBean对象构建好，返回给上一层User类是我们需要显示的数据的封装后的javabean。　
+
+### 四、Servlet中编写控制代码
+
+### 五、JSP中显示数据，构建分页导航
+
+因为将我们所有需要的数据都封装在了pageBean中，pageBean对象又在request域中，所以在jsp页面中，我们只需要拿到我们所需要的数据，进行显示即可，构造导航图需要注意的有一点，逻辑要搞清楚，想要显示什么不想显示什么，全屏自己控制了，只需要记得一点，在请求Servlet时，需要把请求的页码交给服务器。不然服务器不知道你要获得第几页的数据。
+
+* 我做的导航图的逻辑代码
+
+* 显示所有员工数量、总页数
+
+* 首先超链接　
+
+* 如果当前页为第一页时，就没有上一页这个超链接显示
+
+* 　如果当前页不是第一页也不是最后一页，则有上一页和下一页这个超链接显示
+
+* 如果当前页是最后一页，则只有上一页这个超链接显示，下一页没有
+
+* 尾页超链接　
+
+
+
+　　　　　　
+
+ 
+
+代码
+
+```
+ 1             <%-- 构建分页导航 --%>
+ 2             共有${requestScope.pageBean.totalRecord}个员工，共${requestScope.pageBean.totalPage }页，当前为${requestScope.pageBean.pageNum}页
+ 3             <br/>
+ 4             <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=1">首页</a>
+ 5             <%--如果当前页为第一页时，就没有上一页这个超链接显示 --%>
+ 6             <c:if test="${requestScope.pageBean.pageNum ==1}">
+ 7                 <c:forEach begin="${requestScope.pageBean.start}" end="${requestScope.pageBean.end}" step="1" var="i">
+ 8                     <c:if test="${requestScope.pageBean.pageNum == i}">
+ 9                         ${i}
+10                     </c:if>                
+11                     <c:if test="${requestScope.pageBean.pageNum != i}">
+12                         <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=${i}">${i}</a>                                        
+13                     </c:if>                        
+14                 </c:forEach>
+15                 <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=${requestScope.pageBean.pageNum+1}">下一页</a>                    
+16             </c:if>
+17             
+18             <%--如果当前页不是第一页也不是最后一页，则有上一页和下一页这个超链接显示 --%>
+19             <c:if test="${requestScope.pageBean.pageNum > 1 && requestScope.pageBean.pageNum < requestScope.pageBean.totalPage}">
+20                 <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=${requestScope.pageBean.pageNum-1}">上一页</a>
+21                 <c:forEach begin="${requestScope.pageBean.start}" end="${requestScope.pageBean.end}" step="1" var="i">    
+22                     <c:if test="${requestScope.pageBean.pageNum == i}">
+23                         ${i}
+24                     </c:if>            
+25                     <c:if test="${requestScope.pageBean.pageNum != i}">
+26                         <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=${i}">${i}</a>                                        
+27                     </c:if>                        
+28                 </c:forEach>
+29                 <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=${requestScope.pageBean.pageNum+1}">下一页</a>    
+30             </c:if>
+31             
+32             <%-- 如果当前页是最后一页，则只有上一页这个超链接显示，下一页没有 --%>
+33             <c:if test="${requestScope.pageBean.pageNum == requestScope.pageBean.totalPage}">
+34                 <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=${requestScope.pageBean.pageNum-1}">上一页</a>
+35                 <c:forEach begin="${requestScope.pageBean.start}" end="${requestScope.pageBean.end}" step="1" var="i">
+36                     <c:if test="${requestScope.pageBean.pageNum == i}">
+37                         ${i}
+38                     </c:if>
+39                     <c:if test="${requestScope.pageBean.pageNum != i}">
+40                         <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=${i}">${i}</a>                                        
+41                     </c:if>                
+42                 </c:forEach>
+43             </c:if>
+44             <%--尾页 --%>
+45             <a href="${pageContext.request.contextPath}/FindAllWithPage?pageNum=${requestScope.pageBean.totalPage}">尾页</a>
+```
+ 
+
+　
+
+### 六、总结
+其实分页真的很简单，难点就在一个地方，javabean的构建，只要理清楚了pageBean中需要哪些属性，各种属性的作用是什么，那么分页就so easy了。还有一个就是在jsp中写分页导航时的逻辑，不要混乱了。其实一点也不难，有兴趣的同学可以自己动手实现一下分页的功能。对自己理解分页有很大的帮助，以后就在也不用到别人那里复制粘贴别人的分页代码了，自己也能写。靠自己丰衣足食。
+    
 ### JDK1.8中
 * 接口中的变量默认是public static final
 * 接口中的方法默认是 public abstract，除非是static方法或者默认方法
