@@ -1032,4 +1032,93 @@ response.sendRedirect("loginsuccess.jsp");
 
 >* 转发：你先去了A局，A局看了以后，知道这个事情其实应该B局来管，但是他没有把你退回来，而是让你坐一会儿，自己到后面办公室联系了B的人，让他们办好后，送了过来。
 
+---
+
+### Servlet的生命周期
+#### 一、Servlet的生命周期
+
+* Servlet的生命周期分为4个阶段：实例化- ->初始化- ->执行处理- ->销毁 
+>* （1）实例化——new：服务器第一次被访问时，加载一个Servlet容器，而且只会被加载一次。 
+>* （2）初始化——init：创建完Servlet容器后，会调用仅执行一次的init()初始化方法，用于初始化Servlet对象，无论多少台客户端在服务器运行期间访问都不会再执行init()方法。
+
+可以在继承的GenericServlet这个抽象类中看到初始化方法：
+```
+public void init() throws ServletException {
+}
+```
+
+而在我们的Servlet类中应继承调用该方法:
+```
+public void init() throws ServletException {
+super.init();
+}
+```
+
+>* （3）执行处理——service()方法：HttpServlet的抽象类提供了doGet()、doPost()……等方法。对应了request请求的发送方法，与之相匹配：
+```
+protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+String protocol = req.getProtocol();
+String msg = lStrings.getString("http.method_get_not_supported");
+if (protocol.endsWith("1.1")) {
+resp.sendError(405, msg);
+} else {
+resp.sendError(400, msg);
+}
+
+}
+protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+String protocol = req.getProtocol();
+String msg = lStrings.getString("http.method_post_not_supported");
+if (protocol.endsWith("1.1")) {
+resp.sendError(405, msg);
+} else {
+resp.sendError(400, msg);
+}
+
+}
+```
+
+>* （4）销毁——destroy：在服务器关闭或重启时，Servlet会调用destroy方法来销毁，将Servlet容器标记为垃圾文件，让GC做回收处理。我们编写的Servlet是调用了GenericServlet抽象类的destroy方法：
+```
+@Override
+public void destroy() {
+super.destroy();
+}
+```
+
+#### 二、Servlet的工作原理
+
+* 1、首先简单解释一下Servlet接收和响应客户请求的过程： 
+
+客户发送一个请求，Servlet是调用service()方法对请求进行响应的，通过源代码可见，service()方法中对请求的方式进行了匹配。选择调用doGet,doPost等这些方法，然后再进入对应的方法中调用逻辑层的方法，实现对客户的响应。在Servlet接口和GenericServlet中是没有doGet（）、doPost（）等等这些方法的，HttpServlet中定义了这些方法，但是都是返回error信息，所以，我们每次定义一个Servlet的时候，都必须实现doGet或doPost等这些方法。
+
+* 2、每一个自定义的Servlet都必须实现Servlet的接口，Servlet接口中定义了五个方法，其中比较重要的三个方法涉及到Servlet的生命周期，分别是上文提到的init(),service(),destroy()方法。GenericServlet是一个通用的，不特定于任何协议的Servlet,它实现了Servlet接口。而HttpServlet继承于GenericServlet，因此HttpServlet也实现了Servlet接口。所以我们定义Servlet的时候只需要继承HttpServlet即可。
+```
+package javax.servlet;
+
+import java.io.IOException;
+
+public interface Servlet {
+void init(ServletConfig var1) throws ServletException;
+
+ServletConfig getServletConfig();
+
+void service(ServletRequest var1, ServletResponse var2) throws ServletException, IOException;
+
+String getServletInfo();
+
+void destroy();
+}
+```
+
+* 3、Servlet接口和GenericServlet是不特定于任何协议的，而HttpServlet是特定于HTTP协议的类，所以HttpServlet中实现了service()方法，并将请求ServletRequest、ServletResponse 强转为HttpRequest 和 HttpResponse。 
+以上三点参考：Servlet的工作原理
+
+* 4、另外，Servlet是单例模式，线程是不安全的，因此在service()方法中尽量不要操作全局变量。但实际上，可以通过使用session和application来代替全局变量，只是会加大服务器负载。三、Servlet处理请求的过程
+
+>* 客户端发送请求给服务器。
+>* 容器根据请求及web.xml判断对应的Servlet是否存在，如果不存在则返回404
+>* 容器根据请求及web.xml判断对应的Servlet是否已经被实例化，若是相应的Servlet没有被实例化，则容器将会加载相应的Servlet到Java虚拟机并实例化
+>* 调用实例对象的service()方法，并开启一个新的线程去执行相关处理。调用servce方法，判断是调用doGet方法还是doPost方法,业务完成后响应相关的页面发送给客户端。
+
 
