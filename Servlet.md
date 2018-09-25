@@ -15,6 +15,8 @@
 
 [请求转发和重定向区别](#请求转发和重定向区别)
 
+[Servlet的生命周期](#Servlet的生命周期)
+
 ---
 
 ---
@@ -169,8 +171,8 @@ context-param>
 * HttpServlet继承了GenericServlet，而GenericServlet实现Servlet接口
 * 所以我们可以同构继承HttpServlet来创建一个Servlet。
 * HttpServlet重写service()方法：
-*> 在该方法中先将ServletRequest和ServletResponse强转为了HttpServletRequest和HttpServletResponse。
-*> 然调用重载的service()方法，并将刚刚强转得到对象传递到重载的方法中。
+*>  在该方法中先将ServletRequest和ServletResponse强转为了HttpServletRequest和HttpServletResponse。
+*>  然调用重载的service()方法，并将刚刚强转得到对象传递到重载的方法中。
 
 * 重载service(HttpServletRequest request , HttpServletResponse response)
 *> 在方法中获取请求的方式（get或post）
