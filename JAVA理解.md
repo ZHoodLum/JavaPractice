@@ -1,4 +1,7 @@
-#### 此处的java理解来源于各个网站的博客
+#### 此处的部分资源来源于各个网站的博客，加上了自己的理解可能不是特别准确，希望一起交流！
+
+
+[单例模式](#单例模式)
 
 [数据库连接池的好处](#数据库连接池的好处)
 
@@ -23,6 +26,254 @@
 [继承](#继承)
 
 ---
+
+### 单例模式
+
+* 单例模式有以下特点：
+>* 1、单例类只能有一个实例。
+>* 2、单例类必须自己创建自己的唯一实例。
+>* 3、单例类必须给所有其他对象提供这一实例。
+
+* 单例模式确保某个类只有一个实例，而且自行实例化并向整个系统提供这个实例。在计算机系统中，线程池、缓存、日志对象、对话框、打印机、显卡的驱动程序对象常被设计成单例。这些应用都或多或少具有资源管理器的功能。每台计算机可以有若干个打印机，但只能有一个Printer Spooler，以避免两个打印作业同时输出到打印机中。每台计算机可以有若干通信端口，系统应当集中管理这些通信端口，以避免一个通信端口同时被两个请求同时调用。总之，选择单例模式就是为了避免不一致状态，避免政出多头。
+
+---
+
+###  一、懒汉式单例
+
+```
+[java] view plain copy
+1.    //懒汉式单例类.在第一次调用的时候实例化自己   
+2.    public class Singleton {  
+3.        private Singleton() {}  
+4.        private static Singleton single=null;  
+5.        //静态工厂方法   
+6.        public static Singleton getInstance() {  
+7.             if (single == null) {  //single 为空  
+8.                 single = new Singleton();  
+9.             }    
+10.            return single;  
+11.        }  
+12.    }  
+```
+
+Singleton通过将构造方法限定为private避免了类在外部被实例化，在同一个虚拟机范围内，Singleton的唯一实例只能通过getInstance()方法访问。（事实上，通过Java反射机制是能够实例化构造方法为private的类的，那基本上会使所有的Java单例实现失效。此问题在此处不做讨论，姑且掩耳盗铃地认为反射机制不存在。）
+
+但是以上懒汉式单例的实现没有考虑线程安全问题，它是线程不安全的，并发环境下很可能出现多个Singleton实例，要实现线程安全，有以下三种方式，都是对getInstance这个方法改造，保证了懒汉式单例的线程安全，如果你第一次接触单例模式，对线程安全不是很了解，可以先跳过下面这三小条，去看饿汉式单例，等看完后面再回头考虑线程安全的问题：
+
+
+* 1、在getInstance方法上加同步
+
+```
+[java] view plain copy
+1.    public static synchronized Singleton getInstance() {  
+2.             if (single == null) {    
+3.                 single = new Singleton();  
+4.             }    
+5.            return single;  
+6.    }  
+```
+
+
+* 2、双重检查锁定
+
+```
+[java] view plain copy
+1.    public static Singleton getInstance() {  
+2.            if (singleton == null) {    
+3.                synchronized (Singleton.class) {    
+4.                   if (singleton == null) {    
+5.                      singleton = new Singleton();   
+6.                   }    
+7.                }    
+8.            }    
+9.            return singleton;   
+10.        }  
+```
+
+* 3、静态内部类
+
+```
+[java] view plain copy
+1.    public class Singleton {    
+2.        private static class LazyHolder {    
+3.           private static final Singleton INSTANCE = new Singleton();    
+4.        }    
+5.        private Singleton (){}    
+6.        public static final Singleton getInstance() {    
+7.           return LazyHolder.INSTANCE;    
+8.        }    
+9.    }    
+```
+
+这种比上面1、2都好一些，既实现了线程安全，又避免了同步带来的性能影响。
+
+---
+
+### 二、饿汉式单例
+
+```
+[java] view plain copy
+1.    //饿汉式单例类.在类初始化时，已经自行实例化   
+2.    public class Singleton1 {  
+3.        private Singleton1() {}  
+4.        private static final Singleton1 single = new Singleton1();  
+5.        //静态工厂方法   
+6.        public static Singleton1 getInstance() {  
+7.            return single;  
+8.        }  
+9.    }  
+```
+
+饿汉式在类创建的同时就已经创建好一个静态的对象供系统使用，以后不再改变，所以天生是线程安全的。
+
+---
+
+###三、登记式单例
+
+```
+[java] view plain copy
+1.    //类似Spring里面的方法，将类名注册，下次从里面直接获取。  
+2.    public class Singleton3 {  
+3.        private static Map<String,Singleton3> map = new HashMap<String,Singleton3>();  
+4.        static{  
+5.            Singleton3 single = new Singleton3();  
+6.            map.put(single.getClass().getName(), single);  
+7.        }  
+8.        //保护的默认构造子  
+9.        protected Singleton3(){}  
+10.        //静态工厂方法,返还此类惟一的实例  
+11.        public static Singleton3 getInstance(String name) {  
+12.            if(name == null) {  
+13.                name = Singleton3.class.getName();  
+14.                System.out.println("name == null"+"--->name="+name);  
+15.            }  
+16.            if(map.get(name) == null) {  
+17.                try {  
+18.                    map.put(name, (Singleton3) Class.forName(name).newInstance());  
+19.                } catch (InstantiationException e) {  
+20.                    e.printStackTrace();  
+21.                } catch (IllegalAccessException e) {  
+22.                    e.printStackTrace();  
+23.                } catch (ClassNotFoundException e) {  
+24.                    e.printStackTrace();  
+25.                }  
+26.            }  
+27.            return map.get(name);  
+28.        }  
+29.        //一个示意性的商业方法  
+30.        public String about() {      
+31.            return "Hello, I am RegSingleton.";      
+32.        }      
+33.        public static void main(String[] args) {  
+34.            Singleton3 single3 = Singleton3.getInstance(null);  
+35.            System.out.println(single3.about());  
+36.        }  
+37.    }  
+```
+
+登记式单例实际上维护了一组单例类的实例，将这些实例存放在一个Map（登记薄）中，对于已经登记过的实例，则从Map直接返回，对于没有登记的，则先登记，然后返回。
+
+这里我对登记式单例标记了可忽略，我的理解来说，首先它用的比较少，另外其实内部实现还是用的饿汉式单例，因为其中的static方法块，它的单例在类被装载的时候就被实例化了。
+
+---
+
+### 饿汉式和懒汉式区别
+
+* 从名字上来说，饿汉和懒汉，
+>* 饿汉就是类一旦加载，就把单例初始化完成，保证getInstance的时候，单例是已经存在的了，
+>* 而懒汉比较懒，只有当调用getInstance的时候，才回去初始化这个单例。
+
+**另外从以下两点再区分以下这两种方式**
+
+* 1、线程安全：
+>* 饿汉式天生就是线程安全的，可以直接用于多线程而不会出现问题，
+>* 懒汉式本身是非线程安全的，为了实现线程安全有几种写法，分别是上面的1、2、3，这三种实现在资源加载和性能方面有些区别。
+
+* 2、资源加载和性能：
+>* 饿汉式在类创建的同时就实例化一个静态对象出来，不管之后会不会使用这个单例，都会占据一定的内存，但是相应的，在第一次调用时速度也会更快，因为其资源已经初始化完成，
+>* 而懒汉式顾名思义，会延迟加载，在第一次使用该单例的时候才会实例化对象出来，第一次调用时要做初始化，如果要做的工作比较多，性能上会有些延迟，之后就和饿汉式一样了。
+
+---
+
+### 至于1、2、3这三种实现又有些区别，
+* 第1种，在方法调用上加了同步，虽然线程安全了，但是每次都要同步，会影响性能，毕竟99%的情况下是不需要同步的，
+* 第2种，在getInstance中做了两次null检查，确保了只有第一次调用单例的时候才会做同步，这样也是线程安全的，同时避免了每次都同步的性能损耗
+* 第3种，利用了classloader的机制来保证初始化instance时只有一个线程，所以也是线程安全的，同时没有性能损耗，所以一般我倾向于使用这一种。
+
+
+---
+
+### 什么是线程安全？
+* 如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。
+
+* 或者说：一个类或者程序所提供的接口对于线程来说是原子操作，或者多个线程之间的切换不会导致该接口的执行结果存在二义性,也就是说我们不用考虑同步的问题，那就是线程安全的。
+
+---
+
+### 应用
+以下是一个单例类使用的例子，以懒汉式为例，这里为了保证线程安全，使用了双重检查锁定的方式：
+
+```
+[java] view plain copy
+1.    public class TestSingleton {  
+2.        String name = null;  
+3.      
+4.            private TestSingleton() {  
+5.        }  
+6.      
+7.        private static volatile TestSingleton instance = null;  
+8.      
+9.        public static TestSingleton getInstance() {  
+10.               if (instance == null) {    
+11.                 synchronized (TestSingleton.class) {    
+12.                    if (instance == null) {    
+13.                       instance = new TestSingleton();   
+14.                    }    
+15.                 }    
+16.               }   
+17.               return instance;  
+18.        }  
+19.      
+20.        public String getName() {  
+21.            return name;  
+22.        }  
+23.      
+24.        public void setName(String name) {  
+25.            this.name = name;  
+26.        }  
+27.      
+28.        public void printInfo() {  
+29.            System.out.println("the name is " + name);  
+30.        }  
+31.      
+32.    }  
+```
+
+* 可以看到里面加了volatile关键字来声明单例对象，既然synchronized已经起到了多线程下原子性、有序性、可见性的作用
+
+```
+[java] view plain copy
+1.    public class TMain {  
+2.        public static void main(String[] args){  
+3.            TestStream ts1 = TestSingleton.getInstance();  
+4.            ts1.setName("jason");  
+5.            TestStream ts2 = TestSingleton.getInstance();  
+6.            ts2.setName("0539");  
+7.              
+8.            ts1.printInfo();  
+9.            ts2.printInfo();  
+10.              
+11.            if(ts1 == ts2){  
+12.                System.out.println("创建的是同一个实例");  
+13.            }else{  
+14.                System.out.println("创建的不是同一个实例");  
+15.            }  
+16.        }  
+17.    }  
+```
+
+---
+
 ### 数据库连接池的好处
 频繁的建立、关闭连接，会极大的减低系统的性能
 
