@@ -1,5 +1,6 @@
 #### 此处的部分资源来源于各个网站的博客，加上了自己的理解可能不是特别准确，希望一起交流！
 
+[静态代理与动态代理](#静态代理与动态代理)
 
 [单例模式](#单例模式)
 
@@ -24,6 +25,139 @@
 [线程状态](#线程状态)
 
 [继承](#继承)
+
+---
+
+### 静态代理与动态代理
+Proxy代理模式是一种结构型设计模式，主要解决的问题是：在直接访问对象时带来的问题
+
+**代理是一种常用的设计模式，其目的就是为其他对象提供一个代理以控制对某个对象的访问。代理类负责为委托类预处理消息，过滤消息并转发消息，以及进行消息被委托类执行后的后续处理。**
+
+---
+比如你要买或卖房子，找个中介来帮你进行买卖，中介如何操作你并不关心，而你关心的是最终的结果，房子是否买卖成功，中间过程有中介来处理。这里的中介就像我们理解的代理模式一样。我们不直接进行买卖，而是通过中介买卖。我们不直接访问某个对象，而是访问其代理对象。
+---
+为了保持行为的一致性，代理类和委托类通常会实现相同的接口，所以在访问者看来两者没有丝毫的区别。通过代理类这中间一层，能有效控制对委托类对象的直接访问，也可以很好地隐藏和保护委托类对象，同时也为实施不同控制策略预留了空间，从而在设计上获得了更大的灵活性。更通俗的说，代理解决的问题当两个类需要通信时，引入第三方代理类，将两个类的关系解耦，让我们只了解代理类即可，而且代理的出现还可以让我们完成与另一个类之间的关系的统一管理，但是切记，**代理类和委托类要实现相同的接口，因为代理真正调用的还是委托类的方法。**
+---
+使用场合举例：如果需要委托类处理某一业务，那么我们就可以先在代理类中统一处理然后再调用具体实现类按照代理的创建时期，代理类可以分为两种： 
+
+* 静态：由程序员创建代理类或特定工具自动生成源代码再对其编译。在程序运行前代理类的.class文件就已经存在了
+* 动态：在程序运行时运用反射机制动态创建而成。
+
+---
+
+### 静态代理：
+#### 静态代理UML类图：
+
+
+静态代理类图
+ 
+---
+
+#### 模式中包含的角色及其职责
+* Subject：抽象主题角色，抽象主题类可以是抽象类，也可以是接口，是一个最普通的业务类型定义，无特殊要求。
+* RealSubject：具体主题角色，也叫被委托角色、被代理角色。是业务逻辑的具体执行者。
+* Proxy：代理主题角色，也叫委托类、代理类。它把所有抽象主题类定义的方法给具体主题角色实现，并且在具体主题角色处理完毕前后做预处理和善后工作。（最简单的比如打印日志）：
+>*  定义接口
+
+>* 实现接口的实现类
+
+>*  实现接口的静态代理对象
+
+
+
+>* 客户端测试
+
+
+
+>* 测试结果
+
+
+---
+
+
+#### 静态代理类优缺点
+* 优点：
+>* 代理使客户端不需要知道实现类怎么做的（不知道方法），而客户端只需知道代理的方法即可（解耦合）
+* 缺点：
+>* 1）代理类和委托类实现了相同的接口，代理类通过委托类实现了相同的方法。这样就出现了大量的代码重复。如果接口增加一个方法，除了所有实现类需要实现这个方法外，所有代理类也需要实现此方法。增加了代码维护的复杂度。
+>* 2）代理对象只服务于一种类型的对象，如果要服务多类型的对象。势必要为每一种对象都进行代理，静态代理在程序规模稍大时就无法胜任了。如上的代码是只为Realsubject类的访问提供了代理，但是如果还要为其他类如Realsubject2类提供代理的话，就需要我们再次添加代理Realsubject2的代理类。
+
+---
+
+### 动态代理:
+#### jdk动态代理（实现接口）
+* 动态代理类图
+
+
+
+java动态代理类位于java.lang.reflect包下，一般主要涉及到以下两个类：
+* Interface InvocationHandler：该接口中仅定义了一个方法Object：invoke(Object obj,Method method, Object[] args)。在实际使用时，第一个参数obj一般是指代理 类，method是被代理的方法，如上例中的request()，args为该方法的参数数组。 这个抽 象方法在代理类中动态实现。
+* Proxy：该类即为动态代理类，作用类似于上例中的ProxySubject。
+* Protected Proxy(InvocationHandler h)：构造函数，估计用于给内部的h赋值。
+* Static Class getProxyClass (ClassLoader loader, Class[] interfaces)：获得一个 代理类，其中loader是类装载器，interfaces是真实类所拥有的全部接口的数组。
+* Static Object newProxyInstance(ClassLoader loader, Class[] interfaces, InvocationHandler h)：返回代理类的一个实例，返回后的代理类可以当作被代理类使用 (可使用被代理类的在Subject接口中声明过的方法)。
+
+
+
+
+运行结果：
+
+通过这种方式，被代理的对象(RealSubject)可以在运行时动态改变，需要控制的接口 (Subject接口)可以在运行时改变，控制的方式(DynamicSubject类)也可以动态改变，从而实 现了非常灵活的动态代理关系。
+
+### 从JDK 1.3以来，Java 语言通过java.lang.reflex库提供的三个类直接支持代理：
+* java.lang.reflect.Proxy
+* java.lang.reflect.InvocationHandler 
+* Method.
+Proxy类在运行时动态创建代理对象，这也是dynamic proxy的由来，其中最重要的是newProxyInstance,这个方法中，指明了将要代理的类的加载器，业务类接口，以及代理类要执行动作的调用处理器（InvokeHandler)
+
+```
+public static Object newProxyInstance(
+                    ClassLoader loader, Class[] interfaces,InvocationHandler h)
+                             throws IllegalArgumentException
+```
+
+---
+
+### 参数说明：
+* ClassLoader loader：类加载器
+* Class[] interfaces：得到全部的接口
+* InvocationHandler h：得到InvocationHandler接口的子类实例
+**注**:类加载器
+在Proxy类中的newProxyInstance（）方法中需要一个ClassLoader类的实例，ClassLoader实际上对应的是类加载器，在Java中主要有一下三种类加载器;
+* Booststrap ClassLoader：此加载器采用C++编写，一般开发中是看不到的；
+* Extendsion ClassLoader：用来进行扩展类的加载，一般对应的是jre\lib\ext目录中的类;
+* AppClassLoader：(默认)加载classpath指定的类，是最常使用的是一种加载器。
+
+当系统有了一个代理对象之后，对原方法的调用会首先被分派到一个调用处理器（Invocation Handler).InvocationHandler 
+
+---
+
+ ### 对于JDK 的Proxy,有以下几点：
+* 1）Interface：对于JDK proxy，业务类是需要一个Interface的
+* 2）Proxy，Proxy 类是动态产生的，这个类在调用Proxy.newProxyInstance(targetCls.getClassLoader, targetCls.getInterface,InvocationHander)之后，会产生一个Proxy类的实例。实际上这个Proxy类也是存在的，不仅仅是类的实例。这个Proxy类可以保存到硬盘上。
+* 3） Method:对于业务委托类的每个方法，现在Proxy类里面都不用静态显示出来
+* 4） InvocationHandler: 这个类在业务委托类执行时，会先调用invoke方法。invoke方法再执行相应的代理操作，可以实现对业务方法的再包装
+
+---
+
+### cglib动态代理（继承）
+cglib是针对类来实现代理的，他的原理是对指定的目标类生成一个子类，并覆盖其中方法实现增强，**但因为采用的是继承，所以不能对final修饰的类进行代理。** 
+
+
+
+运行结果：
+
+CGLib采用了非常底层的字节码技术，其原理是通过字节码技术为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类方法的调用，顺势织入横切逻辑。
+* JDK动态代理与CGLib动态代理均是实现Spring AOP的基础。
+* 而spring中的AOP，是通过动态代理实现的。
+### 一、简单来说：
+* JDK动态代理只能对实现了接口的类生成代理，而不能针对类
+* CGLIB是针对类实现代理，主要是对指定的类生成一个子类，覆盖其中的方法（继承）
+### 二、Spring在选择用JDK还是CGLiB的依据：
+* (1)当Bean实现接口时，Spring就会用JDK的动态代理
+* (2)当Bean没有实现接口时，Spring使用CGlib是实现
+* (3)可以强制使用CGlib（在spring配置中加入<aop:aspectj-autoproxy proxy-target-class="true"/>）
+
 
 ---
 
