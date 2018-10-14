@@ -17,6 +17,9 @@
 
 [Servlet的生命周期](#Servlet的生命周期)
 
+[Filter过滤器](#Filter过滤器)
+
+
 ---
 
 ---
@@ -1124,6 +1127,8 @@ void destroy();
 >* 调用实例对象的service()方法，并开启一个新的线程去执行相关处理。调用servce方法，判断是调用doGet方法还是doPost方法,业务完成后响应相关的页面发送给客户端。
 
 ---
+
+### Filter过滤器
 ### 一、Filter简介
 
 　　Filter也称之为过滤器，它是Servlet技术中最激动人心的技术之一，WEB开发人员通过Filter技术，对web服务器管理的所有web资源：例如Jsp,
