@@ -1123,4 +1123,101 @@ void destroy();
 >* 容器根据请求及web.xml判断对应的Servlet是否已经被实例化，若是相应的Servlet没有被实例化，则容器将会加载相应的Servlet到Java虚拟机并实例化
 >* 调用实例对象的service()方法，并开启一个新的线程去执行相关处理。调用servce方法，判断是调用doGet方法还是doPost方法,业务完成后响应相关的页面发送给客户端。
 
+---
+### 一、Filter简介
+
+　　Filter也称之为过滤器，它是Servlet技术中最激动人心的技术之一，WEB开发人员通过Filter技术，对web服务器管理的所有web资源：例如Jsp,
+Servlet, 静态图片文件或静态html文件等进行拦截，从而实现一些特殊的功能。例如实现URL级别的权限访问控制、过滤敏感词汇、压缩响应信息等
+一些高级功能。
+　　Servlet API中提供了一个Filter接口，开发web应用时，如果编写的Java类实现了这个接口，则把这个java类称之为过滤器Filter。通过Filter
+技术，开发人员可以实现用户在访问某个目标资源之前，对访问的请求和响应进行拦截，Filter接口源代码：
+```
+public abstract interface Filter{  
+    public abstract void init(FilterConfig paramFilterConfig) throws ServletException;  
+    public abstract void doFilter(ServletRequest paramServletRequest, ServletResponse paramServletResponse, FilterChain   
+        paramFilterChain) throws IOException, ServletException;  
+    public abstract void destroy();  
+}  
+```
+
+### 二、Filter是如何实现拦截的？(Filter的工作原理)
+
+　　Filter接口中有一个doFilter方法，当我们编写好Filter，并配置对哪个web资源进行拦截后，WEB服务器每次在调用web资源的service方法之前，
+都会先调用一下filter的doFilter方法，因此，在该方法内编写代码可达到如下目的：
+    调用目标资源之前，让一段代码执行。
+    是否调用目标资源（即是否让用户访问web资源）。
+    调用目标资源之后，让一段代码执行。
+　　web服务器在调用doFilter方法时，会传递一个filterChain对象进来，filterChain对象是filter接口中最重要的一个对象，它也提供了一个
+doFilter方法，开发人员可以根据需求决定是否调用此方法，调用该方法，则web服务器就会调用web资源的service方法，即web资源就会被访问，
+否则web资源不会被访问。
+
+### 三、Filter开发流程
+
+* 3.1、Filter开发步骤
+* Filter开发分为2步：
+>* 编写java类实现Filter接口，并实现其doFilter方法。
+>* 在web.xml 文件中使用<filter>和<filter-mapping>元素对编写的filter类进行注册，并设置它所能拦截的资源。
+**过滤器范例：**
+```
+import java.io.IOException;  
+import javax.servlet.Filter;  
+import javax.servlet.FilterChain;  
+import javax.servlet.FilterConfig;  
+import javax.servlet.ServletException;  
+import javax.servlet.ServletRequest;  
+import javax.servlet.ServletResponse;  
+public class FilterTest implements Filter{  
+    public void destroy() {  
+        System.out.println("----Filter销毁----");  
+    }  
+    public void doFilter(ServletRequest request, ServletResponse response,FilterChain filterChain) throws IOException, ServletException {  
+        // 对request、response进行一些预处理  
+        request.setCharacterEncoding("UTF-8");  
+        response.setCharacterEncoding("UTF-8");  
+        response.setContentType("text/html;charset=UTF-8");  
+        System.out.println("----调用service之前执行一段代码----");  
+        filterChain.doFilter(request, response); // 执行目标资源，放行  
+        System.out.println("----调用service之后执行一段代码----");  
+    }  
+    public void init(FilterConfig arg0) throws ServletException {  
+        System.out.println("----Filter初始化----");  
+    }  
+}  
+```
+
+**在web. xml中配置过滤器：**
+```
+<?xml version="1.0" encoding="UTF-8"?>  
+<web-app version="3.0"   
+    xmlns="http://java.sun.com/xml/ns/javaee"   
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">  
+  <display-name></display-name>      
+  <welcome-file-list>  
+    <welcome-file>index.jsp</welcome-file>  
+  </welcome-file-list>  
+  <!--配置过滤器-->  
+  <filter>  
+      <filter-name>FilterTest</filter-name>  
+      <filter-class>com.yangcq.filter.FilterTest</filter-class>  
+  </filter>  
+  <!--映射过滤器-->  
+  <filter-mapping>  
+      <filter-name>FilterTest</filter-name>  
+      <!--“/*”表示拦截所有的请求 -->  
+      <url-pattern>/*</url-pattern>  
+  </filter-mapping>  
+</web-app>  
+```
+
+* 3.2、Filter链
+　　在一个web应用中，可以开发编写多个Filter，这些Filter组合起来称之为一个Filter链。web服务器根据Filter在web.xml文件中的注册顺序，
+决定先调用哪个Filter，当第一个Filter的doFilter方法被调用时，web服务器会创建一个代表Filter链的FilterChain对象传递给该方法。在doFilter
+方法中，开发人员如果调用了FilterChain对象的doFilter方法，则web服务器会检查FilterChain对象中是否还有filter，如果有，则调用第2个filter，
+如果没有，则调用目标资源。
+
+
+
+
 
