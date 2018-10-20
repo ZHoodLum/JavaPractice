@@ -4066,4 +4066,112 @@ y = 12;
 ```
 总结：虽然String属于类，属于引用类型，但是由于内容不可改变的特点，很多的时候，就把String当成基本数据类型使用，也就是说：每一个String变量只能保存一个数据（改变了就会把之前的数据替换掉了。）
 
+---
+
+Java：遍历Map/HashMap的各种方法
+
+在遍历Map集合之前首先先定义一个Map对象：
+```
+Map<String, String> map = new LinkedHashMap<String, String>();
+map.put("1", "one");
+map.put("2", "two");
+map.put("3", "three");
+map.put("4", "fore");
+map.put("5", "five");
+```
+
+这个地方使用的是LinkedHashMap，主要是为了确保让map中的元素是按照插入的顺序存放的。
+1. 使用keySet()方法遍历
+使用keyset方法遍历，是先取出map的key组成的Set集合，通过对Set集合的遍历，然后使用map.get(key)方法取出value值。
+```
+for (String key : map.keySet()) {
+    System.out.println(key + " : " + map.get(key));
+}
+```
+
+2. 使用map的values()方法遍历集合的values
+```
+map.values()返回的是由map的值组成的Collection，这个方法只能遍历map的所有value，不能得到map的key。
+for (String value : map.values()) {
+    System.out.println(value);
+}
+```
+
+3. 使用map的entrySet()方法遍历
+使用map的entrySet()方法返回一个以Entry为元素的Set集合，然后对Set集合进行遍历。
+```
+for (Entry<String, String> entry : map.entrySet()) {
+System.out.println(entry.getKey()+ " : " +entry.getValue());
+}
+```
+
+4. 通过keySet()返回的集合的iterator遍历
+由于map.keySet()返回的是一个Set集合，所以通过它的iterator()方法返回一个迭代器，通过迭代器遍历map。
+```
+Iterator<String> it = map.keySet().iterator();
+while(it.hasNext()) {
+    String key = it.next();
+    System.out.println(key + " : " + map.get(key));
+}
+```
+
+5.通过values()返回的Collection的iterator遍历
+map.values()方法返回的是一个Collection对象，这个集合对象可以使用iterator方法访问。
+```
+Iterator<String> it = map.values().iterator();
+while(it.hasNext()) {
+    String key = it.next();
+    System.out.println(key + " : " + map.get(key));
+}
+```
+
+6.通过entrySet()返回的Set的iterator遍历
+同上，map.entrySet()方法返回的是一个Set<Entry<String, String»类型的集合，可以使用iterator来访问该集合。
+```
+Iterator<Entry<String, String>> it =    map.entrySet().iterator();
+while(it3.hasNext()) {
+    Entry<String, String> entry = it3.next();
+System.out.println(entry.getKey() + " : " +entry.getValue());
+}
+```
+
+以上总结了对map集合的集中遍历方式，根据自身需要灵活选择使用哪种方式。
+实例：
+```
+public static void main(String[] args) {
+  Map<String, String> map = new HashMap<String, String>();
+map.put("1", "value1");
+map.put("2", "value2");
+map.put("3", "value3"); 
+  //第一种：普遍使用，二次取值
+  System.out.println("通过Map.keySet遍历key和value：");
+  for (String key : map.keySet()) {
+System.out.println("key= "+ key + " and value= " + map.get(key));
+  }
+  //第二种
+System.out.println("通过Map.entrySet使用iterator遍历key和value：");
+Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
+  while (it.hasNext()) {
+   Map.Entry<String, String> entry = it.next();
+System.out.println("key="+entry.getKey() +
+"and value= " +entry.getValue());
+  }
+  //第三种：推荐，尤其是容量大时
+  System.out.println("通过Map.entrySet遍历key和value");
+  for (Map.Entry<String, String> entry : map.entrySet()) {
+   System.out.println("key= " + entry.getKey() + 
+" and value= " + entry.getValue());
+  }
+  //第四种
+System.out.println("通过Map.values()遍历所有的value，但不能遍历key");
+  for (String v : map.values()) {
+   System.out.println("value= " + v);
+  }
+ }
+```
+ 
+总结
+如果仅需要键(keys)或值(values)使用方法二。如果你使用的语言版本低于java 5，或是打算在遍历时删除entries，必须使用iterator遍历。
+
+
     
