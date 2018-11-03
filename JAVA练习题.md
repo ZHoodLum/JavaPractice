@@ -7,6 +7,8 @@
 ---
 [循环练习题](#循环原练习题)
 
+> [睡眠排序](#睡眠排序)
+
 > [冒泡排序](#冒泡排序)
 
 > [使用Math方法](#使用Math方法)
@@ -71,6 +73,45 @@ ps:break  终止循环
 ---
 
 ### 循环练习题
+
+#### 睡眠排序
+```
+package test;
+
+public class TestRunable implements Runnable{
+	
+	private String num;
+	
+	public TestRunable(int num) {
+		this.num = num + "";
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] nums = {0,1,22,2,2,2,9,7,66,99,88,22};
+		for(int i=0;i<nums.length;i++) {
+			new Thread(new TestRunable(nums[i])).start();
+		}
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try {
+			Thread.sleep(Integer.parseInt(num));
+			System.out.println(num);
+			
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+}
+
+```
 
 ####  冒泡排序 
 > 使用冒牌排序，对A数组内数字进行由小到大排序
