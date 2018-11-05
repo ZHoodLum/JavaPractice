@@ -1316,6 +1316,46 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 方法中，开发人员如果调用了FilterChain对象的doFilter方法，则web服务器会检查FilterChain对象中是否还有filter，如果有，则调用第2个filter，
 如果没有，则调用目标资源。
 
+### 过滤器链调用原理与顺序：
+
+web服务器根据Filter在web.xml文件中的注册顺序，决定先调用哪个Filter，当第一个Filter的doFilter方法被调用时，web服务器会创建一个代表Filter链的FilterChain对象传递给该方法。在doFilter方法（放行）中，开发人员如果调用了FilterChain对象的doFilter方法，则web服务器会检查FilterChain对象中是否还有filter，如果有，则调用第2个filter，如果没有，则调用目标资源。
+
+根据在web.xml文件中的顺序还决定调用的顺序：和<filter-mapping>的配置先后顺序有关系.
+在开发中:Servlet,Filter,Listener配置先后问题： 一般先配置Listener,再配置Filter,最后配置Servlet.
+过滤器链代码测试：chain.doFilter(req, resp);//放行
+
+### 配置路径的细节：
+* a.精确拦截指定资源
+```
+<url-pattern>/hello</url-pattern>:当前Filter只对/hello这个资源做过滤.
+```
+
+* b.拦截所有资源
+```
+<url-pattern>/*</url-pattern>:当前Filter对所有的请求做过滤.如字符编码
+```
+
+* c.对部分资源进行拦截(以什么开头)
+```
+    <url-pattern>/system/*</url-pattern>:当前Filter 对/system/之后的请求做过滤.
+     比如:/system/list,/system/edit,/system/delete 如权限判断
+```
+
+* d.对部分资源进行拦截(以什么结束)
+```
+<url-pattern>*.html</url-pattern>:当前Filter 对后缀是ejf的进行过滤。如假静态化
+```
+
+---
+
+
+
+
+
+
+
+
+
 
 
 
