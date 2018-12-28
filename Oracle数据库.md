@@ -27,6 +27,8 @@
 11|---------------------------------------------|[用户管理](#用户管理)
 ||
 12|---------------------------------------------|[数据的备份](#数据的备份)
+||
+13|---------------------------------------------|[游标](#游标)
 
 
 
@@ -1660,4 +1662,200 @@ shutdown immediate
 startup
 一般专业的DBA的开发人员，必须熟练以上操作，这样才能在灾难之后进行及时恢复
 ```
+
+---
+### 游标
+### 游标的概念 
+#### 游标的定义
+* 游标（cursor）是Oracle系统在内存中开辟的一个工作 区，在其中存放SELECT语句返回的查询结果。 
+
+#### 游标的分类 
+* 隐式游标：PL/SQL隐式建立并自动管理这一游标 
+* 显式游标:由程序员显式说明及控制，用于从表中取出 多行数据，并将多行数据一行一行单独处理
+
+#### 隐式游标
+* 由Oracle在内部声明 
+* 由Oracle自行管理游标 
+* 可以使用游标属性从最近执行的SQL语句中获取信息
+* 用于处理DML语句以及返回单行的查询 
+
+#### 隐式游标属性
+利用SQL 游标的属性可以验证SQL语句的输出结果 
+
+列|说明
+:---|:---
+SQL%ROWCOUNT |返回最近一条SQL语句所影响到的记录的数量（整数型） 
+SQL%FOUND | 布尔型属性，当游标或游标变量被打开但是在执行FETCH语 句之前时， %FOUND是NULL。其后，如果最后的FETCH语句 返回一行或多行记录，则%FOUND为TRUE，如果FETCH语句 没有返回记录，则%FOUND为FALSE。
+SQL%NOTFOUND |布尔型属性，当游标或游标变量被打开但是在执行FETCH语 句之前时， %NOTFOUND是NULL。其后，如果最后的 FETCH语句返回一行记录，则%NOTFOUND为FALSE，如果 FETCH语句没有返回记录，则%NOTFOUND为TRUE。
+SQL%ISOPEN |当游标或游标变量被打开时，为TRUE；否则为FALSE
+
+#### 隐式游标属性示例
+从表EMP中删除指定部门的行，并返回所删除行的数量
+
+```
+DECLARE
+v_deptno NUMBER := 20;
+v_rows_deleted VARCHAR2(30);
+BEGIN DELETE FROM emp WHERE deptno = v_deptno;
+v_rows_deleted := SQL%ROWCOUNT ;
+dbms_output.put_line(v_rows_deleted || ' rows deleted.');
+END;
+```
+
+#### 显示游标
+#### 显式游标:由用户显式声明,查询返回多行记录
+* 使用游标时，select语句查询的结果可以是单条记录， 多条记录，也可以是零条记录。
+* 游标工作区中，存在着一个指针（POINTER）,在初始 状态它指向查询结果的首记录。
+* 要访问查询结果的所有记录，可以通过FETCH语句， 进行指针的移动来实现。
+* 使用游标进行操作，包括定义游标、打开游标、提取数据以及关闭游标几步。
+
+* 游标的声明
+语法:
+
+```
+CURSOR cursor_name IS select_statement;
+```
+* 在游标声明中， SELECT子查询不能使用INTO子句。 
+* 如果需要按指定的次序处理行，可在查询中使用 ORDER子句。
+
+* 例子：
+
+```
+DECLARE
+CURSOR emp_cursor IS
+SELECT empno, ename FROM emp;
+CURSOR dept_cursor IS
+SELECT * FROM dept
+WHERE deptno = 10;
+BEGIN
+...
+```
+
+#### 打开游标
+语法：
+
+```
+open cursor_name
+```
+
+* 使用游标之前应首先打开游标
+* 打开游标，实际上是执行游标定义时对应的SELECT语句 ，将查询结果检索到工作区中。
+* 如果没有要返回的行，不会出现异常 
+
+
+#### 从游标中提取数据
+语法:
+
+```
+FETCH cursor_name INTO [variable1, variable2, ...]
+                                             | record_name];
+```
+
+* 在使用FETCH语句之前必须先打开游标，这样才能保证工作区 中有数据。
+* 对游标第一次使用FETCH语句时，游标指针指向第一条记录， 因此操作的对象是第一条记录，使用后，游标指针指向下一条 记录。
+* 游标指针只能向下移动，不能回退。如果想查完第二条记录后 又回到第一条记录，则必须关闭游标，然后重新打开游标。 
+* INTO子句中的变量个数、顺序、数据类型必须与工作区中每行 记录的字段数、顺序以及数据类型一一对应。
+
+* 例子：
+
+```
+FETCH emp_cursor INTO v_empno, v_ename;
+...
+OPEN defined_cursor;
+LOOP
+FETCH defined_cursor INTO defined_variables
+EXIT WHEN...;
+...
+-- Process the retrieved data
+...
+END;
+```
+
+#### 关闭游标
+语法：
+
+```
+CLOSE cursor_name;
+```
+
+* `处理完活动集中的数据后，应该关闭游标`
+* 如果需要，可以再次打开该游标
+* 游标一旦关闭，不可再从游标中提取数据
+* 当关闭了游标后，所有和该游标相关的资源都会被释放 
+
+#### 游标的练习
+
+```
+DECLARE
+     v_empno emp.empno%type;
+     v_ename emp.ename%type;
+     CURSOR emp_cursor IS
+         SELECT empno,ename FROM emp;
+BEGIN
+     OPEN emp_cursor;
+     FOR i IN 1..5 LOOP
+         FETCH emp_cursor INTO v_ename,v_empno;
+         dbms_output.put_line(v_empno||' '||v_ename);
+     END LOOP;
+     CLOSE emp_cursor;
+END;
+```
+
+#### 显式游标的属性
+
+属性|类型|描述
+:--|:--|:--
+%ISOPEN |布尔| 如果游标是打开的，其值为TRUE
+%NOTFOUND| 布尔 |如果FETCH 语句没有返回记录其 值为TRUE
+%ROWCOUNT| 数值 |返回迄今为止已经从游标中取出的记录数目
+%FOUND |布尔 |如果FETCH 语句返回一行记录,其值为TRUE与%NOTFOUND相反 
+
+#### %ISOPEN 属性:
+仅当游标处于打开状态时才可以从中提取数据。
+在执行提取操作之前，使用 %ISOPEN 游标属性，检测 游标是否已被打开
+举例：
+
+```
+IF NOT emp_cursor%ISOPEN THEN
+     OPEN emp_cursor;
+END IF;
+LOOP
+     FETCH emp_cursor...
+```
+
+举例：创建一个游标，查询薪水大于3000元的雇员名字和对应薪 水，并显示其对应的名字和薪水。
+
+```
+DECLARE 
+    v_sal emp.sal%type;
+    v_ename emp.ename%type;
+    cursor emp_cursor is
+         SELECT ename,sal FROM emp WHERE sal>3000;
+BEGIN OPEN
+emp_cursor;
+LOOP
+         FETCH emp_cursor INTO v_ename,v_sal;
+         EXIT WHEN emp_cursor%notfound;
+        dbms_output.put_line(v_ename||' '||v_sal);
+    END LOOP;
+    CLOSE emp_cursor;
+END;
+```
+
+### 注！！！！
+显式游标的功能
+
+* 能够一行接一行地处理查询返回的行
+* 跟踪当前正在处理的那一行
+* 允许程序员在PL/SQL块中手工控制这些显式游标
+* 不能对游标赋值，也不能在表达式中使用游标名
+* 显式游标可以有参数
+* 游标参数可以出现在查询中常量出现的任何位置上 
+* 可以将游标参数初始化为默认值 
+* 可以将实参的不同值传递到游标，按需要采用或替换默 认值 
+* 游标参数的范围对于游标来讲是局部变量
+* 当游标为OPENED时，游标参数的值可以用于相关的查询
+
+
+
 
