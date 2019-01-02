@@ -1857,5 +1857,46 @@ END;
 * 当游标为OPENED时，游标参数的值可以用于相关的查询
 
 
+### 序列
+再Oracle之中，自动增长列并不是自动控制的，而是需要用户手工控制的，这样主要为了方便
 
+1）create SEQUENCE sequence  --创建序列；
+```
+create sequence myseq;
+```
+
+序列名称 . nextval :让序列增长到下一个内容。
+序列名称 . currval :取得当前序列的内容。
+```
+select myseq.nextval from dual;
+select myseq.currval from dual;
+```
+
+一般作为主键使用
+```
+create table tab(
+    id number primary key,
+    name varchar2(20) not null
+)
+insert into tab values(myseq.nextval,'姓名');
+此时的id编号自动增长。
+```
+
+2） [INCREMENT BY n]  [start with n]
+```
+创建序列，从10开始，每次增长2.
+create sequence myseq increment by 2 start with 10;
+
+```
+
+3） [MAXVALUE n | MOMAXVALUE]
+4） [MINVALUE n | NOMINVALUE]
+5） [CYCLE | NOCYCLE]
+```
+希望定义一个序列，这个序列可以在1，3，5，7，9之间循环出现。
+create sequence myseq increment by 2 start with 1 maxvalue 10 minvalue 1 cycle nocache;
+```
+6） [CACHE n |  NOCACHE]
+
+在Oracle数据库中。已经为用户准备好了若干个已经生成好的序列，每次操作的时候是从这块空间之中去除序列的内容，但是有这样一个问题，如果现在数据库的实例关闭了，那么保存的这块空间的内容就消失了，但是虽然消失了，可是数据已经增长好了，这样就会出现跳号的问题。而如果想要取消这种问题，则最好的方式是将序列设置为不缓存，使用nocache。
 
