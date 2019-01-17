@@ -1,5 +1,6 @@
 #关于java一些的日常练习
 
+[main方法](#main方法)
 
 ## java环境变量的配置
 
@@ -86,6 +87,19 @@
 
 ---
 ---
+### main方法
+
+main方法是java的程序的入口方法，JVM在运行程序时首先找的就是main方法，如果找到了main方法再执行，找不到的话就会报错。
+* public static void main(String[] args)这句代码进行分析。
+* public： 声明方法为公有的，表明了任何对象和类都可以访问这个方法，这样JVM就可以调用这个方法。
+* static : 表明了这个方法为静态的，我们知道静态方法在类进行加载后就可以使用类名+方法名进行调用，这对于main这个入口方法是很有用的。因为类刚进行加载不存在任何实例，只能使用类名.main进行调用。
+* void： 表明方法没有返回值。为什么要使用void类型呢？因为main返回任何值对程序都没任何意义（main是最先执行的，不需要返回值），所以设计成void，意味着main不会有任何值返回。
+* main： main是JVM识别的特殊方法，即程序的入口方法，必须为main。
+* String[] args : 字符串数组给开发人员在命令行状态下与程序交互提供了一种手段。为什么使用数组呢？因为传入的参数可能多个，需要使用数组来存。args可以换，而String不可以换。
+* 注：也可以这么写： String args[]     上面提到了由于这里面装的是数组，所以想想怎么声明数组的就OK了！dataType[] arrayRefVar;
+* // 首选的方法或dataType arrayRefVar[]; 
+* // 效果相同，但不是首选方法同样的，在main 方法中这样写也是没有问题的！
+* 注：main方法必须有public static void修饰，也可以使用final或者synchronized来修饰，但是不能使用abstract来修饰，因为main方法是入口方法。修饰符顺序可以变化。
 
 
 ### JDK与JRE区别：
