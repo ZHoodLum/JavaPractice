@@ -1024,7 +1024,7 @@ table_name
 * 为表添加列语句
 
 ``` 
-* 格式：alert table 表名称 add (列名称 数据类型 [default 默认值],
+* 格式：alter table 表名称 add (列名称 数据类型 [default 默认值],
                                                 列名称 数据类型 [default 默认值],
                                                 列名称 数据类型 [default 默认值]...................
                                                  )；
@@ -1036,11 +1036,23 @@ table_name
 * 修改表的内部结构
 
 ```
-* 格式：alert table 表名称 modify (列名称 数据类型 [default 默认值],
+* 格式：alter table 表名称 modify (列名称 数据类型 [default 默认值],
                                                 列名称 数据类型 [default 默认值],
                                                 列名称 数据类型 [default 默认值]...................
                                                  )；
  此语句能不用则不用，
+ 
+Oracle修改表结构
+--添加字段
+alter table [tablename] add  [column name] [column data type];
+
+--修改字段数据类型
+alter table [tablename] modify [column name] [column data type];
+注：增加字段长度时很顺利；变更数据类型，可能需要清空当前列数据。
+
+--修改字段名称
+alter table [tablename] rename column [column name] [new column name];
+
 ```
 
 ---
