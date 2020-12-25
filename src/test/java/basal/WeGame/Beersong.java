@@ -1,16 +1,14 @@
-package com.neusoft.zdy;
+package basal.WeGame;
 
 public class Beersong {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
 		int beernum = 99;
 		String word = "boottles";
 		
 		while(beernum >0) {
 			if(beernum == 1) {
-				word = "bottles"; //单数的瓶子
+				word = "bottles";
 			}
 			
 			System.out.println(beernum + "" + word + " of beer on the wall ");
@@ -23,8 +21,8 @@ public class Beersong {
 				System.out.println(beernum + "" + word + " of beer on the wall ");
 			}else {
 				System.out.println("No more bottles of beer on the wall");
-			}//else结束
-		}//while结束
-	}//main结束
+			}//else
+		}//while
+	}//main
 
-}//calss结束
+}//calss
