@@ -248,7 +248,7 @@ Java 流(Stream)、文件(File)和IO
 
 ## 流
 
-![iopng](/src/main/resources/images/io.png)
+![iopng](../../resources/images/io.png)
 
 ## 字节输入流的主要方法
 * 此抽象类是表示`输入字节流`的所有类的超类
