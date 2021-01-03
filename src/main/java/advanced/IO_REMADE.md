@@ -247,7 +247,7 @@ Java 流(Stream)、文件(File)和IO
 ---
 
 ## 流
-![io.png](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/io.png)
+![iopng](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/io.png)
 
 ## 字节输入流的主要方法
 * 此抽象类是表示`输入字节流`的所有类的超类
@@ -255,7 +255,7 @@ Java 流(Stream)、文件(File)和IO
 * java.lang.Object
 >* java.io.InputStream所有已实现的接口：Closeable
 >* 直接已知子类：AudioInputStream, ByteArrayInputStream, `FileInputStream`, FilterInputStream,` InputStream`, ObjectInputStream, PipedInputStream, SequenceInputStream, StringBufferInputStream
-![inputStream.png](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/inputStream.png)
+![inputStreampng](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/inputStream.png)
 
 ---
 ### 一、FileInputStream的使用
@@ -447,7 +447,7 @@ public class ByteArrayInputStreamTest {
 * java.lang.Object
  >*  java.io.OutputStream所有已实现的接口：Closeable, Flushable
  >* 直接已知子类：ByteArrayOutputStream, `FileOutputStream`, FilterOutputStream, ObjectOutputStream, `OutputStream`, PipedOutputStream
-![outputStream.png](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/outputStream.png)
+![outputStreampng](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/outputStream.png)
 
 ### 一、FileOutputStream的使用
 > java.lang.Object
@@ -797,7 +797,7 @@ public class BufferedputStream {
 * java.lang.Object
 >* java.io.Reader所有已实现的接口：Closeable, Readable
 >* 直接已知子类：BufferedReader, CharArrayReader, `FilterReader`,` InputStreamReader`, `PipedReader`, StringReader
-![reader.png](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/reader.png)
+![readerpng](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/reader.png)
 
 ### 一、InputStreamReader的使用
 > java.lang.Object
@@ -919,7 +919,7 @@ long skip(long n)|跳过字符
 >*  java.io.Writer所有已实现的接口：Closeable, Flushable, Appendable
 >* 直接已知子类：BufferedWriter, CharArrayWriter, FilterWriter,` OutputStreamWriter`, PipedWriter, `PrintWriter`, StringWriter
   
-![writer.png](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/writer.png)
+![writerpng](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/writer.png)
 
 ### 一、OutputStreamWriter的使用
 > java.lang.Object
@@ -1446,7 +1446,7 @@ public class BufferedWriterTest {
 ## 节点流与处理流的使用
 ### 一、节点流
 * 定义：节点流：从一个特定的数据源（节点）读写数据（如：文件、内存） 的类叫做节点流类
-![memory.png](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/memory.png)
+![memorypng](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/memory.png)
 
 * 这些节点类跟数据源或数据目的地做直接连接用的
 * 在java.io包中，字节继承体系有三种节点类，而字符继承体系有四 种节点类
@@ -1478,7 +1478,7 @@ Piped |PipedInputStream PipedOutputStream |PipedReader PipedWriter
 ### 二、处理流
 * 定义：
 只用字节或是字符为单位来对数据做输入输出是不够的，有时候 我们需要一行一行的读数据，有时我们需要读取特定格式的数据， 因此Java提供了这样的机制，能把数据流作连接(chain)，让原本没 有特殊访问方法的流，通过连接到特殊的流后，变成可以用特定 的方法来访问数据
-![datasink.png](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/datasink.png)
+![datasinkpng](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/datasink.png)
 * “连接”在已存在的流（节点流或处理流）之上，通过对数据的 处理为程序提供更为强大的读写功能
 *  处理流类的构造函数中，都必须接收另外一个流对象作为参数
 
