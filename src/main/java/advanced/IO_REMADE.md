@@ -248,7 +248,7 @@ Java 流(Stream)、文件(File)和IO
 
 ## 流
 
-![iopng](https://raw.githubusercontent.com/ZHoodLum/JavaPractice/master/src/main/resources/images/io.png)
+![iopng](/src/main/resources/images/io.png)
 
 ## 字节输入流的主要方法
 * 此抽象类是表示`输入字节流`的所有类的超类
@@ -808,7 +808,7 @@ public class BufferedputStream {
 * 每次调用 InputStreamReader 中的一个 `read() `方法都会导致从`底层输入流`读取一个或多个字节。要启用从字节到字符的有效转换，可以`提前从底层流读取更多的字节`，使其超过满足当前读取操作所需的字节。 
 * 使用InputStreamReader()方法可以使字节流转换为字符流，具体详情查看下面的【InputStreamReader构造方法摘要 】标题内容
 * 为了达到最高效率，可要考虑在 BufferedReader 内包装 InputStreamReader。例如： 
-```aidl
+```
  BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 ```
 ### InputStreamReader构造方法摘要 
@@ -929,7 +929,7 @@ long skip(long n)|跳过字符
 * `OutputStreamWriter 是字符流通向字节流的桥梁`：可使用指定的 charset 将要写入流中的字符编码成字节。它使用的字符集可以由名称指定或显式给定，` 否则将接受平台默认的字符集`。 
 * 每次调用 write() 方法都会导致在给定字符（或字符集）上调用编码转换器。在写入底层输出流之前，得到的这些字节将在缓冲区中累积。可以指定此缓冲区的大小，不过，默认的缓冲区对多数用途来说已足够大。注意，传递给 write() 方法的字符没有缓冲。 
 * 为了获得最高效率，可考虑将 OutputStreamWriter 包装到 BufferedWriter 中，以避免频繁调用转换器。例如： 
-```aidl
+```
  Writer out  = new BufferedWriter(new OutputStreamWriter(System.out));
 ```
 * 代理对 是一个字符，它由两个 char 值序列表示：高 代理项的范围为 '\uD800' 到 '\uDBFF'，后跟范围为 '\uDC00' 到 '\uDFFF' 的低 代理项。 
@@ -1185,7 +1185,7 @@ public class FileWriterTest {
 * 从字符输入流中读取文本，缓冲各个字符，从而实现字符、数组和行的高效读取。 
 * 可以指定缓冲区的大小，或者可使用默认的大小。大多数情况下，默认值就足够大了。 
 * 通常，Reader 所作的每个读取请求都会导致对底层字符或字节流进行相应的读取请求。因此，建议用 BufferedReader 包装所有其 read() 操作可能开销很高的 Reader（如 FileReader 和 InputStreamReader）。例如， 
-```aidl
+```
  BufferedReader in  = new BufferedReader(new FileReader("foo.in"));
 ```
 * 将缓冲指定文件的输入。如果没有缓冲，则每次调用 read() 或 readLine() 都会导致从文件中读取字节，并将其转换为字符后返回，而这是极其低效的。 
@@ -1348,7 +1348,7 @@ public class BufferedReaderTest {
 * 可以指定缓冲区的大小，或者接受默认的大小。在大多数情况下，默认值就足够大了。 
 * 该类提供了 newLine() 方法，它使用平台自己的行分隔符概念，此概念由系统属性 line.separator 定义。并非所有平台都使用新行符 ('\n') 来终止各行。因此调用此方法来终止每个输出行要优于直接写入新行符。 
 * 通常 Writer 将其输出立即发送到底层字符或字节流。除非要求提示输出，否则建议用 BufferedWriter 包装所有其 write() 操作可能开销很高的 Writer（如 FileWriters 和 OutputStreamWriters）。例如， 
-```aidl
+```
  PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("foo.out")));
 ```
  * 将缓冲 PrintWriter 对文件的输出。如果没有缓冲，则每次调用 print() 方法会导致将字符转换为字节，然后立即写入到文件，而这是极其低效的。
