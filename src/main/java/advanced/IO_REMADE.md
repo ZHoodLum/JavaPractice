@@ -248,7 +248,7 @@ Java 流(Stream)、文件(File)和IO
 
 ## 流
 
-![iopng](../../resources/images/io.png)
+![iopng](../../resources/images/IO/io.png)
 
 ## 字节输入流的主要方法
 * 此抽象类是表示`输入字节流`的所有类的超类
@@ -256,7 +256,7 @@ Java 流(Stream)、文件(File)和IO
 * java.lang.Object
 >* java.io.InputStream所有已实现的接口：Closeable
 >* 直接已知子类：AudioInputStream, ByteArrayInputStream, `FileInputStream`, FilterInputStream,` InputStream`, ObjectInputStream, PipedInputStream, SequenceInputStream, StringBufferInputStream
-![inputStreampng](https://github.com/ZHoodLum/JavaPractice/blob/master/src/main/resources/images/inputStream.png)
+![inputStreampng](../../resources/images/IO/inputStream.png)
 
 ---
 ### 一、FileInputStream的使用
