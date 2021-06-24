@@ -18,6 +18,9 @@ public class FileTest {
         String projectPath = System.getProperty("user.dir");
 
         File file = new File(projectPath + "\\src\\main\\resources\\IO");
+        File file2 = new File(projectPath + "\\src\\main\\resources\\App");
+        file2.renameTo(file);
+        System.out.println(file.getPath());
 
         //文件是否存在
         if (!file.exists()) {//不存在

@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 public class XuXianPerson implements Serializable {
 	public static void main(String[] args) {
+		System.out.println(String.format("%s/%s", "http://127.0.0.1:8070//openapi/v1", "apps/GATEWAY2/appnamespaces"));
 		System.out.println("人鬼情未了篇....");
 		new XuXianPerson("TOM", 426).tell();
 	}
