@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: java-proactive-application
+
+# log4j2 日志配置
+logging:
+  config: classpath:log4j2-spring.xml
+#  config: logback.xml

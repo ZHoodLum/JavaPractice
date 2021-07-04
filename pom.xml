@@ -3,12 +3,79 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com</groupId>
-    <artifactId>JavaPractive</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>JavaProactive</artifactId>
+    <version>1.0.2-RELEASE</version>
+    <description>Demo project for Spring Boot</description>
+
+    <!--不在是Jar  war 而是pom文件 ，表示是一个总的父工程-->
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <spring.boot.version>2.4.5.RELEASE</spring.boot.version>
+        <spring.boot.other.version>2.4.5</spring.boot.other.version>
+        <lombok.version>1.16.18</lombok.version>
+        <!--日志门面-->
+        <log4j.version>2.9.1</log4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.5</version>
+        <!-- lookup parent from repository -->
+        <relativePath/>
+    </parent>
 
     <dependencies>
+        <!--**********************************springboot需要的JAR**********************************-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <!--SpringBoot能自动适配所有的日志，而且底层使用slf4j+logback的方式记录日志，引入其他框架的时候，只需要把这个框架依赖的日志框架排除掉即可-->
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--热部署 生产部署记得关闭！！！ 热部署插件 放到子工程cloud-provider-payment8001的POM.xml下-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <!--**********************************日志门面 使用前剔除spring-boot-starter和spring-boot-starter-web<中的默认日志log**********************************-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <version>${spring.boot.other.version}</version>
+        </dependency>
+        <!--用于与slf4j保持桥接-->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <!--**********************************自动生成getter setter方法**********************************-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+
         <!--win10粘贴板依赖-->
         <!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all -->
         <dependency>
@@ -16,6 +83,12 @@
             <artifactId>groovy-all</artifactId>
             <version>2.5.6</version>
             <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>groovy-all</artifactId>
+                    <groupId>groovy.util.logging.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
@@ -23,23 +96,36 @@
             <artifactId>guava</artifactId>
             <version>29.0-jre</version>
         </dependency>
-
-
     </dependencies>
 
 
     <build>
         <plugins>
+            <!--使Maven编译时，跳过test -->
             <plugin>
+                <!--                <groupId>org.springframework.boot</groupId>-->
+                <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
+
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
-
-
 </project>
