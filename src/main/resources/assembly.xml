@@ -1,0 +1,57 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>V1.0.1-RELEASE</id>
+    <formats>
+        <!--压缩文件形式 可选 zip tar.gz等 -->
+        <format>zip</format>
+    </formats>
+
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <!-- 依赖jar文件处理 全部放入lib目录 -->
+    <dependencySets>
+        <dependencySet>
+            <!-- 本项目所生成的jar包不放入lib文件夹中 -->
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>lib</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+
+
+    <!-- 项目文件处理 -->
+    <fileSets>
+        <!-- 配置文件放到config文件夹内 -->
+        <fileSet>
+            <directory>${basedir}/src/main/resources</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <excludes>
+                <exclude>assembly.xml</exclude>
+            </excludes>
+            <filtered>true</filtered>
+            <!--配置文件输出位置 根目录config文件夹下-->
+            <outputDirectory>${file.separator}/config</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>${basedir}/bin</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <filtered>true</filtered>
+            <!--shell脚本 根目录bin文件夹下-->
+            <outputDirectory>${file.separator}/bin</outputDirectory>
+        </fileSet>
+
+        <!-- 自己写的项目代码生成的jar文件 放在根目录  -->
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>${file.separator}</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

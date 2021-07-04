@@ -112,6 +112,58 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!-- 依赖文件目录 -->
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!-- 启动类 -->
+                            <mainClass>com.JavaProactiveAppliaction</mainClass>
+                        </manifest>
+                        <!-- 配置文件目录 -->
+                        <manifestEntries>
+                            <Class-Path>config/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <!-- 排除配置文件(使jar包不含配置文件) -->
+                    <excludes>
+                        <exclude>*.properties</exclude>
+                        <exclude>**/*.properties</exclude>
+                        <exclude>*.yml</exclude>
+                        <exclude>*.xml</exclude>
+                        <exclude>**/*.xml</exclude>
+                        <exclude>*.conf</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <!--将整个项目按照自定义的目录结构打成最终的压缩包，方便实际部署 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>java-proactive-${version}</finalName>
+                    <descriptors>
+                        <!-- assembly配置文件(配置如何打包项目) -->
+                        <descriptor>/src/main/resources/assembly.xml</descriptor>
+                    </descriptors>
+                    <outputDirectory>output</outputDirectory>
+                    <!--生成的打包文件是否拼接assembly.xml中的id  默认值为true-->
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
             <resource>
