@@ -5,7 +5,7 @@ package advanced.lambda;
  * @Date：Created on 2021/7/1 8:02
  * @Description:创建线程
  */
-public class CreateThread {
+public class ThreadCreate {
     public static void main(String[] args) {
         //普通写法
         Runnable runnable = new Runnable() {

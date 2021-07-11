@@ -37,10 +37,10 @@ public class OperatorColon {
 
         //类::实例方法
         Function<MessageEntity, String> function = e -> e.getName();
-        System.out.println("类::实例方法1" + function.apply(new MessageEntity("男", "职业选手小明")));
+        System.out.println("类::实例方法1" + function.apply(new MessageEntity("男", "职业选手小明",123.01)));
 
         Function<MessageEntity, String> function1 = MessageEntity::getName;
-        System.out.println("类::实例方法1" + function1.apply(new MessageEntity("男", "职业选手小明2")));
+        System.out.println("类::实例方法1" + function1.apply(new MessageEntity("男", "职业选手小明2",123.3)));
 
 
         //类::new

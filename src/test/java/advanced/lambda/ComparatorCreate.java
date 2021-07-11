@@ -8,7 +8,7 @@ import java.util.TreeSet;
  * @Date：Created on 2021/7/1 8:07
  * @Description:标记接口
  */
-public class CreateComparator {
+public class ComparatorCreate {
     public static void main(String[] args) {
         //普通写法
         Comparator<String> comparator = new Comparator<String>() {

@@ -46,8 +46,7 @@ eg:
 Lambda表达式会被匹配到这个抽象方法上。
 
 使用注解@FunctionInterface注解检测接口是否符合函数式接口
-[创建线程](./../../../test/java/advanced/lambda/CreateThread.java)
-[创建线程2](/../../test/java/advanced/lambda/CreateThread.java)
+[创建线程](./../../../test/java/advanced/lambda/InterfaceTypeDemo.java)
 
 
 ## 常见的函数式接口
@@ -68,4 +67,61 @@ Predicate<T>断言型接口|T|boolean|boolean test(T t);确定类型为T的对�
 * 类::new
 
 此时的操作符也是JDK8新增的符号 ::
+[JDK8新增的符号 ::](./../../../test/java/advanced/lambda/OperatorColon.java)
+
+
+## Stream
+流stream中保存对集合或者数组数据的操作。和集合类似，但集合中报错的是数据。
+
+这里的流指的是：原料-->工序1-->工序2-->工序n等等之后----->形成了产品
+
+这就叫流！！！
+
+## Stream特点
+* Stream自己不会存储元素
+* 不会改变源对象。相反，他们会返回一个持续有结果的新的Stream
+* Stream操作是延迟执行的。这就意味着他们会等到需要结果的时候才会执行
+
+
+## Stream使用步骤
+* 创建：新建一个流
+* 中间操作：在一个或者多个步骤中，将初始Stream转化到另一个Stream的中间操作
+* 终止操作：使用一个终止操作来产生一个结果，该操作会强制他之前的延迟操作立即执行。在这个之后，该Stream就不能使用了。
+
+## 创建Stream
+* 通过Collection对象的stream()或parallelStream()方法
+* 通过Arrays类的stream方法
+* 通过Stream接口的of()、iterate()、generate()方法
+* 通过Instream、LongStream、DoubleStream接口中的of、range、rangeClosed方法
+[创建Stream](./../../test/java/advanced/lambda/StreamCreate.java)
+
+## 中间操作Stream
+* filter、limit、skip、distinct、sorted
+* map
+* parallel
+[中间操作Stream](./../../test/java/advanced/lambda/StreamMiddle.java)
+
+## 终止操作Stream
+* forEach、min、max、count
+* reduce、collect
+[终止操作Stream](./../../test/java/advanced/lambda/StreamStop.java)
+
+
+## 新时间API
+之前的时间API存在问题:线程安全问题、设计混乱
+
+本地化日期时间API：
+* LocalDate
+* LocalTime
+* LocalDateTime
+[时间格式化](./../../test/java/advanced/lambda/DateSimpleDateFormat.java)
+
+
+## Instant 时间戳
+
+## ZoneID 时区
+
+## Date、Instant、LocalDateTime 的转换
+
+## DateTimeFormatter 时间格式化
 
